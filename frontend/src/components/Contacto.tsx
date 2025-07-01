@@ -1,6 +1,6 @@
 function Contacto() {
   const mensaje = encodeURIComponent('¡Hola! Quiero más info sobre el torneo.');
-  const link = `https://wa.me/5491123456789?text=${mensaje}`;
+  const link = `https://wa.me/5491132263988?text=${mensaje}`;
 
   return (
     <section id = "contacto">

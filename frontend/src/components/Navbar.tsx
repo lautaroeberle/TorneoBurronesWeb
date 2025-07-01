@@ -1,7 +1,7 @@
 function Navbar() {
   return (
     <nav>
-      <div><strong>Torneo Fútbol 5 y 8</strong></div>
+      <div><strong>Copa Burró</strong></div>
       <ul>
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#beneficios">Beneficios</a></li>

@@ -23,8 +23,8 @@ function Hero() {
       {/* Sección INICIO */}
       <section id="inicio" className="inicio" style={{ backgroundImage: `url(${inicioImg})` }}>
         <div id ="titulo">
-          <h1>Torneo de Fútbol 5 y 8</h1>
-          <p>Jugá con tu equipo en las mejores canchas de Buenos Aires</p>
+          <h1>TPyB Torneos</h1>
+          <p>Jugá con tu equipo en el mejor torneo de Buenos Aires </p>
           <a href="#inscripcion">
             <button className="btn">Inscribirse ahora</button>
           </a>
