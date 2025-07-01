@@ -36,9 +36,9 @@ function Hero() {
         <div>
           <h2>Beneficios</h2>
           <ul>
+            <li>Cobertura de partidos y fotos</li>
             <li>Árbitros profesionales</li>
-            <li>Premios por etapa</li>
-            <li>Hidratación y cobertura médica</li>
+            <li>Cobertura médica</li>
           </ul>
         </div>
       </section>
@@ -69,7 +69,7 @@ function Hero() {
         <div>
           <h2>Contacto</h2>
           <p>¿Dudas o consultas? Escribinos directamente por WhatsApp.</p>
-          <a href="https://wa.me/5491122334455" target="_blank">
+          <a href="https://wa.me/5491132263988" target="_blank">
             <button className="btn">Contactar por WhatsApp</button>
           </a>
         </div>
