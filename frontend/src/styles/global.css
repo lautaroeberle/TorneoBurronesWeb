@@ -162,3 +162,28 @@ form input {
     width: 80px;
   }
 }
+.login, .panel {
+  padding: 5rem 2rem;
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+}
+
+.login input {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+}
+
+.login button {
+  padding: 0.8rem 2rem;
+  background-color: #ffcb05;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
