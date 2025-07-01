@@ -39,6 +39,11 @@ body {
 .navbar a:hover {
   color: #ffcb05;
 }
+.navbar.transparent {
+  background-color: rgba(0, 0, 0, 0.4); /* más transparente */
+  transition: background-color 0.3s ease;
+}
+
 
 /* SECCIÓN INICIO - pantalla completa */
 .inicio {
