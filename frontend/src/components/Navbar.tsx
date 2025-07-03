@@ -1,16 +1,26 @@
-function Navbar() {
+import { Link } from "react-router-dom";
+import NavLinkHero from "./NavLinkHero";
+
+const Navbar = () => {
   return (
-    <nav>
-      <div><strong>Copa Burró</strong></div>
+    <nav className="navbar">
       <ul>
-        <li><a href="#inicio">Inicio</a></li>
-        <li><a href="#beneficios">Beneficios</a></li>
-        <li><a href="#sedes">Sedes</a></li>
-        <li><a href="#inscripcion">Inscripción</a></li>
-        <li><a href="#contacto">Contacto</a></li>
+        <li><NavLinkHero to="inicio">Inicio</NavLinkHero></li>
+        <li><NavLinkHero to="beneficios">Beneficios</NavLinkHero></li>
+        <li><NavLinkHero to="sedes">Sedes</NavLinkHero></li>
+        <li><NavLinkHero to="inscripcion">Inscripción</NavLinkHero></li>
+        <li><NavLinkHero to="contacto">Contacto</NavLinkHero></li>
+
+        <li className="dropdown">
+          <span>Torneos ▾</span>
+          <ul className="dropdown-menu">
+            <li><Link to="/copa">Copa</Link></li>
+            <li><Link to="/apertura">Apertura</Link></li>
+          </ul>
+        </li>
       </ul>
     </nav>
   );
-}
+};
 
 export default Navbar;

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Torneos from "./Torneos";
 import EquipoNuevo from "./EquipoNuevo";
+import EditarEquipos from "./EditarEquipos";
 
 function Panel() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function Panel() {
       <p>Desde aquí vas a poder cargar torneos, equipos y jugadores.</p>
        <Torneos />
        <EquipoNuevo />
+        <EditarEquipos />
     </div>
   );
 }

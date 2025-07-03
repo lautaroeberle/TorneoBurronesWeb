@@ -187,3 +187,49 @@ form input {
   font-weight: bold;
 }
 
+/* Estilo base para el dropdown */
+.navbar .dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+/* El menú desplegable inicialmente oculto */
+.navbar .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* justo debajo del dropdown padre */
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 0.5rem 0;
+  border-radius: 0 0 5px 5px;
+  min-width: 120px;
+  z-index: 2000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Mostrar el menú al hacer hover en el padre */
+.navbar .dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Estilos para los items del dropdown */
+.navbar .dropdown-menu li {
+  list-style: none;
+  padding: 0.5rem 1rem;
+}
+
+/* Estilos para los links dentro del dropdown */
+.navbar .dropdown-menu li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  
+}
+
+.navbar .dropdown-menu li a:hover {
+  color: #ffcb05;
+  background-color: transparent; /* para asegurarnos */
+}
+

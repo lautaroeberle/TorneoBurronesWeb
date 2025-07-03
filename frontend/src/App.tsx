@@ -1,29 +1,23 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Hero from './components/Hero';
 
 function App() {
+  const location = useLocation();
 
-   useEffect(() => {
-    const navbar = document.querySelector(".navbar");
-
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        navbar?.classList.add("transparent");
-      } else {
-        navbar?.classList.remove("transparent");
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
       }
-    };
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location]);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-
-  return (
-    <>
-      <Hero />
-    </>
-  );
+  return <Hero />;
 }
 
 export default App;

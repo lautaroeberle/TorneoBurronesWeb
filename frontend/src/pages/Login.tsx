@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [usuario, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === "danielsanticremosoyjugueton@gmail.com" && pass === "danieltucci") {
+    if (usuario === "daniel" && pass === "santi") {
       localStorage.setItem("admin", "true");
       navigate("/admin/panel");
     } else {
@@ -22,9 +22,9 @@ function Login() {
       <h2>Login Administrador</h2>
       <form onSubmit={handleLogin}>
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
+          type="user"
+          placeholder="Usuario"
+          value={usuario}
           onChange={e => setEmail(e.target.value)}
           required
         />

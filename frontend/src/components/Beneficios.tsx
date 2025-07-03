@@ -1,16 +1,16 @@
-function Beneficios() {
-  return (
-    <section id="beneficios">
-      <h2>¿Por qué participar?</h2>
-      <ul>
-        <li>🏆 Premios para los ganadores</li>
-        <li>📸 Cobertura de partidos y fotos</li>
-        <li>⚽ Canchas profesionales</li>
-        <li>🎁 Sorteos para los participantes</li>
-      </ul>
-    </section>
+import beneficiosImg from "../assets/beneficios.jpg";
 
-  );
-}
+const Beneficios = () => (
+  <section id="beneficios" className="beneficios" style={{ backgroundImage: `url(${beneficiosImg})` }}>
+    <div>
+      <h2>Beneficios</h2>
+      <ul>
+        <li>Cobertura de partidos y fotos</li>
+        <li>Árbitros profesionales</li>
+        <li>Cobertura médica</li>
+      </ul>
+    </div>
+  </section>
+);
 
 export default Beneficios;
