@@ -1,40 +1,50 @@
+import { useEffect, useState } from "react";
 import "../styles/TorneoPage.css";
 
-const CopaPage = () => {
+type Partido = {
+  id: number;
+  equipo_local: string;
+  equipo_visitante: string;
+  goles_local: number;
+  goles_visitante: number;
+  fecha: string;
+  hora: string;
+  fase: string;
+  jugado: boolean;
+};
+
+function CopaPage() {
+  const [partidos, setPartidos] = useState<Partido[]>([]);
+
+  useEffect(() => {
+    const fetchPartidos = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano");
+        const data = await res.json();
+        setPartidos(data);
+      } catch (error) {
+        console.error("Error al cargar partidos:", error);
+      }
+    };
+    fetchPartidos();
+  }, []);
+
   return (
     <div className="torneo-page">
-      <h2>Copa de Verano 2025</h2>
-
-      <section className="tabla-posiciones">
-        <h3>Tabla de Posiciones</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Equipo</th>
-              <th>PJ</th>
-              <th>G</th>
-              <th>E</th>
-              <th>P</th>
-              <th>GF</th>
-              <th>GC</th>
-              <th>DG</th>
-              <th>PTS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Futuro contenido dinámico */}
-          </tbody>
-        </table>
-      </section>
+      <h2>Copa de Verano {new Date().getFullYear()}</h2>
 
       <section className="partidos">
         <h3>Partidos</h3>
         <ul>
-          <li>Los Pibes vs El Rejunte - 15/01/2025 - 21:00 - Cancha 1 - Resultado: -</li>
+          {partidos.map((p) => (
+            <li key={p.id}>
+              {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} - {p.fase} - Resultado: {p.jugado ? `${p.goles_local} - ${p.goles_visitante}` : "Pendiente"}
+            </li>
+          ))}
         </ul>
       </section>
     </div>
   );
-};
+}
 
 export default CopaPage;

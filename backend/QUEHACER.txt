@@ -1,0 +1,2 @@
+1- Agregar reglamento a Hero
+2- dar opciones tipo enum para fase torneo en panel

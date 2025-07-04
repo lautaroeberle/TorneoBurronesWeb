@@ -14,6 +14,10 @@ app.use("/api/torneos", torneosRouter);
 const equiposRouter = require("./routes/equipos");
 app.use("/api/equipos", equiposRouter);
 
+const partidosRouter = require("./routes/partidos");
+app.use("/api/partidos", partidosRouter);
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
