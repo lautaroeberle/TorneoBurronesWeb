@@ -16,7 +16,8 @@ function EditarPartido() {
 
   const cargarPartidos = async (torneoId: string) => {
     setTorneoSeleccionado(torneoId);
-    const res = await fetch(`http://localhost:3000/api/partidos/torneo/${torneoId}`);
+    const res = await fetch(`http://localhost:3000/api/partidos/torneo/${torneoId}`)
+
     const data = await res.json();
     setPartidos(data);
   };

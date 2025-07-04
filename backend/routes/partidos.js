@@ -74,7 +74,6 @@ router.put('/:id', async (req, res) => {
 // Obtener partidos por ID de torneo (para EditarPartido)
 router.get('/torneo/:id', (req, res) => {
   const torneoId = req.params.id;
-
   const query = `
     SELECT p.*, 
            el.nombre AS equipo_local, 

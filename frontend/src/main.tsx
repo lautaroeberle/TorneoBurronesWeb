@@ -9,6 +9,7 @@ import Panel from "../src/pages/Panel.tsx";
 import CopaPage from "../src/pages/CopaPage.tsx";
 import AperturaPage from "../src/pages/AperturaPage.tsx";
 import './styles/global.css';
+import ReglamentoPage from "./pages/ReglamentoPage.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<App />} />
           <Route path="/copa" element={<CopaPage />} />
           <Route path="/apertura" element={<AperturaPage />} />
+          <Route path="/reglamento" element={<ReglamentoPage />} />
         </Route>
 
         {/* Rutas admin sin navbar */}

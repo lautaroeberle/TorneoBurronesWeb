@@ -233,3 +233,25 @@ form input {
   background-color: transparent; /* para asegurarnos */
 }
 
+.descarga-container {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.boton-descarga {
+  display: inline-block;
+  padding: 14px 24px;
+  background-color: #4e342e; /* marrón oscuro */
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.boton-descarga:hover {
+  background-color: #6d4c41;
+  transform: translateY(-2px);
+}
