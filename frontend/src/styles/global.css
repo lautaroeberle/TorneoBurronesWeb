@@ -255,3 +255,24 @@ form input {
   background-color: #6d4c41;
   transform: translateY(-2px);
 }
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .navbar ul {
+    gap: 0.8rem;
+  }
+
+  .navbar a {
+    font-size: 14px;
+  }
+}
+.navbar-hidden {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.navbar {
+  transition: transform 0.3s ease;
+}
