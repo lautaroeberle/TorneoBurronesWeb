@@ -28,7 +28,7 @@ Pero había un condimento especial que hacía hervir el alma burrona: los partid
       </section>
       <section>
         <p>
-Desde el primer enfrentamiento oficial, quedó clara una cosa: Palermo City nació para perder contra Burrones FC. Cada vez que se cruzaban, era poesía barrial: goles de todos los colores, lujos innecesarios, festejos que cruzaban la línea del respeto (pero con humor, claro). Los de Palermo intentaban, proponían, jugaban bien... pero al final, miraban al piso mientras el marcador decía otra vez: Burrones ganador.
+Desde el primer enfrentamiento oficial, quedó clara una cosa: Palermo City nació para perder contra Burrones FC. Cada vez que se cruzaban, era poesía barrial: goles de todos los colores, lujos innecesarios, festejos que cruzaban la línea del respeto. Los de Palermo intentaban, proponían, jugaban bien... pero al final, miraban al piso mientras el marcador decía otra vez: Burrones ganador.
 
 Se intentó de todo: cambiar el arquero, traer un técnico con carpeta, usar GPS, camisetas nuevas, entrenar dos veces por semana (¡insólito en amateurismo!). Nada funcionó. Siempre, pero siempre, los papás estaban ahí para recordarles su lugar en la mesa: al lado del huevito y el babero.
 
@@ -37,7 +37,7 @@ Se intentó de todo: cambiar el arquero, traer un técnico con carpeta, usar GPS
       </section>
  <section>
         <p>
-Hoy, Burrones FC no solo sigue compitiendo: inspira. Nuevas generaciones llegan al club con la ilusión de ponerse la casaca marrón (con olor a historia) y escribir su capítulo. Algunos preguntan: “¿Quién fue el goleador contra Palermo aquella vez?”, otros simplemente se sienten orgullosos de pertenecer al equipo que nunca renegó de su esencia y siempre honró su linaje: el de dominar a Palermo City sin piedad, pero con estilo.
+Hoy, Burrones FC no solo sigue compitiendo: inspira. Nuevas generaciones llegan al club con la ilusión de ponerse la casaca violeta y blanca (con olor a historia) y escribir su capítulo. Algunos preguntan: “¿Quién fue el goleador contra Palermo aquella vez?”, otros simplemente se sienten orgullosos de pertenecer al equipo que nunca renegó de su esencia y siempre honró su linaje: el de dominar a Palermo City sin piedad, pero con estilo.
 
 
 
