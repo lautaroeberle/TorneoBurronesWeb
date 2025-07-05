@@ -55,10 +55,12 @@ router.put('/:id', async (req, res) => {
   const { goles_local, goles_visitante, jugado } = req.body;
 
   try {
-    const [resultado] = await db.promise().query(
-      `UPDATE partidos SET goles_local = ?, goles_visitante = ?, jugado = ? WHERE id = ?`,
-      [goles_local, goles_visitante, jugado, id]
-    );
+    const jugadoEntero = jugado === "true" || jugado === true ? 1 : 0;
+
+const [resultado] = await db.promise().query(
+  `UPDATE partidos SET goles_local = ?, goles_visitante = ?, jugado = ? WHERE id = ?`,
+  [goles_local, goles_visitante, jugadoEntero, id]
+);
 
     if (resultado.affectedRows === 0) {
       return res.status(404).json({ error: 'Partido no encontrado' });
