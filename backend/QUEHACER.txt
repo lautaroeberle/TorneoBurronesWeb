@@ -1,2 +1,3 @@
 1- Agregar reglamento a Hero
 2- dar opciones tipo enum para fase torneo en panel
+3-stats deben guardarse por partido (para no repetir y para mostrar x partido)

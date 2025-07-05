@@ -53,7 +53,7 @@ function EquipoNuevo() {
       }),
     })
       .then(res => res.json())
-      .then(data => {
+      .then(() => {
         alert("Equipo y jugadores cargados correctamente");
         setNombreEquipo("");
         setJugadores([]);

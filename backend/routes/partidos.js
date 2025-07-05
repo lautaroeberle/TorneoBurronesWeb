@@ -55,7 +55,8 @@ router.put('/:id', async (req, res) => {
   const { goles_local, goles_visitante, jugado } = req.body;
 
   try {
-    const jugadoEntero = jugado === "true" || jugado === true ? 1 : 0;
+    const jugadoEntero = jugado === "true" || jugado === true || jugado === "1" || jugado === 1 ? 1 : 0;
+
 
 const [resultado] = await db.promise().query(
   `UPDATE partidos SET goles_local = ?, goles_visitante = ?, jugado = ? WHERE id = ?`,
@@ -120,5 +121,43 @@ router.get('/torneo', (req, res) => {
     res.json(rows);
   });
 });
+// Guardar estadísticas por jugador (formato flexible: goles, amarillas, rojas)
+router.post('/:id/estadisticas', async (req, res) => {
+  const partidoId = req.params.id;
+  const { jugador_id, goles, amarillas, rojas } = req.body;
+
+  try {
+    const insertEvento = async (tipo, cantidad) => {
+      if (cantidad > 0) {
+        await db.promise().query(
+          `INSERT INTO estadisticas_partido (partido_id, jugador_id, tipo_evento, cantidad)
+           VALUES (?, ?, ?, ?)`,
+          [partidoId, jugador_id, tipo, cantidad]
+        );
+
+        // Opcional: actualizar estadísticas acumuladas del jugador
+        await db.promise().query(
+          `UPDATE jugadores SET ${tipo === 'gol' ? 'goles' : tipo + 's'} = ${tipo === 'gol' ? 'goles' : tipo + 's'} + ? WHERE id = ?`,
+          [cantidad, jugador_id]
+        );
+      }
+    };
+
+    await insertEvento('gol', goles);
+    await insertEvento('amarilla', amarillas);
+    await insertEvento('roja', rojas);
+
+    res.status(201).json({ message: 'Estadísticas guardadas correctamente' });
+  } catch (error) {
+    console.error("Error al guardar estadística:", error);
+    res.status(500).json({ error: 'Error al guardar estadística' });
+  }
+});
+
+
+
+
+
+
 
 module.exports = router;

@@ -82,6 +82,14 @@ router.post("/jugador", (req, res) => {
     }
   );
 });
+// Obtener jugadores de un equipo específico
+router.get("/:id/jugadores", (req, res) => {
+  const equipoId = req.params.id;
+  db.query("SELECT id, nombre FROM jugadores WHERE equipo_id = ?", [equipoId], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
 
 
 
