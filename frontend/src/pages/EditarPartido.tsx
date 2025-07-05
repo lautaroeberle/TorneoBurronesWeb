@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/panel.css";
 
 interface Jugador {
   id: number;
@@ -27,20 +28,13 @@ function EditarPartido() {
       .then(data => setTorneos(data));
   }, []);
 
-const cargarPartidos = async (torneoId: string) => {
-  setTorneoSeleccionado(torneoId);
-  const res = await fetch(`http://localhost:3000/api/partidos/torneo/${torneoId}`);
-  let data = await res.json();
-
-  
-  data = data.map((p: any) => ({
-    ...p,
-    jugado: Number(p.jugado)
-  }));
-
-  setPartidos(data);
-};
-
+  const cargarPartidos = async (torneoId: string) => {
+    setTorneoSeleccionado(torneoId);
+    const res = await fetch(`http://localhost:3000/api/partidos/torneo/${torneoId}`);
+    let data = await res.json();
+    data = data.map((p: any) => ({ ...p, jugado: Number(p.jugado) }));
+    setPartidos(data);
+  };
 
   const cargarJugadores = async (equipoLocalId: number, equipoVisitanteId: number) => {
     try {
@@ -109,34 +103,52 @@ const cargarPartidos = async (torneoId: string) => {
   };
 
   return (
-    <div className="panel">
-      <h2>Editar Partido</h2>
+    <div className="panel-section">
+      <h2 className="section-title">Editar Partido</h2>
 
-      <select onChange={e => cargarPartidos(e.target.value)} defaultValue="">
+      <select className="select" onChange={e => cargarPartidos(e.target.value)} defaultValue="">
         <option value="">Seleccionar Torneo</option>
         {torneos.map((t: any) => (
           <option key={t.id} value={t.id}>{t.nombre} {t.anio}</option>
         ))}
       </select>
 
-      <ul>
+      <ul className="lista-partidos">
         {partidos.map((p: any) => (
           <li key={p.id}>
             {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} - 
             Resultado: {p.jugado === 1 ? `${p.goles_local} - ${p.goles_visitante}` : 'Pendiente'}
-            <button onClick={() => handleEdit(p)}>Editar</button>
+            <button className="btn btn-modify" onClick={() => handleEdit(p)}>Editar</button>
           </li>
         ))}
       </ul>
 
       {partidoSeleccionado && (
-        <form onSubmit={handleSubmit}>
-          <h3>Editando: {partidoSeleccionado.equipo_local} vs {partidoSeleccionado.equipo_visitante}</h3>
-          <input type="number" name="goles_local" value={partidoSeleccionado.goles_local} onChange={handleChange} />
-          <input type="number" name="goles_visitante" value={partidoSeleccionado.goles_visitante} onChange={handleChange} />
-          <label>
+        <form className="formulario" onSubmit={handleSubmit}>
+          <h3>
+            Editando: {partidoSeleccionado.equipo_local} vs {partidoSeleccionado.equipo_visitante}
+          </h3>
+
+          <input
+            type="number"
+            name="goles_local"
+            value={partidoSeleccionado.goles_local}
+            onChange={handleChange}
+            className="input"
+            placeholder="Goles Local"
+          />
+          <input
+            type="number"
+            name="goles_visitante"
+            value={partidoSeleccionado.goles_visitante}
+            onChange={handleChange}
+            className="input"
+            placeholder="Goles Visitante"
+          />
+
+          <label className="label">
             ¿Jugado?
-            <select name="jugado" value={partidoSeleccionado.jugado} onChange={handleChange}>
+            <select name="jugado" value={partidoSeleccionado.jugado} onChange={handleChange} className="select">
               <option value={0}>No</option>
               <option value={1}>Sí</option>
             </select>
@@ -144,25 +156,62 @@ const cargarPartidos = async (torneoId: string) => {
 
           <h4>Estadísticas por jugador</h4>
           {estadisticas.map((est, index) => (
-            <div key={index} style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
-              <select value={est.jugador_id} onChange={(e) => actualizarEstadistica(index, 'jugador_id', e.target.value)}>
+            <div key={index} className="estadistica-linea">
+              <select
+                value={est.jugador_id}
+                onChange={(e) => actualizarEstadistica(index, 'jugador_id', e.target.value)}
+                className="select"
+              >
                 <option value="">Seleccionar jugador</option>
                 {jugadores.map(j => (
                   <option key={j.id} value={j.id}>{j.nombre}</option>
                 ))}
               </select>
-              <input type="number" placeholder="Goles" value={est.goles} onChange={e => actualizarEstadistica(index, 'goles', e.target.value)} />
-              <input type="number" placeholder="Amarillas" value={est.amarillas} onChange={e => actualizarEstadistica(index, 'amarillas', e.target.value)} />
-              <input type="number" placeholder="Rojas" value={est.rojas} onChange={e => actualizarEstadistica(index, 'rojas', e.target.value)} />
+
+              <div className="icon-input">
+                ⚽
+                <input
+                  type="number"
+                  placeholder="Goles"
+                  value={est.goles}
+                  onChange={e => actualizarEstadistica(index, 'goles', e.target.value)}
+                  className="input"
+                />
+              </div>
+
+              <div className="icon-input">
+                🟡
+                <input
+                  type="number"
+                  placeholder="Amarillas"
+                  value={est.amarillas}
+                  onChange={e => actualizarEstadistica(index, 'amarillas', e.target.value)}
+                  className="input"
+                />
+              </div>
+
+              <div className="icon-input">
+                🔴
+                <input
+                  type="number"
+                  placeholder="Rojas"
+                  value={est.rojas}
+                  onChange={e => actualizarEstadistica(index, 'rojas', e.target.value)}
+                  className="input"
+                />
+              </div>
             </div>
           ))}
-          <button type="button" onClick={agregarEstadistica}>Agregar Estadística</button>
+
+          <button type="button" className="btn btn-create" onClick={agregarEstadistica}>
+            Agregar Estadística
+          </button>
           <br />
-          <button type="submit">Guardar cambios</button>
+          <button type="submit" className="btn btn-save">Guardar cambios</button>
         </form>
       )}
 
-      <p>{mensaje}</p>
+      <p className="mensaje">{mensaje}</p>
     </div>
   );
 }

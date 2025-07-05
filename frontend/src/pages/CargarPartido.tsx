@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/panel.css";
 
 function CargarPartido() {
   const [torneos, setTorneos] = useState([]);
@@ -34,11 +35,10 @@ function CargarPartido() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-   const body = {
-    ...form,
-    grupo_fecha: form.fase === "Grupos" ? form.grupo_fecha : null
-  };
-
+    const body = {
+      ...form,
+      grupo_fecha: form.fase === "Grupos" ? form.grupo_fecha : null
+    };
 
     try {
       const res = await fetch("http://localhost:3000/api/partidos", {
@@ -55,34 +55,34 @@ function CargarPartido() {
   };
 
   return (
-    <div className="panel">
-      <h2>Cargar Partido</h2>
-      <form onSubmit={handleSubmit}>
-        <select name="torneo_id" value={form.torneo_id} onChange={handleChange} required>
+    <div className="panel-section">
+      <h2 className="section-title">Cargar Partido</h2>
+      <form className="form" onSubmit={handleSubmit}>
+        <select className="select" name="torneo_id" value={form.torneo_id} onChange={handleChange} required>
           <option value="">Seleccionar Torneo</option>
           {torneos.map((t: any) => (
             <option key={t.id} value={t.id}>{t.nombre} {t.anio}</option>
           ))}
         </select>
 
-        <select name="equipo_local_id" value={form.equipo_local_id} onChange={handleChange} required>
+        <select className="select" name="equipo_local_id" value={form.equipo_local_id} onChange={handleChange} required>
           <option value="">Equipo Local</option>
           {equipos.map((e: any) => (
             <option key={e.id} value={e.id}>{e.nombre}</option>
           ))}
         </select>
 
-        <select name="equipo_visitante_id" value={form.equipo_visitante_id} onChange={handleChange} required>
+        <select className="select" name="equipo_visitante_id" value={form.equipo_visitante_id} onChange={handleChange} required>
           <option value="">Equipo Visitante</option>
           {equipos.map((e: any) => (
             <option key={e.id} value={e.id}>{e.nombre}</option>
           ))}
         </select>
 
-        <input type="date" name="fecha" value={form.fecha} onChange={handleChange} required />
-        <input type="time" name="hora" value={form.hora} onChange={handleChange} required />
+        <input className="input" type="date" name="fecha" value={form.fecha} onChange={handleChange} required />
+        <input className="input" type="time" name="hora" value={form.hora} onChange={handleChange} required />
 
-        <select name="fase" value={form.fase} onChange={handleChange} required>
+        <select className="select" name="fase" value={form.fase} onChange={handleChange} required>
           <option value="">Seleccionar Fase</option>
           <option value="Grupos">Grupos</option>
           <option value="Octavos de final">Octavos de final</option>
@@ -93,6 +93,7 @@ function CargarPartido() {
 
         {form.fase === "Grupos" && (
           <input
+            className="input"
             type="number"
             name="grupo_fecha"
             value={form.grupo_fecha}
@@ -102,9 +103,9 @@ function CargarPartido() {
           />
         )}
 
-        <button type="submit">Guardar Partido</button>
+        <button type="submit" className="btn btn-create">Guardar Partido</button>
       </form>
-      <p>{mensaje}</p>
+      <p className="mensaje">{mensaje}</p>
     </div>
   );
 }

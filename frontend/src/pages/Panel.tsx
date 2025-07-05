@@ -5,6 +5,7 @@ import EquipoNuevo from "./EquipoNuevo";
 import EditarEquipos from "./EditarEquipos";
 import CargarPartido from "./CargarPartido";
 import EditarPartido from "./EditarPartido";
+import "../styles/panel.css";
 
 function Panel() {
   const navigate = useNavigate();
@@ -15,15 +16,17 @@ function Panel() {
   }, [navigate]);
 
   return (
-    <div className="panel">
-      <h1>Panel de Administración</h1>
-      
-       <Torneos />
-       <EquipoNuevo />
-        <EditarEquipos />
-        <CargarPartido />
-        <EditarPartido />
-
+    <div className="admin-panel">
+      <header>
+        <h1>Panel de Administración</h1>
+      </header>
+      <main>
+        <section className="panel-section"><Torneos /></section>
+        <section className="panel-section"><EquipoNuevo /></section>
+        <section className="panel-section"><EditarEquipos /></section>
+        <section className="panel-section"><CargarPartido /></section>
+        <section className="panel-section"><EditarPartido /></section>
+      </main>
     </div>
   );
 }

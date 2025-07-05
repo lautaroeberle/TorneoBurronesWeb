@@ -3,12 +3,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
-// Crear equipo con sus jugadores
+// Crear equipo con sus jugadores (o sin jugadores)
 router.post("/con-jugadores", (req, res) => {
   const { torneo_id, nombre, jugadores } = req.body;
 
-  if (!torneo_id || !nombre || !jugadores || jugadores.length === 0) {
-    return res.status(400).json({ error: "Datos incompletos" });
+  if (!torneo_id || !nombre) {
+    return res.status(400).json({ error: "Datos incompletos: torneo_id y nombre son requeridos" });
   }
 
   // Insertar equipo
@@ -17,7 +17,12 @@ router.post("/con-jugadores", (req, res) => {
 
     const equipoId = result.insertId;
 
-    // Insertar jugadores
+    // Si no hay jugadores, respondemos solo con equipo creado
+    if (!jugadores || jugadores.length === 0) {
+      return res.status(201).json({ message: "Equipo creado sin jugadores." });
+    }
+
+    // Insertar jugadores si hay
     const values = jugadores.map(j => [j.nombre, j.apellido, j.dni, j.dorsal, equipoId]);
     db.query(
       "INSERT INTO jugadores (nombre, apellido, dni, dorsal, equipo_id) VALUES ?",
@@ -29,6 +34,7 @@ router.post("/con-jugadores", (req, res) => {
     );
   });
 });
+
 
 // Obtener todos los equipos y sus jugadores
 router.get("/", (req, res) => {

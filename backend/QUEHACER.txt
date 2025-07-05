@@ -1,3 +1,6 @@
 1- Agregar reglamento a Hero
 2- dar opciones tipo enum para fase torneo en panel
 3-stats deben guardarse por partido (para no repetir y para mostrar x partido)
+cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que se reinicie la pag
+
+revisar que carajo es el subrayado

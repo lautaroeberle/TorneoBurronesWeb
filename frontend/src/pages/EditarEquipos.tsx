@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/panel.css";
 
 interface Jugador {
   id: number;
@@ -63,28 +64,23 @@ function EditarEquipos() {
   const guardarCambios = async () => {
     if (!equipoSeleccionado) return;
 
-    // Actualizar equipo
     await fetch(`http://localhost:3000/api/equipos/${equipoSeleccionado.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre: equipoSeleccionado.nombre }),
     });
 
-    // Guardar jugadores
     for (const jugador of equipoSeleccionado.jugadores) {
-      if (jugador.nuevo) {
-        await fetch("http://localhost:3000/api/equipos/jugador", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(jugador),
-        });
-      } else {
-        await fetch(`http://localhost:3000/api/equipos/jugador/${jugador.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(jugador),
-        });
-      }
+      const endpoint = jugador.nuevo
+        ? "http://localhost:3000/api/equipos/jugador"
+        : `http://localhost:3000/api/equipos/jugador/${jugador.id}`;
+      const method = jugador.nuevo ? "POST" : "PUT";
+
+      await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(jugador),
+      });
     }
 
     alert("Cambios guardados");
@@ -93,10 +89,11 @@ function EditarEquipos() {
   };
 
   return (
-    <div>
-      <h2>Editar equipos</h2>
+    <div className="panel-section">
+      <h2 className="section-title">Editar Equipos</h2>
 
       <select
+        className="select"
         onChange={(e) => {
           const eq = equipos.find(eq => eq.id === Number(e.target.value));
           if (eq) setEquipoSeleccionado(eq);
@@ -110,7 +107,7 @@ function EditarEquipos() {
       </select>
 
       {equipoSeleccionado && (
-        <div style={{ marginTop: "1rem" }}>
+        <div className="equipo-edicion">
           <h3>Nombre del equipo</h3>
           <input
             type="text"
@@ -120,7 +117,7 @@ function EditarEquipos() {
 
           <h3>Jugadores</h3>
           {equipoSeleccionado.jugadores.map((jug, i) => (
-            <div key={i} style={{ marginBottom: "1rem" }}>
+            <div key={i} className="jugador-form">
               <input
                 type="text"
                 placeholder="Nombre"
@@ -142,9 +139,11 @@ function EditarEquipos() {
             </div>
           ))}
 
-          <button type="button" onClick={agregarJugadorNuevo}>Agregar jugador</button>
+          <button type="button" className="btn btn-create" onClick={agregarJugadorNuevo}>
+            Agregar jugador
+          </button>
           <br /><br />
-          <button onClick={guardarCambios}>Guardar cambios</button>
+          <button className="btn btn-save" onClick={guardarCambios}>Guardar cambios</button>
         </div>
       )}
     </div>

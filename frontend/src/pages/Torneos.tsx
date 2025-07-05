@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../styles/panel.css";
 
 const OPCIONES_TORNEOS = [
   "Copa de Verano",
@@ -46,9 +47,9 @@ function Torneos() {
   }, []);
 
   return (
-    <div>
-      <h2>Agregar Torneo</h2>
-      <form onSubmit={agregarTorneo}>
+    <div className="panel-section">
+      <h2 className="section-title">Agregar Torneo</h2>
+      <form className="form" onSubmit={agregarTorneo}>
         <select
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
@@ -67,16 +68,16 @@ function Torneos() {
           onChange={(e) => setAño(Number(e.target.value))}
           required
         />
-        <button type="submit">Crear</button>
+        <button type="submit" className="btn btn-create">Crear</button>
       </form>
-      <p>{mensaje}</p>
+      <p className="mensaje">{mensaje}</p>
 
-      <h3>Torneos existentes:</h3>
-      <ul>
+      <h3 className="section-subtitle">Torneos existentes:</h3>
+      <ul className="listado">
         {torneos.map((t: any) => (
-          <li key={t.id}>
-            {t.nombre} ({t.año}) {" "}
-            <button onClick={() => eliminarTorneo(t.id)}>Eliminar</button>
+          <li key={t.id} className="item">
+            {t.nombre} ({t.año})
+            <button onClick={() => eliminarTorneo(t.id)} className="btn btn-delete">Eliminar</button>
           </li>
         ))}
       </ul>
