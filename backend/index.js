@@ -16,6 +16,9 @@ app.use("/api/equipos", equiposRouter);
 
 const partidosRouter = require("./routes/partidos");
 app.use("/api/partidos", partidosRouter);
+const estadisticasRouter = require("./routes/estadisticas");
+app.use("/api/estadisticas", estadisticasRouter);
+
 
 
 const PORT = 3000;

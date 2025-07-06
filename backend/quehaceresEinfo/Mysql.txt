@@ -1,0 +1,77 @@
+use torneo;
+CREATE TABLE inscripciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100),
+  equipo VARCHAR(100),
+  telefono VARCHAR(20)
+);
+
+
+
+DROP TABLE IF EXISTS torneos;
+
+CREATE TABLE torneos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre ENUM('Copa de Verano', 'Apertura', 'Copa de Invierno', 'Clausura') NOT NULL,
+  año INT NOT NULL
+);
+DROP TABLE IF EXISTS jugadores;
+CREATE TABLE jugadores (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  apellido VARCHAR(100) NOT NULL,
+  dni VARCHAR(20) NOT NULL,
+  dorsal INT NOT NULL,
+  goles INT DEFAULT 0,
+  amarillas INT DEFAULT 0,
+  rojas INT DEFAULT 0,
+  equipo_id INT NOT NULL,
+  FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
+);
+DROP TABLE IF EXISTS posiciones;
+CREATE TABLE posiciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  equipo_id INT NOT NULL,
+  pj INT DEFAULT 0, -- partidos jugados
+  pg INT DEFAULT 0, -- ganados
+  pe INT DEFAULT 0, -- empatados
+  pp INT DEFAULT 0, -- perdidos
+  gf INT DEFAULT 0, -- goles a favor
+  gc INT DEFAULT 0, -- goles en contra
+  puntos INT DEFAULT 0,
+  FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
+);
+DROP TABLE IF EXISTS partidos;
+CREATE TABLE partidos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  torneo_id INT NOT NULL,
+  equipo_local_id INT NOT NULL,
+  equipo_visitante_id INT NOT NULL,
+  fecha DATE,
+  hora TIME,
+  goles_local INT DEFAULT 0,
+  goles_visitante INT DEFAULT 0,
+  fase ENUM('Grupos', 'Octavos de final', 'Cuartos de final', 'Semifinal', 'Final') NOT NULL,
+  grupo_fecha INT, -- solo aplicable si fase = 'Grupos'
+  jugado BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (torneo_id) REFERENCES torneos(id),
+  FOREIGN KEY (equipo_local_id) REFERENCES equipos(id),
+  FOREIGN KEY (equipo_visitante_id) REFERENCES equipos(id)
+);
+DROP TABLE IF EXISTS equipos;
+CREATE TABLE equipos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100),
+  torneo_id INT NOT NULL,
+  FOREIGN KEY (torneo_id) REFERENCES torneos(id) ON DELETE CASCADE
+);
+DROP TABLE IF EXISTS estadisticas_partido;
+CREATE TABLE estadisticas_partido (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  partido_id INT NOT NULL,
+  jugador_id INT NOT NULL,
+  tipo ENUM('gol', 'amarilla', 'roja') NOT NULL,
+  minuto INT NOT NULL,
+  FOREIGN KEY (partido_id) REFERENCES partidos(id),
+  FOREIGN KEY (jugador_id) REFERENCES jugadores(id)
+);

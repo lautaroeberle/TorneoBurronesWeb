@@ -16,6 +16,7 @@ type Partido = {
 type Evento = {
   jugador_id: number;
   nombre: string;
+  apellido:string;
   tipo: "gol" | "amarilla" | "roja";
   minuto: number;
   equipo: string;
@@ -26,33 +27,32 @@ function AperturaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
 
-  useEffect(() => {
-   const fetchDatos = async () => {
-  try {
-    const [resPartidos, resEventos] = await Promise.all([
-      fetch("http://localhost:3000/api/partidos/torneo?nombre=Apertura"),
-      fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Apertura")
-    ]);
+useEffect(() => {
+  const fetchDatos = async () => {
+    try {
+      const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Apertura");
+      const dataPartidos = await resPartidos.json();
+      setPartidos(dataPartidos);
+    } catch (error) {
+      console.error("Error al cargar partidos del Apertura:", error);
+    }
 
-    const dataPartidos = await resPartidos.json();
-    const dataEventos = await resEventos.json();
+    try {
+      const resEventos = await fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Apertura");
+      const dataEventos = await resEventos.json();
+      setEventos(dataEventos);
+    } catch (error) {
+      console.warn("No se pudieron cargar eventos del Apertura:", error);
+    }
+  };
 
-    console.log("Partidos recibidos:", dataPartidos);
-    console.log("Eventos recibidos:", dataEventos);
+  fetchDatos();
+}, []);
 
-    setPartidos(dataPartidos);
-    setEventos(dataEventos);
-  } catch (error) {
-    console.error("Error al cargar datos del torneo Apertura:", error);
-  }
-};
-
-    fetchDatos();
-  }, []);
 
   const renderEventos = (partidoId: number) => {
     const eventosDelPartido = eventos
-      .filter(e => e.partido_id === partidoId)
+      .filter((e) => e.partido_id === partidoId)
       .sort((a, b) => a.minuto - b.minuto);
 
     if (eventosDelPartido.length === 0) return null;
@@ -61,8 +61,14 @@ function AperturaPage() {
       <ul className="minuto-a-minuto">
         {eventosDelPartido.map((e, i) => (
           <li key={i}>
-            <strong>{e.minuto}'</strong> - {e.tipo === "gol" ? "⚽" : e.tipo === "amarilla" ? "🟡" : "🔴"}{" "}
-            {e.nombre} ({e.equipo}) - {e.tipo === "gol" ? "Gol" : e.tipo === "amarilla" ? "Amarilla" : "Roja"}
+            <strong>{e.minuto}'</strong>{" "}
+            {e.tipo === "gol" ? "⚽" : e.tipo === "amarilla" ? "🟡" : "🔴"}{" "}
+            {e.nombre} ({e.equipo}) -{" "}
+            {e.tipo === "gol"
+              ? "Gol"
+              : e.tipo === "amarilla"
+              ? "Amarilla"
+              : "Roja"}
           </li>
         ))}
       </ul>
@@ -71,23 +77,24 @@ function AperturaPage() {
 
   return (
     <div className="torneo-page">
-      <h2>Apertura {new Date().getFullYear()}</h2>
+      <h2>Torneo Apertura {new Date().getFullYear()}</h2>
 
       <section className="partidos">
         <h3>Partidos</h3>
         <ul>
-          {partidos.map((p) => {
-  const esJugado = !!p.jugado; // fuerza booleano
-  return (
-    <li key={p.id}>
-      <strong>{p.equipo_local}</strong> vs <strong>{p.equipo_visitante}</strong> - {p.fecha} {p.hora} - {p.fase}
-      <br />
-      Resultado: {esJugado ? `${p.goles_local} - ${p.goles_visitante}` : "Pendiente"}
-      {esJugado && renderEventos(p.id)}
-    </li>
-  );
-})}
-
+          {partidos.map((p) => (
+            <li key={p.id}>
+              <strong>{p.equipo_local}</strong> vs{" "}
+              <strong>{p.equipo_visitante}</strong> - {p.fecha} {p.hora} -{" "}
+              {p.fase}
+              <br />
+              Resultado:{" "}
+              {p.jugado
+                ? `${p.goles_local} - ${p.goles_visitante}`
+                : "Pendiente"}
+              {p.jugado && renderEventos(p.id)}
+            </li>
+          ))}
         </ul>
       </section>
     </div>
