@@ -1,3 +1,4 @@
+// src/EditarPartido.tsx
 import { useEffect, useState } from "react";
 import "../styles/panel.css";
 
@@ -6,11 +7,10 @@ interface Jugador {
   nombre: string;
 }
 
-interface Estadistica {
+interface Evento {
   jugador_id: number;
-  goles: number;
-  amarillas: number;
-  rojas: number;
+  tipo: 'gol' | 'amarilla' | 'roja';
+  minuto: number;
 }
 
 function EditarPartido() {
@@ -19,7 +19,7 @@ function EditarPartido() {
   const [torneoSeleccionado, setTorneoSeleccionado] = useState('');
   const [partidoSeleccionado, setPartidoSeleccionado] = useState<any>(null);
   const [jugadores, setJugadores] = useState<Jugador[]>([]);
-  const [estadisticas, setEstadisticas] = useState<Estadistica[]>([]);
+  const [eventos, setEventos] = useState<Evento[]>([]);
   const [mensaje, setMensaje] = useState('');
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function EditarPartido() {
   const handleEdit = (partido: any) => {
     setPartidoSeleccionado({ ...partido });
     cargarJugadores(partido.equipo_local_id, partido.equipo_visitante_id);
-    setEstadisticas([]);
+    setEventos([]);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -65,15 +65,19 @@ function EditarPartido() {
     setPartidoSeleccionado({ ...partidoSeleccionado, [name]: newValue });
   };
 
-  const agregarEstadistica = () => {
-    setEstadisticas([...estadisticas, { jugador_id: 0, goles: 0, amarillas: 0, rojas: 0 }]);
+  const agregarEvento = () => {
+    setEventos([...eventos, { jugador_id: 0, tipo: 'gol', minuto: 0 }]);
   };
 
-  const actualizarEstadistica = (index: number, campo: keyof Estadistica, valor: any) => {
-    const nuevas = [...estadisticas];
-    nuevas[index][campo] = Number(valor);
-    setEstadisticas(nuevas);
+  const actualizarEvento = (index: number, campo: keyof Evento, valor: any) => {
+  const nuevosEventos = [...eventos];
+  nuevosEventos[index] = {
+    ...nuevosEventos[index],
+    [campo]: valor
   };
+  setEventos(nuevosEventos);
+};
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,17 +92,15 @@ function EditarPartido() {
       })
     });
 
-    for (const est of estadisticas) {
-      await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}/estadisticas`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(est)
-      });
-    }
+    await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}/estadisticas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(eventos)
+    });
 
     setMensaje('Partido y estadísticas actualizados');
     setPartidoSeleccionado(null);
-    setEstadisticas([]);
+    setEventos([]);
     cargarPartidos(torneoSeleccionado);
   };
 
@@ -154,12 +156,12 @@ function EditarPartido() {
             </select>
           </label>
 
-          <h4>Estadísticas por jugador</h4>
-          {estadisticas.map((est, index) => (
+          <h4>Eventos del partido (minuto a minuto)</h4>
+          {eventos.map((evento, index) => (
             <div key={index} className="estadistica-linea">
               <select
-                value={est.jugador_id}
-                onChange={(e) => actualizarEstadistica(index, 'jugador_id', e.target.value)}
+                value={evento.jugador_id}
+                onChange={(e) => actualizarEvento(index, 'jugador_id', e.target.value)}
                 className="select"
               >
                 <option value="">Seleccionar jugador</option>
@@ -168,43 +170,28 @@ function EditarPartido() {
                 ))}
               </select>
 
-              <div className="icon-input">
-                ⚽
-                <input
-                  type="number"
-                  placeholder="Goles"
-                  value={est.goles}
-                  onChange={e => actualizarEstadistica(index, 'goles', e.target.value)}
-                  className="input"
-                />
-              </div>
+              <select
+                value={evento.tipo}
+                onChange={e => actualizarEvento(index, 'tipo', e.target.value)}
+                className="select"
+              >
+                <option value="gol">⚽ Gol</option>
+                <option value="amarilla">🟡 Amarilla</option>
+                <option value="roja">🔴 Roja</option>
+              </select>
 
-              <div className="icon-input">
-                🟡
-                <input
-                  type="number"
-                  placeholder="Amarillas"
-                  value={est.amarillas}
-                  onChange={e => actualizarEstadistica(index, 'amarillas', e.target.value)}
-                  className="input"
-                />
-              </div>
-
-              <div className="icon-input">
-                🔴
-                <input
-                  type="number"
-                  placeholder="Rojas"
-                  value={est.rojas}
-                  onChange={e => actualizarEstadistica(index, 'rojas', e.target.value)}
-                  className="input"
-                />
-              </div>
+              <input
+                type="number"
+                placeholder="Minuto"
+                value={evento.minuto}
+                onChange={e => actualizarEvento(index, 'minuto', e.target.value)}
+                className="input"
+              />
             </div>
           ))}
 
-          <button type="button" className="btn btn-create" onClick={agregarEstadistica}>
-            Agregar Estadística
+          <button type="button" className="btn btn-create" onClick={agregarEvento}>
+            Agregar Evento
           </button>
           <br />
           <button type="submit" className="btn btn-save">Guardar cambios</button>

@@ -121,36 +121,59 @@ router.get('/torneo', (req, res) => {
     res.json(rows);
   });
 });
-// Guardar estadísticas por jugador (formato flexible: goles, amarillas, rojas)
+// Nueva versión: múltiples eventos individuales con tipo y minuto
 router.post('/:id/estadisticas', async (req, res) => {
   const partidoId = req.params.id;
-  const { jugador_id, goles, amarillas, rojas } = req.body;
+  const eventos = req.body; // array de { jugador_id, tipo, minuto }
 
   try {
-    const insertEvento = async (tipo, cantidad) => {
-      if (cantidad > 0) {
-        await db.promise().query(
-          `INSERT INTO estadisticas_partido (partido_id, jugador_id, tipo_evento, cantidad)
-           VALUES (?, ?, ?, ?)`,
-          [partidoId, jugador_id, tipo, cantidad]
-        );
+    for (const evento of eventos) {
+      const { jugador_id, tipo, minuto } = evento;
 
-        // Opcional: actualizar estadísticas acumuladas del jugador
-        await db.promise().query(
-          `UPDATE jugadores SET ${tipo === 'gol' ? 'goles' : tipo + 's'} = ${tipo === 'gol' ? 'goles' : tipo + 's'} + ? WHERE id = ?`,
-          [cantidad, jugador_id]
-        );
-      }
-    };
+      // Insertar evento
+      await db.promise().query(
+        `INSERT INTO estadisticas_partido (partido_id, jugador_id, tipo, minuto)
+         VALUES (?, ?, ?, ?)`,
+        [partidoId, jugador_id, tipo, minuto]
+      );
 
-    await insertEvento('gol', goles);
-    await insertEvento('amarilla', amarillas);
-    await insertEvento('roja', rojas);
+      // Actualizar acumulado
+      const campo = tipo === 'gol' ? 'goles' : tipo === 'amarilla' ? 'amarillas' : 'rojas';
+      await db.promise().query(
+        `UPDATE jugadores SET ${campo} = ${campo} + 1 WHERE id = ?`,
+        [jugador_id]
+      );
+    }
 
-    res.status(201).json({ message: 'Estadísticas guardadas correctamente' });
+    res.status(201).json({ message: 'Estadísticas guardadas con minuto correctamente' });
   } catch (error) {
-    console.error("Error al guardar estadística:", error);
-    res.status(500).json({ error: 'Error al guardar estadística' });
+    console.error("Error al guardar estadísticas con minuto:", error);
+    res.status(500).json({ error: 'Error al guardar estadísticas' });
+  }
+});
+
+// Obtener todos los eventos (minuto a minuto) de un torneo
+router.get("/estadisticas/torneo", async (req, res) => {
+  const { nombre } = req.query;
+
+  const query = `
+    SELECT ep.partido_id, ep.jugador_id, ep.tipo, ep.minuto,
+           j.nombre AS nombre, e.nombre AS equipo
+    FROM estadisticas_partido ep
+    JOIN jugadores j ON ep.jugador_id = j.id
+    JOIN equipos e ON j.equipo_id = e.id
+    JOIN partidos p ON ep.partido_id = p.id
+    JOIN torneos t ON p.torneo_id = t.id
+    WHERE t.nombre = ?
+    ORDER BY ep.partido_id, ep.minuto
+  `;
+
+  try {
+    const [rows] = await db.promise().query(query, [nombre]);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener eventos del torneo:", error);
+    res.status(500).json({ error: "Error al obtener eventos del torneo" });
   }
 });
 
