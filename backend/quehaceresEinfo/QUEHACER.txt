@@ -12,3 +12,8 @@ cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que
 
 mostrar apellido (o nombre completo) en vez de nombre en stats
 
+eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una vez se abra el coso editar partidos)
+
+MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
+
+en cargar partido deben mostrarse solamente los equipos del torneo que se elije

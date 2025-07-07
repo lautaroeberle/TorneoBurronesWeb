@@ -11,6 +11,8 @@ app.use('/api/inscripcion', inscripcionRouter);
 const torneosRouter = require("./routes/torneos");
 app.use("/api/torneos", torneosRouter);
 
+app.use("/uploads", express.static("uploads"));
+
 const equiposRouter = require("./routes/equipos");
 app.use("/api/equipos", equiposRouter);
 

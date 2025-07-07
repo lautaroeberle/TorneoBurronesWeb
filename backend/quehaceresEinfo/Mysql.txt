@@ -61,10 +61,12 @@ CREATE TABLE partidos (
 DROP TABLE IF EXISTS equipos;
 CREATE TABLE equipos (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(100),
+  nombre VARCHAR(100) NOT NULL,
   torneo_id INT NOT NULL,
+  imagen VARCHAR(255),
   FOREIGN KEY (torneo_id) REFERENCES torneos(id) ON DELETE CASCADE
 );
+
 DROP TABLE IF EXISTS estadisticas_partido;
 CREATE TABLE estadisticas_partido (
   id INT AUTO_INCREMENT PRIMARY KEY,

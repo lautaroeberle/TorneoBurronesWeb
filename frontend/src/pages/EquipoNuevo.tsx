@@ -4,23 +4,31 @@ import "../styles/panel.css";
 function EquipoNuevo() {
   const [nombre, setNombre] = useState("");
   const [torneoId, setTorneoId] = useState("");
-  const [torneos, setTorneos] = useState<any[]>([]);
+  const [imagen, setImagen] = useState<File | null>(null);
   const [mensaje, setMensaje] = useState("");
+  const [torneos, setTorneos] = useState<any[]>([]);
 
-  const fetchTorneos = () => {
+  useEffect(() => {
     fetch("http://localhost:3000/api/torneos")
-      .then(res => res.json())
-      .then(data => setTorneos(data));
-  };
+      .then((res) => res.json())
+      .then((data) => setTorneos(data));
+  }, []);
 
   const agregarEquipo = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Enviamos jugadores vacíos para que backend acepte la creación sin jugadores
+    const formData = new FormData();
+    formData.append("nombre", nombre);
+    formData.append("torneo_id", torneoId);
+    formData.append("jugadores", JSON.stringify([])); // Por ahora sin jugadores
+
+    if (imagen) {
+      formData.append("imagen", imagen);
+    }
+
     fetch("http://localhost:3000/api/equipos/con-jugadores", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, torneo_id: torneoId, jugadores: [] }),
+      body: formData,
     })
       .then(async (res) => {
         const data = await res.json();
@@ -30,13 +38,10 @@ function EquipoNuevo() {
         setMensaje(data.message || "Equipo creado");
         setNombre("");
         setTorneoId("");
+        setImagen(null);
       })
       .catch((err) => setMensaje(err.message || "Error al crear equipo"));
   };
-
-  useEffect(() => {
-    fetchTorneos();
-  }, []);
 
   return (
     <div className="panel-section">
@@ -62,6 +67,12 @@ function EquipoNuevo() {
             </option>
           ))}
         </select>
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImagen(e.target.files?.[0] || null)}
+        />
 
         <button type="submit" className="btn btn-create">
           Crear
