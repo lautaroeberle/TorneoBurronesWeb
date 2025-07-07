@@ -17,3 +17,12 @@ eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una 
 MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
 
 en cargar partido deben mostrarse solamente los equipos del torneo que se elije
+
+
+
+
+
+
+agregar fecha de nacimiento jugador
+
+agregar barrio al crear equipo (tambien al editar)

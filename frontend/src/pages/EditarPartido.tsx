@@ -8,9 +8,10 @@ interface Jugador {
 }
 
 interface Evento {
-  jugador_id: number;
-  tipo: 'gol' | 'amarilla' | 'roja';
-  minuto: number;
+  jugador_id: number | string;
+  tipo: 'gol' | 'amarilla' | 'roja' | 'azul';
+  minuto: number | string;
+  tipo_gol?: 'penal' | 'en_contra' | 'jugada'; // solo si tipo === 'gol'
 }
 
 function EditarPartido() {
@@ -61,48 +62,65 @@ function EditarPartido() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    const newValue = name === "jugado" ? Number(value) : value;
+    const newValue = name === "jugado" || name.startsWith("goles_") ? Number(value) : value;
     setPartidoSeleccionado({ ...partidoSeleccionado, [name]: newValue });
   };
 
   const agregarEvento = () => {
-    setEventos([...eventos, { jugador_id: 0, tipo: 'gol', minuto: 0 }]);
+    setEventos([...eventos, { jugador_id: "", tipo: 'gol', minuto: 0, tipo_gol: 'jugada' }]);
   };
 
   const actualizarEvento = (index: number, campo: keyof Evento, valor: any) => {
-  const nuevosEventos = [...eventos];
-  nuevosEventos[index] = {
-    ...nuevosEventos[index],
-    [campo]: valor
-  };
-  setEventos(nuevosEventos);
-};
+    const nuevosEventos = [...eventos];
+    nuevosEventos[index] = {
+      ...nuevosEventos[index],
+      [campo]: valor
+    };
 
+    // Si el campo es tipo y es distinto de 'gol', eliminar tipo_gol
+    if (campo === "tipo" && valor !== "gol") {
+      delete nuevosEventos[index].tipo_gol;
+    }
+    // Si el campo es tipo y es 'gol' y no tiene tipo_gol, asignar 'jugada'
+    if (campo === "tipo" && valor === "gol" && !nuevosEventos[index].tipo_gol) {
+      nuevosEventos[index].tipo_gol = 'jugada';
+    }
+
+    setEventos(nuevosEventos);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        goles_local: Number(partidoSeleccionado.goles_local),
-        goles_visitante: Number(partidoSeleccionado.goles_visitante),
-        jugado: Number(partidoSeleccionado.jugado)
-      })
-    });
+  // ✅ Filtrar eventos incompletos
+  const eventosFiltrados = eventos.filter((ev) => {
+    return ev.jugador_id !== "" && ev.jugador_id !== null && ev.jugador_id !== undefined;
+  });
 
-    await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}/estadisticas`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(eventos)
-    });
+  // Actualizar datos del partido
+  await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      goles_local: Number(partidoSeleccionado.goles_local),
+      goles_visitante: Number(partidoSeleccionado.goles_visitante),
+      jugado: Number(partidoSeleccionado.jugado)
+    })
+  });
 
-    setMensaje('Partido y estadísticas actualizados');
-    setPartidoSeleccionado(null);
-    setEventos([]);
-    cargarPartidos(torneoSeleccionado);
-  };
+  // ✅ Enviar solo eventos válidos
+  await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}/estadisticas`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eventosFiltrados)
+  });
+
+  setMensaje('Partido y estadísticas actualizados');
+  setPartidoSeleccionado(null);
+  setEventos([]);
+  cargarPartidos(torneoSeleccionado);
+};
+
 
   return (
     <div className="panel-section">
@@ -138,6 +156,7 @@ function EditarPartido() {
             onChange={handleChange}
             className="input"
             placeholder="Goles Local"
+            min={0}
           />
           <input
             type="number"
@@ -146,6 +165,7 @@ function EditarPartido() {
             onChange={handleChange}
             className="input"
             placeholder="Goles Visitante"
+            min={0}
           />
 
           <label className="label">
@@ -161,7 +181,7 @@ function EditarPartido() {
             <div key={index} className="estadistica-linea">
               <select
                 value={evento.jugador_id}
-                onChange={(e) => actualizarEvento(index, 'jugador_id', e.target.value)}
+                onChange={(e) => actualizarEvento(index, 'jugador_id', Number(e.target.value))}
                 className="select"
               >
                 <option value="">Seleccionar jugador</option>
@@ -170,22 +190,40 @@ function EditarPartido() {
                 ))}
               </select>
 
-              <select
-                value={evento.tipo}
-                onChange={e => actualizarEvento(index, 'tipo', e.target.value)}
-                className="select"
-              >
-                <option value="gol">⚽ Gol</option>
-                <option value="amarilla">🟡 Amarilla</option>
-                <option value="roja">🔴 Roja</option>
-              </select>
+             
+<select
+  className="select"
+  value={evento.tipo}
+  onChange={e => actualizarEvento(index, 'tipo', e.target.value)}
+>
+  <option value="gol">⚽ Gol</option>
+  <option value="amarilla">🟡 Amarilla</option>
+  <option value="roja">🔴 Roja</option>
+  <option value="azul">🔵 Azul</option>
+</select>
+
+{evento.tipo === 'gol' && (
+  <select
+    className="select"
+    value={evento.tipo_gol || 'jugada'}
+    onChange={e => actualizarEvento(index, 'tipo_gol', e.target.value)}
+  >
+    <option value="jugada">Jugada</option>
+    <option value="penal">Penal</option>
+    <option value="en_contra">En contra</option>
+  </select>
+)}
+
+
 
               <input
                 type="number"
-                placeholder="Minuto"
                 value={evento.minuto}
-                onChange={e => actualizarEvento(index, 'minuto', e.target.value)}
+                onChange={e => actualizarEvento(index, 'minuto', Number(e.target.value))}
                 className="input"
+                min={0}
+                max={120}
+                placeholder="Minuto"
               />
             </div>
           ))}

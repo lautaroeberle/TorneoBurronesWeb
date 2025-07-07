@@ -25,6 +25,7 @@ CREATE TABLE jugadores (
   goles INT DEFAULT 0,
   amarillas INT DEFAULT 0,
   rojas INT DEFAULT 0,
+  azules INT DEFAULT 0,
   equipo_id INT NOT NULL,
   FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
 );
@@ -72,7 +73,8 @@ CREATE TABLE estadisticas_partido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   partido_id INT NOT NULL,
   jugador_id INT NOT NULL,
-  tipo ENUM('gol', 'amarilla', 'roja') NOT NULL,
+  tipo ENUM('gol', 'amarilla', 'roja', 'azul') NOT NULL,
+  tipo_gol ENUM('normal', 'en_contra', 'penal') DEFAULT NULL,
   minuto INT NOT NULL,
   FOREIGN KEY (partido_id) REFERENCES partidos(id),
   FOREIGN KEY (jugador_id) REFERENCES jugadores(id)

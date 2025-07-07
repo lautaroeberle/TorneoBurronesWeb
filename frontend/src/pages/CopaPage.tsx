@@ -17,7 +17,8 @@ type Evento = {
   jugador_id: number;
   nombre: string;
   apellido: string;
-  tipo: "gol" | "amarilla" | "roja";
+  tipo: "gol" | "amarilla" | "roja" | "azul";
+  tipo_gol?: "penal" | "en_contra" | "jugada";
   minuto: number;
   equipo: string;
   partido_id: number;
@@ -87,13 +88,27 @@ function CopaPage() {
         {eventosDelPartido.map((e, i) => (
           <li key={i}>
             <strong>{e.minuto}'</strong>{" "}
-            {e.tipo === "gol" ? "⚽" : e.tipo === "amarilla" ? "🟡" : "🔴"}{" "}
+            {e.tipo === "gol"
+              ? "⚽"
+              : e.tipo === "amarilla"
+              ? "🟡"
+              : e.tipo === "roja"
+              ? "🔴"
+              : "🔵"}{" "}
             {e.nombre} ({e.equipo}) -{" "}
             {e.tipo === "gol"
-              ? "Gol"
+              ? `Gol${
+                  e.tipo_gol === "en_contra"
+                    ? " en contra"
+                    : e.tipo_gol === "penal"
+                    ? " de penal"
+                    : ""
+                }`
               : e.tipo === "amarilla"
               ? "Amarilla"
-              : "Roja"}
+              : e.tipo === "roja"
+              ? "Roja"
+              : "Azul"}
           </li>
         ))}
       </ul>

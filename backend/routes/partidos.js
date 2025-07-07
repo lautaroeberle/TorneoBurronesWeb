@@ -121,36 +121,52 @@ router.get('/torneo', (req, res) => {
     res.json(rows);
   });
 });
-// Nueva versión: múltiples eventos individuales con tipo y minuto
+// Controlador: POST /:id/estadisticas
 router.post('/:id/estadisticas', async (req, res) => {
   const partidoId = req.params.id;
-  const eventos = req.body; // array de { jugador_id, tipo, minuto }
+  const eventos = req.body;
 
   try {
-    for (const evento of eventos) {
-      const { jugador_id, tipo, minuto } = evento;
+    for (const ev of eventos) {
+      const { jugador_id, tipo, minuto, tipo_gol } = ev;
 
-      // Insertar evento
+      if (tipo === 'gol' && !['penal','jugada','en_contra'].includes(tipo_gol)) {
+        return res.status(400).json({ error: 'tipo_gol inválido' });
+      }
+
       await db.promise().query(
-        `INSERT INTO estadisticas_partido (partido_id, jugador_id, tipo, minuto)
-         VALUES (?, ?, ?, ?)`,
-        [partidoId, jugador_id, tipo, minuto]
+        `INSERT INTO estadisticas_partido
+         (partido_id, jugador_id, tipo, tipo_gol, minuto)
+         VALUES (?, ?, ?, ?, ?)`,
+        [partidoId, jugador_id, tipo, tipo === 'gol' ? tipo_gol : null, minuto]
       );
 
-      // Actualizar acumulado
-      const campo = tipo === 'gol' ? 'goles' : tipo === 'amarilla' ? 'amarillas' : 'rojas';
-      await db.promise().query(
-        `UPDATE jugadores SET ${campo} = ${campo} + 1 WHERE id = ?`,
-        [jugador_id]
-      );
+      if (tipo === 'gol' && tipo_gol !== 'en_contra') {
+        await db.promise().query(`UPDATE jugadores SET goles = goles + 1 WHERE id = ?`, [jugador_id]);
+      } else if (tipo === 'amarilla') {
+        await db.promise().query(`UPDATE jugadores SET amarillas = amarillas + 1 WHERE id = ?`, [jugador_id]);
+      } else if (tipo === 'roja') {
+        await db.promise().query(`UPDATE jugadores SET rojas = rojas + 1 WHERE id = ?`, [jugador_id]);
+      } else if (tipo === 'azul') {
+        await db.promise().query(`UPDATE jugadores SET azules = azules + 1 WHERE id = ?`, [jugador_id]);
+      }
     }
 
-    res.status(201).json({ message: 'Estadísticas guardadas con minuto correctamente' });
+    // Marcar partido como jugado
+    await db.promise().query(
+      `UPDATE partidos SET jugado = 1 WHERE id = ?`,
+      [partidoId]
+    );
+
+    res.status(201).json({ message: 'Estadísticas guardadas' });
   } catch (error) {
-    console.error("Error al guardar estadísticas con minuto:", error);
+    console.error(error);
     res.status(500).json({ error: 'Error al guardar estadísticas' });
   }
 });
+
+
+
 
 
 
