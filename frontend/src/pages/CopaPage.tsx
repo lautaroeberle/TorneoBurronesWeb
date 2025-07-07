@@ -16,39 +16,64 @@ type Partido = {
 type Evento = {
   jugador_id: number;
   nombre: string;
-  apellido:string;
+  apellido: string;
   tipo: "gol" | "amarilla" | "roja";
   minuto: number;
   equipo: string;
   partido_id: number;
 };
 
+type Equipo = {
+  id: number;
+  nombre: string;
+  imagen: string;
+};
+
 function CopaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
+  const [equipos, setEquipos] = useState<Equipo[]>([]);
 
-useEffect(() => {
-  const fetchDatos = async () => {
-    try {
-      const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano");
-      const dataPartidos = await resPartidos.json();
-      setPartidos(dataPartidos);
-    } catch (error) {
-      console.error("Error al cargar partidos de la Copa de Verano:", error);
-    }
+  useEffect(() => {
+    const fetchDatos = async () => {
+      try {
+        const resPartidos = await fetch(
+          "http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano"
+        );
+        const dataPartidos = await resPartidos.json();
+        setPartidos(dataPartidos);
+      } catch (error) {
+        console.error("Error al cargar partidos de la Copa de Verano:", error);
+      }
 
-    try {
-      const resEventos = await fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Copa de Verano");
-      const dataEventos = await resEventos.json();
-      setEventos(dataEventos);
-    } catch (error) {
-      console.warn("No se pudieron cargar eventos de la Copa de Verano:", error);
-    }
+      try {
+        const resEventos = await fetch(
+          "http://localhost:3000/api/estadisticas/torneo?nombre=Copa de Verano"
+        );
+        const dataEventos = await resEventos.json();
+        setEventos(dataEventos);
+      } catch (error) {
+        console.warn("No se pudieron cargar eventos de la Copa de Verano:", error);
+      }
+
+      try {
+        const resEquipos = await fetch("http://localhost:3000/api/equipos");
+        const dataEquipos = await resEquipos.json();
+        setEquipos(dataEquipos);
+      } catch (error) {
+        console.warn("No se pudieron cargar los equipos:", error);
+      }
+    };
+
+    fetchDatos();
+  }, []);
+
+  const obtenerLogo = (nombreEquipo: string) => {
+    const equipo = equipos.find((e) => e.nombre === nombreEquipo);
+    return equipo
+      ? `http://localhost:3000/uploads/${equipo.imagen}`
+      : "http://localhost:3000/uploads/default.png";
   };
-
-  fetchDatos();
-}, []);
-
 
   const renderEventos = (partidoId: number) => {
     const eventosDelPartido = eventos
@@ -84,9 +109,18 @@ useEffect(() => {
         <ul>
           {partidos.map((p) => (
             <li key={p.id}>
+              <img
+                src={obtenerLogo(p.equipo_local)}
+                alt={p.equipo_local}
+                className="logo-equipo"
+              />
               <strong>{p.equipo_local}</strong> vs{" "}
-              <strong>{p.equipo_visitante}</strong> - {p.fecha} {p.hora} -{" "}
-              {p.fase}
+              <img
+                src={obtenerLogo(p.equipo_visitante)}
+                alt={p.equipo_visitante}
+                className="logo-equipo"
+              />
+              <strong>{p.equipo_visitante}</strong> - {p.fecha} {p.hora} - {p.fase}
               <br />
               Resultado:{" "}
               {p.jugado

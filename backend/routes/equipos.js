@@ -70,14 +70,35 @@ router.get("/", (req, res) => {
   });
 });
 
-// Modificar nombre de equipo
-router.put("/:id", (req, res) => {
-  const { nombre } = req.body;
-  db.query("UPDATE equipos SET nombre = ? WHERE id = ?", [nombre, req.params.id], (err) => {
+// Modificar equipo (nombre y/o imagen)
+router.put("/:id", upload.single("imagen"), (req, res) => {
+  const equipoId = req.params.id;
+  const nombre = req.body.nombre;
+  const imagen = req.file ? req.file.filename : null;
+
+  if (!nombre) return res.status(400).json({ error: "Nombre requerido" });
+
+  const campos = [];
+  const valores = [];
+
+  campos.push("nombre = ?");
+  valores.push(nombre);
+
+  if (imagen) {
+    campos.push("imagen = ?");
+    valores.push(imagen);
+  }
+
+  valores.push(equipoId);
+
+  const query = `UPDATE equipos SET ${campos.join(", ")} WHERE id = ?`;
+  db.query(query, valores, (err) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: "Equipo actualizado" });
+    res.json({ message: "Equipo actualizado correctamente" });
   });
 });
+
+
 
 // Modificar jugador
 router.put("/jugador/:id", (req, res) => {

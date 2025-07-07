@@ -15,12 +15,14 @@ interface Equipo {
   id: number;
   nombre: string;
   torneo_id: number;
+  imagen: string;
   jugadores: Jugador[];
 }
 
 function EditarEquipos() {
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState<Equipo | null>(null);
+  const [imagenNueva, setImagenNueva] = useState<File | null>(null);
 
   const fetchEquipos = () => {
     fetch("http://localhost:3000/api/equipos")
@@ -64,10 +66,13 @@ function EditarEquipos() {
   const guardarCambios = async () => {
     if (!equipoSeleccionado) return;
 
+    const formData = new FormData();
+    formData.append("nombre", equipoSeleccionado.nombre);
+    if (imagenNueva) formData.append("imagen", imagenNueva);
+
     await fetch(`http://localhost:3000/api/equipos/${equipoSeleccionado.id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre: equipoSeleccionado.nombre }),
+      body: formData,
     });
 
     for (const jugador of equipoSeleccionado.jugadores) {
@@ -86,6 +91,7 @@ function EditarEquipos() {
     alert("Cambios guardados");
     fetchEquipos();
     setEquipoSeleccionado(null);
+    setImagenNueva(null);
   };
 
   return (
@@ -114,6 +120,18 @@ function EditarEquipos() {
             value={equipoSeleccionado.nombre}
             onChange={(e) => handleNombreEquipo(e.target.value)}
           />
+
+          <h3>Logo actual</h3>
+          <img
+            src={`http://localhost:3000/uploads/${equipoSeleccionado.imagen || "default.png"}`}
+            alt="Logo equipo"
+            style={{ width: "100px", borderRadius: "5px", marginBottom: "10px" }}
+          />
+          <input type="file" accept="image/*" onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              setImagenNueva(e.target.files[0]);
+            }
+          }} />
 
           <h3>Jugadores</h3>
           {equipoSeleccionado.jugadores.map((jug, i) => (

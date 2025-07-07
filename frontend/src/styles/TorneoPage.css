@@ -35,3 +35,15 @@
     font-size: 0.75rem;
   }
 }
+.logo-equipo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin: 0 8px;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 2px;
+}
+
