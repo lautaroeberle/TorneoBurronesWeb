@@ -102,10 +102,10 @@ router.put("/:id", upload.single("imagen"), (req, res) => {
 
 // Modificar jugador
 router.put("/jugador/:id", (req, res) => {
-  const { nombre, apellido, dorsal } = req.body;
+  const { nombre, apellido, dorsal, fecha_nacimiento } = req.body;
   db.query(
-    "UPDATE jugadores SET nombre = ?, apellido = ?, dorsal = ? WHERE id = ?",
-    [nombre, apellido, dorsal, req.params.id],
+    "UPDATE jugadores SET nombre = ?, apellido = ?, dorsal = ?, fecha_nacimiento = ? WHERE id = ?",
+    [nombre, apellido, dorsal, fecha_nacimiento, req.params.id],
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ message: "Jugador actualizado" });
@@ -113,18 +113,20 @@ router.put("/jugador/:id", (req, res) => {
   );
 });
 
+
 // Agregar jugador nuevo a equipo existente
 router.post("/jugador", (req, res) => {
-  const { nombre, apellido, dni, dorsal, equipo_id } = req.body;
+  const { nombre, apellido, dni, dorsal, equipo_id, fecha_nacimiento } = req.body;
   db.query(
-    "INSERT INTO jugadores (nombre, apellido, dni, dorsal, equipo_id) VALUES (?, ?, ?, ?, ?)",
-    [nombre, apellido, dni, dorsal, equipo_id],
+    "INSERT INTO jugadores (nombre, apellido, dni, dorsal, equipo_id, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?)",
+    [nombre, apellido, dni, dorsal, equipo_id, fecha_nacimiento],
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
       res.status(201).json({ message: "Jugador agregado" });
     }
   );
 });
+
 // Obtener jugadores de un equipo específico
 router.get("/:id/jugadores", (req, res) => {
   const equipoId = req.params.id;

@@ -27,8 +27,10 @@ CREATE TABLE jugadores (
   rojas INT DEFAULT 0,
   azules INT DEFAULT 0,
   equipo_id INT NOT NULL,
+  fecha_nacimiento DATE,
   FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
 );
+
 DROP TABLE IF EXISTS posiciones;
 CREATE TABLE posiciones (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,3 +81,6 @@ CREATE TABLE estadisticas_partido (
   FOREIGN KEY (partido_id) REFERENCES partidos(id),
   FOREIGN KEY (jugador_id) REFERENCES jugadores(id)
 );
+
+
+ojo con este archivo, revisar cambios

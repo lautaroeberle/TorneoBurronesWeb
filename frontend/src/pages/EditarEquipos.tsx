@@ -8,8 +8,10 @@ interface Jugador {
   dni: string;
   dorsal: number;
   equipo_id: number;
+  fecha_nacimiento: string; 
   nuevo?: boolean;
 }
+
 
 interface Equipo {
   id: number;
@@ -40,28 +42,30 @@ function EditarEquipos() {
   };
 
   const actualizarJugador = (index: number, campo: string, valor: string | number) => {
-    if (!equipoSeleccionado) return;
-    const jugadoresActualizados = [...equipoSeleccionado.jugadores];
-    (jugadoresActualizados[index] as any)[campo] = valor;
-    setEquipoSeleccionado({ ...equipoSeleccionado, jugadores: jugadoresActualizados });
-  };
+  if (!equipoSeleccionado) return;
+  const jugadoresActualizados = [...equipoSeleccionado.jugadores];
+  (jugadoresActualizados[index] as any)[campo] = valor;
+  setEquipoSeleccionado({ ...equipoSeleccionado, jugadores: jugadoresActualizados });
+};
 
-  const agregarJugadorNuevo = () => {
-    if (!equipoSeleccionado) return;
-    const nuevoJugador: Jugador = {
-      id: 0,
-      nombre: "",
-      apellido: "",
-      dni: "",
-      dorsal: 0,
-      equipo_id: equipoSeleccionado.id,
-      nuevo: true,
-    };
-    setEquipoSeleccionado({
-      ...equipoSeleccionado,
-      jugadores: [...equipoSeleccionado.jugadores, nuevoJugador],
-    });
+const agregarJugadorNuevo = () => {
+  if (!equipoSeleccionado) return;
+  const nuevoJugador: Jugador = {
+    id: 0,
+    nombre: "",
+    apellido: "",
+    dni: "",
+    dorsal: 0,
+    equipo_id: equipoSeleccionado.id,
+    fecha_nacimiento: "", 
+    nuevo: true,
   };
+  setEquipoSeleccionado({
+    ...equipoSeleccionado,
+    jugadores: [...equipoSeleccionado.jugadores, nuevoJugador],
+  });
+};
+
 
   const guardarCambios = async () => {
     if (!equipoSeleccionado) return;
@@ -135,27 +139,34 @@ function EditarEquipos() {
 
           <h3>Jugadores</h3>
           {equipoSeleccionado.jugadores.map((jug, i) => (
-            <div key={i} className="jugador-form">
-              <input
-                type="text"
-                placeholder="Nombre"
-                value={jug.nombre}
-                onChange={(e) => actualizarJugador(i, "nombre", e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Apellido"
-                value={jug.apellido}
-                onChange={(e) => actualizarJugador(i, "apellido", e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="Dorsal"
-                value={jug.dorsal}
-                onChange={(e) => actualizarJugador(i, "dorsal", Number(e.target.value))}
-              />
-            </div>
-          ))}
+  <div key={i} className="jugador-form">
+    <input
+      type="text"
+      placeholder="Nombre"
+      value={jug.nombre}
+      onChange={(e) => actualizarJugador(i, "nombre", e.target.value)}
+    />
+    <input
+      type="text"
+      placeholder="Apellido"
+      value={jug.apellido}
+      onChange={(e) => actualizarJugador(i, "apellido", e.target.value)}
+    />
+    <input
+      type="number"
+      placeholder="Dorsal"
+      value={jug.dorsal}
+      onChange={(e) => actualizarJugador(i, "dorsal", Number(e.target.value))}
+    />
+    <input
+      type="date"
+      placeholder="Fecha de Nacimiento"
+      value={jug.fecha_nacimiento}
+      onChange={(e) => actualizarJugador(i, "fecha_nacimiento", e.target.value)}
+    />
+  </div>
+))}
+
 
           <button type="button" className="btn btn-create" onClick={agregarJugadorNuevo}>
             Agregar jugador

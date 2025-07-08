@@ -1,3 +1,20 @@
+--------------HECHO-----------
+MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
+- PERMITIR AGREGAR IMAGEN CREACION EQUIPO  URGENTE
+agregar fecha de nacimiento jugador
+
+
+
+
+-----------POR HACER-----------
+
+
+
+
+
+
+
+
 
 3-stats deben guardarse por partido (para no repetir y para mostrar x partido)
 cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que se reinicie la pag
@@ -7,14 +24,14 @@ cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que
 -todo el front
 
 
-- PERMITIR AGREGAR IMAGEN CREACION EQUIPO  URGENTE
+
 
 
 mostrar apellido (o nombre completo) en vez de nombre en stats
 
 eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una vez se abra el coso editar partidos)
 
-MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
+
 
 en cargar partido deben mostrarse solamente los equipos del torneo que se elije
 
@@ -23,6 +40,8 @@ en cargar partido deben mostrarse solamente los equipos del torneo que se elije
 
 
 
-agregar fecha de nacimiento jugador
+
 
 agregar barrio al crear equipo (tambien al editar)
+
+agregar seccion noticias
