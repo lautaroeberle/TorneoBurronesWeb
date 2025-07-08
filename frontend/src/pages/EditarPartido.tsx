@@ -11,7 +11,8 @@ interface Evento {
   jugador_id: number | string;
   tipo: 'gol' | 'amarilla' | 'roja' | 'azul';
   minuto: number | string;
-  tipo_gol?: 'penal' | 'en_contra' | 'jugada'; // solo si tipo === 'gol'
+  tipo_gol?: 'penal' | 'en_contra' | 'jugada';
+  existente?: boolean; // Nuevo campo para distinguir eventos existentes
 }
 
 function EditarPartido() {
@@ -54,10 +55,27 @@ function EditarPartido() {
     }
   };
 
+  const cargarEstadisticas = async (partidoId: number) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/estadisticas/partido/${partidoId}`);
+      const data = await res.json();
+      const eventosFormateados = data.map((ev: any) => ({
+        jugador_id: ev.jugador_id,
+        tipo: ev.tipo,
+        tipo_gol: ev.tipo_gol,
+        minuto: ev.minuto,
+        existente: true,
+      }));
+      setEventos(eventosFormateados);
+    } catch (err) {
+      console.error("Error al cargar estadísticas existentes:", err);
+    }
+  };
+
   const handleEdit = (partido: any) => {
     setPartidoSeleccionado({ ...partido });
     cargarJugadores(partido.equipo_local_id, partido.equipo_visitante_id);
-    setEventos([]);
+    cargarEstadisticas(partido.id);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -77,11 +95,9 @@ function EditarPartido() {
       [campo]: valor
     };
 
-    // Si el campo es tipo y es distinto de 'gol', eliminar tipo_gol
     if (campo === "tipo" && valor !== "gol") {
       delete nuevosEventos[index].tipo_gol;
     }
-    // Si el campo es tipo y es 'gol' y no tiene tipo_gol, asignar 'jugada'
     if (campo === "tipo" && valor === "gol" && !nuevosEventos[index].tipo_gol) {
       nuevosEventos[index].tipo_gol = 'jugada';
     }
@@ -90,49 +106,45 @@ function EditarPartido() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  // ✅ Filtrar eventos incompletos
-  const eventosFiltrados = eventos.filter((ev) => {
-    return ev.jugador_id !== "" && ev.jugador_id !== null && ev.jugador_id !== undefined;
-  });
+    const eventosFiltrados = eventos.filter((ev) => {
+      return ev.jugador_id !== "" && ev.jugador_id !== null && ev.jugador_id !== undefined && !ev.existente;
+    });
 
-  // Actualizar datos del partido
-  await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      goles_local: Number(partidoSeleccionado.goles_local),
-      goles_visitante: Number(partidoSeleccionado.goles_visitante),
-      jugado: Number(partidoSeleccionado.jugado)
-    })
-  });
+    await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        goles_local: Number(partidoSeleccionado.goles_local),
+        goles_visitante: Number(partidoSeleccionado.goles_visitante),
+        jugado: Number(partidoSeleccionado.jugado)
+      })
+    });
 
-  // ✅ Enviar solo eventos válidos
-  await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}/estadisticas`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(eventosFiltrados)
-  });
+    await fetch(`http://localhost:3000/api/partidos/${partidoSeleccionado.id}/estadisticas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(eventosFiltrados)
+    });
 
-  setMensaje('Partido y estadísticas actualizados');
-  setTimeout(() => setMensaje(""), 3000);
-  setPartidoSeleccionado(null);
-  setEventos([]);
-  cargarPartidos(torneoSeleccionado);
-};
+    setMensaje('Partido y estadísticas actualizados');
+    setTimeout(() => setMensaje(""), 3000);
+    setPartidoSeleccionado(null);
+    setEventos([]);
+    cargarPartidos(torneoSeleccionado);
+  };
 
+  const eliminarPartido = async (partidoId: number) => {
+    if (!window.confirm("¿Seguro que querés eliminar este partido y sus estadísticas?")) return;
 
-const eliminarPartido = async (partidoId: number) => {
-  if (!window.confirm("¿Seguro que querés eliminar este partido y sus estadísticas?")) return;
+    await fetch(`http://localhost:3000/api/partidos/${partidoId}`, {
+      method: "DELETE",
+    });
 
-  await fetch(`http://localhost:3000/api/partidos/${partidoId}`, {
-    method: "DELETE",
-  });
-
-  alert("Partido eliminado");
-  cargarPartidos(torneoSeleccionado);
-};
+    alert("Partido eliminado");
+    cargarPartidos(torneoSeleccionado);
+  };
 
   return (
     <div className="panel-section">
@@ -151,10 +163,9 @@ const eliminarPartido = async (partidoId: number) => {
             {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} - 
             Resultado: {p.jugado === 1 ? `${p.goles_local} - ${p.goles_visitante}` : 'Pendiente'}
             <button className="botonEditar" onClick={() => handleEdit(p)}>Editar</button>
-<button className="botonEliminar" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
-  Eliminar
-</button>
-
+            <button className="botonEliminar" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
+              Eliminar
+            </button>
           </li>
         ))}
       </ul>
@@ -206,31 +217,28 @@ const eliminarPartido = async (partidoId: number) => {
                 ))}
               </select>
 
-             
-<select
-  className="select"
-  value={evento.tipo}
-  onChange={e => actualizarEvento(index, 'tipo', e.target.value)}
->
-  <option value="gol">⚽ Gol</option>
-  <option value="amarilla">🟡 Amarilla</option>
-  <option value="roja">🔴 Roja</option>
-  <option value="azul">🔵 Azul</option>
-</select>
+              <select
+                className="select"
+                value={evento.tipo}
+                onChange={e => actualizarEvento(index, 'tipo', e.target.value)}
+              >
+                <option value="gol">⚽ Gol</option>
+                <option value="amarilla">🟡 Amarilla</option>
+                <option value="roja">🔴 Roja</option>
+                <option value="azul">🔵 Azul</option>
+              </select>
 
-{evento.tipo === 'gol' && (
-  <select
-    className="select"
-    value={evento.tipo_gol || 'jugada'}
-    onChange={e => actualizarEvento(index, 'tipo_gol', e.target.value)}
-  >
-    <option value="jugada">Jugada</option>
-    <option value="penal">Penal</option>
-    <option value="en_contra">En contra</option>
-  </select>
-)}
-
-
+              {evento.tipo === 'gol' && (
+                <select
+                  className="select"
+                  value={evento.tipo_gol || 'jugada'}
+                  onChange={e => actualizarEvento(index, 'tipo_gol', e.target.value)}
+                >
+                  <option value="jugada">Jugada</option>
+                  <option value="penal">Penal</option>
+                  <option value="en_contra">En contra</option>
+                </select>
+              )}
 
               <input
                 type="number"

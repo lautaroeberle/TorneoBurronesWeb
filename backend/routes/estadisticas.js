@@ -24,6 +24,42 @@ router.get("/torneo", async (req, res) => {
     res.status(500).json({ error: 'Error al obtener estadísticas' });
   }
 });
+// obtiene estadísticas de un partido puntual
+router.get("/partido/:id", async (req, res) => {
+  const { id } = req.params;
+  const query = `
+    SELECT jugador_id, tipo, tipo_gol, minuto
+    FROM estadisticas_partido
+    WHERE partido_id = ?
+    ORDER BY minuto ASC
+  `;
+  try {
+    const [rows] = await db.promise().query(query, [id]);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener estadísticas del partido:", error);
+    res.status(500).json({ error: 'Error al obtener estadísticas del partido' });
+  }
+});
+
+// Eliminar una estadística individual por ID
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const query = "DELETE FROM estadisticas_partido WHERE id = ?";
+  try {
+    const [result] = await db.promise().query(query, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Evento no encontrado" });
+    }
+
+    res.sendStatus(204);
+  } catch (error) {
+    console.error("Error al eliminar evento:", error);
+    res.status(500).json({ error: "Error al eliminar evento" });
+  }
+});
 
 
 module.exports = router;

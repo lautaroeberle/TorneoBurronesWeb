@@ -4,6 +4,8 @@ MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
 agregar fecha de nacimiento jugador
 agregar barrio al crear equipo (tambien al editar)
 eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una vez se abra el coso editar partidos)
+colores botones  (verde agregar, rojo eliminar, azul guardar/cambiar)
+stats deben guardarse por partido (para no repetir y para mostrar x partido)
 
 
 -----------POR HACER-----------
@@ -17,7 +19,7 @@ eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una 
 
 
 
-cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que se reinicie la pag  ------ MEDIANAMENTE URG
+
 
  revisar que carajo es el subrayado
 
@@ -25,18 +27,29 @@ cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que
 
 
 
-3-stats deben guardarse por partido (para no repetir y para mostrar x partido) -------- PROXIMO A HACER
+ 
 
 mostrar apellido (o nombre completo) en vez de nombre en stats  --- POCO URGENTE
 
 
-
-colores botones  (verde agregar, rojo eliminar, azul guardar/cambiar) ---- MEDIANAMENTE URG
-
 en cargar partido deben mostrarse solamente los equipos del torneo que se elije     ---- MEDIANTAMENTE URG
 
-
+ver todo de tabla de posiciones ---- me
 
 agregar seccion noticias         MEDIANAMENTE URG
 
 agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG
+
+
+
+
+
+prompt: enviar eso + archivo editarPartido.tsx
+por alguna razon los eventos no se eliminan. el codigo que proporcionaste no cumple su funcion.
+
+que puede estar pasando? te envio el codigo de un delete de mi pagina que sí funciona router.delete("/:id", (req, res) => {
+  db.query("DELETE FROM torneos WHERE id = ?", [req.params.id], (err) => {
+    if (err) return res.status(500).send(err);
+    res.sendStatus(204);
+  });
+});
