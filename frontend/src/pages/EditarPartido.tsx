@@ -149,8 +149,8 @@ const eliminarPartido = async (partidoId: number) => {
           <li key={p.id}>
             {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} - 
             Resultado: {p.jugado === 1 ? `${p.goles_local} - ${p.goles_visitante}` : 'Pendiente'}
-            <button className="btn btn-modify" onClick={() => handleEdit(p)}>Editar</button>
-<button className="btn btn-delete" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
+            <button className="botonEditar" onClick={() => handleEdit(p)}>Editar</button>
+<button className="botonEliminar" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
   Eliminar
 </button>
 
@@ -243,11 +243,11 @@ const eliminarPartido = async (partidoId: number) => {
             </div>
           ))}
 
-          <button type="button" className="btn btn-create" onClick={agregarEvento}>
+          <button type="button" className="botonCrear" onClick={agregarEvento}>
             Agregar Evento
           </button>
           <br />
-          <button type="submit" className="btn btn-save">Guardar cambios</button>
+          <button type="submit" className="botonGuardar">Guardar cambios</button>
         </form>
       )}
 

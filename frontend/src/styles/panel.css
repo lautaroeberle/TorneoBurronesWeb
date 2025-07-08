@@ -1,11 +1,14 @@
 :root {
   --primary-color: #1e3a8a;
   --secondary-color: #f1f5f9;
-  --accent-color: #3b82f6;
   --text-color: #1f2937;
   --border-color: #e5e7eb;
   --background-light: #ffffff;
   --background-dark: #f9fafb;
+  --crear-color: green;
+   --guardar-color: #3b82f6;
+   --eliminar-color:rgb(187, 26, 26);
+   --editar-color:rgba(79, 80, 7, 0.596);
 }
 
 * {
@@ -88,6 +91,36 @@ button:hover {
   background-color: #2563eb;
 }
 
+.botonEliminar{
+  background-color: var(--eliminar-color);
+}
+.botonEliminar:hover{
+  background-color: rgb(124, 3, 3);
+}
+.botonCrear{
+  background-color: var(--crear-color);
+}
+.botonCrear:hover{
+  background-color: rgb(1, 88, 1);
+}
+.botonGuardar{
+  background-color: var(--guardar-color);
+}
+.botonGuardar:hover{
+   background-color: #2563eb;
+}
+.botonEditar{
+  background-color: var(--editar-color);
+}
+.botonEditar:hover{
+   background-color: #506106;
+}
+
+
+
+
+
+
 ul {
   list-style-type: none;
   padding-left: 0;
@@ -96,15 +129,6 @@ ul {
 li {
   padding: 0.5rem 0;
   border-bottom: 1px solid var(--border-color);
-}
-
-li button {
-  margin-left: 1rem;
-  background-color: #ef4444;
-}
-
-li button:hover {
-  background-color: #dc2626;
 }
 
 input::placeholder {

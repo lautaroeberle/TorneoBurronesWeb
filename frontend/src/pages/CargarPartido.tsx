@@ -103,7 +103,7 @@ function CargarPartido() {
           />
         )}
 
-        <button type="submit" className="btn btn-create">Guardar Partido</button>
+        <button type="submit" className="botonGuardar">Guardar Partido</button>
       </form>
       <p className="mensaje">{mensaje}</p>
     </div>

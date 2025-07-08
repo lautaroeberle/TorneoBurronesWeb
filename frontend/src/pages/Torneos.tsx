@@ -68,7 +68,7 @@ function Torneos() {
           onChange={(e) => setAño(Number(e.target.value))}
           required
         />
-        <button type="submit" className="btn btn-create">Crear</button>
+        <button type="submit" className="botonCrear">Crear</button>
       </form>
       <p className="mensaje">{mensaje}</p>
 
@@ -77,7 +77,7 @@ function Torneos() {
         {torneos.map((t: any) => (
           <li key={t.id} className="item">
             {t.nombre} ({t.año})
-            <button onClick={() => eliminarTorneo(t.id)} className="btn btn-delete">Eliminar</button>
+            <button onClick={() => eliminarTorneo(t.id)} className="botonEliminar">Eliminar</button>
           </li>
         ))}
       </ul>

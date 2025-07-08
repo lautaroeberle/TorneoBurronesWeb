@@ -288,7 +288,7 @@ const eliminarEquipo = async () => {
 
 {!jug.nuevo && (
   <button
-    className="btn btn-delete"
+    className="botonEliminar"
     onClick={() => eliminarJugador(jug.id)}
     style={{ marginLeft: "10px" }}
   >
@@ -300,15 +300,15 @@ const eliminarEquipo = async () => {
             </div>
           ))}
 
-          <button type="button" className="btn btn-create" onClick={agregarJugadorNuevo}>
+          <button type="button" className="botonCrear" onClick={agregarJugadorNuevo}>
             Agregar jugador
           </button>
           <br /><br />
-          <button className="btn btn-delete" onClick={eliminarEquipo}>
+          <button className="botonEliminar" onClick={eliminarEquipo}>
   Eliminar equipo
 </button>
 <br /><br />
-          <button className="btn btn-save" onClick={guardarCambios}>Guardar cambios</button>
+          <button className="botonGuardar" onClick={guardarCambios}>Guardar cambios</button>
         </div>
       )}
     </div>

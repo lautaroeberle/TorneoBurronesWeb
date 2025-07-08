@@ -165,7 +165,7 @@ function EquipoNuevo() {
           onChange={(e) => setImagen(e.target.files?.[0] || null)}
         />
 
-        <button type="submit" className="btn btn-create">
+        <button type="submit" className="botonCrear">
           Crear
         </button>
       </form>
