@@ -2,7 +2,7 @@
 MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
 - PERMITIR AGREGAR IMAGEN CREACION EQUIPO  URGENTE
 agregar fecha de nacimiento jugador
-
+agregar barrio al crear equipo (tambien al editar)
 
 
 
@@ -42,6 +42,8 @@ en cargar partido deben mostrarse solamente los equipos del torneo que se elije
 
 
 
-agregar barrio al crear equipo (tambien al editar)
+
 
 agregar seccion noticias
+
+agregar paginas individuales para ver stats de equipos y quizas jugadores

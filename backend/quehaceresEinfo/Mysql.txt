@@ -67,8 +67,20 @@ CREATE TABLE equipos (
   nombre VARCHAR(100) NOT NULL,
   torneo_id INT NOT NULL,
   imagen VARCHAR(255),
+  barrio ENUM(
+    'Agronomía', 'Almagro', 'Balvanera', 'Barracas', 'Belgrano', 'Boedo', 'Caballito', 'Chacarita', 'Coghlan', 'Colegiales', 'Constitución', 
+    'Flores', 'Floresta', 'La Boca', 'La Paternal', 'Liniers', 'Mataderos', 'Monte Castro', 'Montserrat', 'Nueva Pompeya', 'Núñez', 'Palermo', 
+    'Parque Avellaneda', 'Parque Chacabuco', 'Parque Chas', 'Parque Patricios', 'Puerto Madero', 'Recoleta', 'Retiro', 'Saavedra', 'San Cristóbal', 
+    'San Nicolás', 'San Telmo', 'Vélez Sársfield', 'Versalles', 'Villa Crespo', 'Villa del Parque', 'Villa Devoto', 'Villa General Mitre', 'Villa Lugano', 
+    'Villa Luro', 'Villa Ortúzar', 'Villa Pueyrredón', 'Villa Real', 'Villa Riachuelo', 'Villa Santa Rita', 'Villa Soldati', 'Villa Urquiza',
+    'Vicente López', 'Olivos', 'Florida', 'La Lucila', 'Villa Martelli', 'Florida Oeste', 'Munro', 'Carapachay', 'Villa Adelina', 'San Isidro', 
+    'San Fernando', 'Tigre', 'Escobar', 'Pilar', 'José C. Paz', 'Malvinas Argentinas', 'Tres de Febrero', 'Morón', 'Hurlingham', 'Ituzaingó', 'Merlo', 
+    'Moreno', 'La Matanza', 'Lomas de Zamora', 'Lanús', 'Avellaneda', 'Quilmes', 'Berazategui', 'Florencio Varela', 'Ezeiza', 'San Martín', 
+    'Villa Ballester', 'Villa Lynch'
+  ) DEFAULT 'Palermo',
   FOREIGN KEY (torneo_id) REFERENCES torneos(id) ON DELETE CASCADE
 );
+
 
 DROP TABLE IF EXISTS estadisticas_partido;
 CREATE TABLE estadisticas_partido (

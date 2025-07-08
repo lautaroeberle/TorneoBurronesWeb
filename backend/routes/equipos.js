@@ -19,17 +19,17 @@ const upload = multer({ storage });
 
 // Crear equipo con imagen (y jugadores vacíos por ahora)
 router.post("/con-jugadores", upload.single("imagen"), (req, res) => {
-  const { torneo_id, nombre } = req.body;
+  const { torneo_id, nombre, barrio } = req.body;
   const jugadores = req.body.jugadores ? JSON.parse(req.body.jugadores) : [];
   const imagen = req.file ? req.file.filename : "default.png";
 
-  if (!torneo_id || !nombre) {
-    return res.status(400).json({ error: "Datos incompletos: torneo_id y nombre son requeridos" });
+  if (!torneo_id || !nombre || !barrio) {
+    return res.status(400).json({ error: "Datos incompletos: torneo_id, nombre y barrio son requeridos" });
   }
 
   db.query(
-    "INSERT INTO equipos (nombre, torneo_id, imagen) VALUES (?, ?, ?)",
-    [nombre, torneo_id, imagen],
+    "INSERT INTO equipos (nombre, torneo_id, imagen, barrio) VALUES (?, ?, ?, ?)",
+    [nombre, torneo_id, imagen, barrio],
     (err, result) => {
       if (err) return res.status(500).json({ error: err.message });
 
@@ -52,6 +52,7 @@ router.post("/con-jugadores", upload.single("imagen"), (req, res) => {
   );
 });
 
+
 // Obtener todos los equipos y sus jugadores
 router.get("/", (req, res) => {
   db.query("SELECT * FROM equipos", (err, equipos) => {
@@ -70,19 +71,22 @@ router.get("/", (req, res) => {
   });
 });
 
-// Modificar equipo (nombre y/o imagen)
+// Modificar equipo (nombre, imagen y barrio)
 router.put("/:id", upload.single("imagen"), (req, res) => {
   const equipoId = req.params.id;
-  const nombre = req.body.nombre;
+  const { nombre, barrio } = req.body;
   const imagen = req.file ? req.file.filename : null;
 
-  if (!nombre) return res.status(400).json({ error: "Nombre requerido" });
+  if (!nombre || !barrio) return res.status(400).json({ error: "Nombre y barrio son requeridos" });
 
   const campos = [];
   const valores = [];
 
   campos.push("nombre = ?");
   valores.push(nombre);
+  
+  campos.push("barrio = ?");
+  valores.push(barrio);
 
   if (imagen) {
     campos.push("imagen = ?");
