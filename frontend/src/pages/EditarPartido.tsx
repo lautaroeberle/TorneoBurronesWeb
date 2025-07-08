@@ -116,6 +116,7 @@ function EditarPartido() {
   });
 
   setMensaje('Partido y estadísticas actualizados');
+  setTimeout(() => setMensaje(""), 3000);
   setPartidoSeleccionado(null);
   setEventos([]);
   cargarPartidos(torneoSeleccionado);

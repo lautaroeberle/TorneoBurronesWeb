@@ -30,6 +30,7 @@ function Torneos() {
       .then(res => res.json())
       .then(data => {
         setMensaje(data.message || "Torneo creado");
+        setTimeout(() => setMensaje(""), 3000);
         setNombre("");
         fetchTorneos();
       })

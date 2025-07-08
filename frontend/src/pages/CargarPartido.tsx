@@ -48,6 +48,7 @@ function CargarPartido() {
       });
       const data = await res.json();
       setMensaje(data.message || "Partido agregado");
+      setTimeout(() => setMensaje(""), 3000);
     } catch (err) {
       console.error(err);
       setMensaje("Error al guardar partido");

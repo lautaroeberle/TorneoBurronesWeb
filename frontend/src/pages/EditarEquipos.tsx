@@ -25,6 +25,7 @@ function EditarEquipos() {
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState<Equipo | null>(null);
   const [imagenNueva, setImagenNueva] = useState<File | null>(null);
+   const [mensaje, setMensaje] = useState("");
 
   const fetchEquipos = () => {
     fetch("http://localhost:3000/api/equipos")
@@ -71,37 +72,39 @@ function EditarEquipos() {
     });
   };
 
-  const guardarCambios = async () => {
-    if (!equipoSeleccionado) return;
+const guardarCambios = async () => {
+  if (!equipoSeleccionado) return;
 
-    const formData = new FormData();
-    formData.append("nombre", equipoSeleccionado.nombre);
-    formData.append("barrio", equipoSeleccionado.barrio); // Incluir barrio en los cambios
-    if (imagenNueva) formData.append("imagen", imagenNueva);
+  const formData = new FormData();
+  formData.append("nombre", equipoSeleccionado.nombre);
+  formData.append("barrio", equipoSeleccionado.barrio);
+  if (imagenNueva) formData.append("imagen", imagenNueva);
 
-    await fetch(`http://localhost:3000/api/equipos/${equipoSeleccionado.id}`, {
-      method: "PUT",
-      body: formData,
+  await fetch(`http://localhost:3000/api/equipos/${equipoSeleccionado.id}`, {
+    method: "PUT",
+    body: formData,
+  });
+
+  for (const jugador of equipoSeleccionado.jugadores) {
+    const endpoint = jugador.nuevo
+      ? "http://localhost:3000/api/equipos/jugador"
+      : `http://localhost:3000/api/equipos/jugador/${jugador.id}`;
+    const method = jugador.nuevo ? "POST" : "PUT";
+
+    await fetch(endpoint, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(jugador),
     });
+  }
 
-    for (const jugador of equipoSeleccionado.jugadores) {
-      const endpoint = jugador.nuevo
-        ? "http://localhost:3000/api/equipos/jugador"
-        : `http://localhost:3000/api/equipos/jugador/${jugador.id}`;
-      const method = jugador.nuevo ? "POST" : "PUT";
+  setMensaje("Cambios guardados");
+  setTimeout(() => setMensaje(""), 3000); 
+  fetchEquipos();
+  setEquipoSeleccionado(null);
+  setImagenNueva(null);
+};
 
-      await fetch(endpoint, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(jugador),
-      });
-    }
-
-    alert("Cambios guardados");
-    fetchEquipos();
-    setEquipoSeleccionado(null);
-    setImagenNueva(null);
-  };
   const eliminarJugador = async (jugadorId: number) => {
   if (!window.confirm("¿Seguro que querés eliminar este jugador?")) return;
 
@@ -311,7 +314,10 @@ const eliminarEquipo = async () => {
           <button className="botonGuardar" onClick={guardarCambios}>Guardar cambios</button>
         </div>
       )}
+      {mensaje && <p className="mensaje" >{mensaje}</p>}
+
     </div>
+    
   );
 }
 

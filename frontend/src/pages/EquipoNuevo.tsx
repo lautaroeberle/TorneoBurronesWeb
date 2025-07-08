@@ -38,10 +38,12 @@ function EquipoNuevo() {
           throw new Error(data.error || "Error al crear equipo");
         }
         setMensaje(data.message || "Equipo creado");
+        setTimeout(() => setMensaje(""), 3000);
         setNombre("");
         setTorneoId("");
         setBarrio("Palermo");
         setImagen(null);
+        // window.location.reload();
       })
       .catch((err) => setMensaje(err.message || "Error al crear equipo"));
   };
@@ -66,7 +68,7 @@ function EquipoNuevo() {
           <option value="">Seleccionar Torneo</option>
           {torneos.map((t) => (
             <option key={t.id} value={t.id}>
-              {t.nombre} ({t.anio})
+              {t.nombre} ({t.anio}) 
             </option>
           ))}
         </select>
