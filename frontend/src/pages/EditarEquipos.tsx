@@ -102,6 +102,32 @@ function EditarEquipos() {
     setEquipoSeleccionado(null);
     setImagenNueva(null);
   };
+  const eliminarJugador = async (jugadorId: number) => {
+  if (!window.confirm("¿Seguro que querés eliminar este jugador?")) return;
+
+  await fetch(`http://localhost:3000/api/equipos/jugador/${jugadorId}`, {
+    method: "DELETE",
+  });
+
+  // Actualiza estado local
+  if (!equipoSeleccionado) return;
+  const jugadoresFiltrados = equipoSeleccionado.jugadores.filter(j => j.id !== jugadorId);
+  setEquipoSeleccionado({ ...equipoSeleccionado, jugadores: jugadoresFiltrados });
+};
+
+const eliminarEquipo = async () => {
+  if (!equipoSeleccionado) return;
+  if (!window.confirm("¿Seguro que querés eliminar este equipo y todos sus jugadores?")) return;
+
+  await fetch(`http://localhost:3000/api/equipos/${equipoSeleccionado.id}`, {
+    method: "DELETE",
+  });
+
+  alert("Equipo eliminado");
+  setEquipoSeleccionado(null);
+  fetchEquipos();
+};
+
 
   return (
     <div className="panel-section">
@@ -230,6 +256,7 @@ function EditarEquipos() {
 <option value="Villa Lynch">Villa Lynch</option>
 
           </select>
+          
 
           <h3>Jugadores</h3>
           {equipoSeleccionado.jugadores.map((jug, i) => (
@@ -253,11 +280,23 @@ function EditarEquipos() {
                 onChange={(e) => actualizarJugador(i, "dorsal", Number(e.target.value))}
               />
               <input
-                type="date"
-                placeholder="Fecha de Nacimiento"
-                value={jug.fecha_nacimiento}
-                onChange={(e) => actualizarJugador(i, "fecha_nacimiento", e.target.value)}
-              />
+  type="date"
+  placeholder="Fecha de Nacimiento"
+  value={jug.fecha_nacimiento}
+  onChange={(e) => actualizarJugador(i, "fecha_nacimiento", e.target.value)}
+/>
+
+{!jug.nuevo && (
+  <button
+    className="btn btn-delete"
+    onClick={() => eliminarJugador(jug.id)}
+    style={{ marginLeft: "10px" }}
+  >
+    Eliminar
+  </button>
+)}
+<br />
+
             </div>
           ))}
 
@@ -265,6 +304,10 @@ function EditarEquipos() {
             Agregar jugador
           </button>
           <br /><br />
+          <button className="btn btn-delete" onClick={eliminarEquipo}>
+  Eliminar equipo
+</button>
+<br /><br />
           <button className="btn btn-save" onClick={guardarCambios}>Guardar cambios</button>
         </div>
       )}

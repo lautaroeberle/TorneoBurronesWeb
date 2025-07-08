@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-
+// obtiene estadisticas (solo para mostrarlas)
 router.get("/torneo", async (req, res) => {
   const { nombre } = req.query;
   const query = `

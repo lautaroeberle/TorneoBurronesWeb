@@ -3,7 +3,7 @@ MODIFICAR STATS: agregar gol en contra, penal y tarjeta azul?
 - PERMITIR AGREGAR IMAGEN CREACION EQUIPO  URGENTE
 agregar fecha de nacimiento jugador
 agregar barrio al crear equipo (tambien al editar)
-
+eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una vez se abra el coso editar partidos)
 
 
 -----------POR HACER-----------
@@ -16,8 +16,8 @@ agregar barrio al crear equipo (tambien al editar)
 
 
 
-3-stats deben guardarse por partido (para no repetir y para mostrar x partido)
-cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que se reinicie la pag
+
+cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que se reinicie la pag  ------ MEDIANAMENTE URG
 
  revisar que carajo es el subrayado
 
@@ -25,25 +25,18 @@ cada vez quye se cree un equipo, se guarden cambios o algo asi, en el panel, que
 
 
 
+3-stats deben guardarse por partido (para no repetir y para mostrar x partido) -------- PROXIMO A HACER
 
-
-mostrar apellido (o nombre completo) en vez de nombre en stats
-
-eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una vez se abra el coso editar partidos)
-
-
-
-en cargar partido deben mostrarse solamente los equipos del torneo que se elije
+mostrar apellido (o nombre completo) en vez de nombre en stats  --- POCO URGENTE
 
 
 
+colores botones  (verde agregar, rojo eliminar, azul guardar/cambiar) ---- MEDIANAMENTE URG
+
+en cargar partido deben mostrarse solamente los equipos del torneo que se elije     ---- MEDIANTAMENTE URG
 
 
 
+agregar seccion noticias         MEDIANAMENTE URG
 
-
-
-
-agregar seccion noticias
-
-agregar paginas individuales para ver stats de equipos y quizas jugadores
+agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG

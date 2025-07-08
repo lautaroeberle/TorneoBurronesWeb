@@ -122,6 +122,17 @@ function EditarPartido() {
 };
 
 
+const eliminarPartido = async (partidoId: number) => {
+  if (!window.confirm("¿Seguro que querés eliminar este partido y sus estadísticas?")) return;
+
+  await fetch(`http://localhost:3000/api/partidos/${partidoId}`, {
+    method: "DELETE",
+  });
+
+  alert("Partido eliminado");
+  cargarPartidos(torneoSeleccionado);
+};
+
   return (
     <div className="panel-section">
       <h2 className="section-title">Editar Partido</h2>
@@ -139,6 +150,10 @@ function EditarPartido() {
             {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} - 
             Resultado: {p.jugado === 1 ? `${p.goles_local} - ${p.goles_visitante}` : 'Pendiente'}
             <button className="btn btn-modify" onClick={() => handleEdit(p)}>Editar</button>
+<button className="btn btn-delete" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
+  Eliminar
+</button>
+
           </li>
         ))}
       </ul>

@@ -165,6 +165,18 @@ router.post('/:id/estadisticas', async (req, res) => {
   }
 });
 
+// Eliminar partido
+router.delete("/:id", (req, res) => {
+  db.query("DELETE FROM partidos WHERE id = ?", [req.params.id], (err) => {
+    if (err) {
+      console.error("Error al eliminar partido:", err);
+      return res.status(500).send("Error al eliminar partido");
+    }
+    res.sendStatus(204);
+  });
+});
+
+
 
 
 

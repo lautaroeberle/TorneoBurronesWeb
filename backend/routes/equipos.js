@@ -139,6 +139,33 @@ router.get("/:id/jugadores", (req, res) => {
     res.json(rows);
   });
 });
+// Eliminar equipo
+// Eliminar equipo
+router.delete("/:id", (req, res) => {
+  db.query("DELETE FROM equipos WHERE id = ?", [req.params.id], (err, result) => {
+    if (err) {
+      console.error("Error al eliminar equipo:", err);
+      return res.status(500).send("Error al eliminar equipo");
+    }
+    res.sendStatus(204);
+  });
+});
+
+
+// Eliminar jugador
+router.delete("/jugador/:id", (req, res) => {
+  db.query("DELETE FROM jugadores WHERE id = ?", [req.params.id], (err, result) => {
+    if (err) {
+      console.error("Error al eliminar jugador:", err);
+      return res.status(500).send("Error al eliminar jugador");
+    }
+    res.sendStatus(204);
+  });
+});
+
+
+
+
 
 
 

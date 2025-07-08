@@ -55,12 +55,13 @@ CREATE TABLE partidos (
   goles_local INT DEFAULT 0,
   goles_visitante INT DEFAULT 0,
   fase ENUM('Grupos', 'Octavos de final', 'Cuartos de final', 'Semifinal', 'Final') NOT NULL,
-  grupo_fecha INT, -- solo aplicable si fase = 'Grupos'
+  grupo_fecha INT,
   jugado BOOLEAN DEFAULT FALSE,
-  FOREIGN KEY (torneo_id) REFERENCES torneos(id),
-  FOREIGN KEY (equipo_local_id) REFERENCES equipos(id),
-  FOREIGN KEY (equipo_visitante_id) REFERENCES equipos(id)
+  FOREIGN KEY (torneo_id) REFERENCES torneos(id) ON DELETE CASCADE,
+  FOREIGN KEY (equipo_local_id) REFERENCES equipos(id) ON DELETE CASCADE,
+  FOREIGN KEY (equipo_visitante_id) REFERENCES equipos(id) ON DELETE CASCADE
 );
+
 DROP TABLE IF EXISTS equipos;
 CREATE TABLE equipos (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,6 +84,7 @@ CREATE TABLE equipos (
 
 
 DROP TABLE IF EXISTS estadisticas_partido;
+
 CREATE TABLE estadisticas_partido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   partido_id INT NOT NULL,
@@ -90,9 +92,10 @@ CREATE TABLE estadisticas_partido (
   tipo ENUM('gol', 'amarilla', 'roja', 'azul') NOT NULL,
   tipo_gol ENUM('normal', 'en_contra', 'penal') DEFAULT NULL,
   minuto INT NOT NULL,
-  FOREIGN KEY (partido_id) REFERENCES partidos(id),
-  FOREIGN KEY (jugador_id) REFERENCES jugadores(id)
+  FOREIGN KEY (partido_id) REFERENCES partidos(id) ON DELETE CASCADE,
+  FOREIGN KEY (jugador_id) REFERENCES jugadores(id) ON DELETE CASCADE
 );
+
 
 
 ojo con este archivo, revisar cambios
