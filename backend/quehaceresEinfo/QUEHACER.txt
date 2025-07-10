@@ -6,6 +6,11 @@ agregar barrio al crear equipo (tambien al editar)
 eliminar torneos, equipos, partidos, estadisticas (para eso deben mostrarse una vez se abra el coso editar partidos)
 colores botones  (verde agregar, rojo eliminar, azul guardar/cambiar)
 stats deben guardarse por partido (para no repetir y para mostrar x partido)
+agregar seccion noticias        
+subpanel o nuevo panel para cargar noticias (nuevos componentes,bdd,etc.)
+mostrar apellido (o nombre completo) en vez de nombre en stats 
+archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
+
 
 
 -----------POR HACER-----------
@@ -29,15 +34,14 @@ stats deben guardarse por partido (para no repetir y para mostrar x partido)
 
  
 
-mostrar apellido (o nombre completo) en vez de nombre en stats  --- POCO URGENTE
+
 
 
   
 
 ver todo de tabla de posiciones ---- me
 
-agregar seccion noticias         MEDIANAMENTE URG
-subpanel o nuevo panel para cargar noticias (nuevos componentes,bdd,etc.)
+
 
 
 
@@ -52,7 +56,7 @@ agregar paginas individuales para ver stats de equipos y quizas jugadores ------
 
 
 
-archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
+
 
 
 
@@ -60,4 +64,6 @@ archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
 
 -----POR HACER UNA VEZ TERMINADO TODO-----
 -eliminar eventos
-en cargar partido deben mostrarse solamente los equipos del torneo que se elije
+-en cargar partido deben mostrarse solamente los equipos del torneo que se elije
+-mejorar panel lucio (incluso agregar previsualizacion)
+-revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel

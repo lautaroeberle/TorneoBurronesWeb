@@ -95,7 +95,7 @@ function CopaPage() {
               : e.tipo === "roja"
               ? "🔴"
               : "🔵"}{" "}
-            {e.nombre} ({e.equipo}) -{" "}
+            {e.apellido} ({e.equipo}) -{" "}
             {e.tipo === "gol"
               ? `Gol${
                   e.tipo_gol === "en_contra"

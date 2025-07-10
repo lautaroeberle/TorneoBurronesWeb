@@ -5,6 +5,7 @@ import "../styles/panel.css";
 interface Jugador {
   id: number;
   nombre: string;
+  apellido:string;
 }
 
 interface Evento {
@@ -213,7 +214,7 @@ function EditarPartido() {
               >
                 <option value="">Seleccionar jugador</option>
                 {jugadores.map(j => (
-                  <option key={j.id} value={j.id}>{j.nombre}</option>
+                  <option key={j.id} value={j.id}>{j.apellido}</option>
                 ))}
               </select>
 
