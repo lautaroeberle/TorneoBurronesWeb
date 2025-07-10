@@ -63,6 +63,17 @@ function PanelNoticias() {
         setTimeout(() => setMensaje(""), 3000);
       });
   };
+  const alternarPublicacion = (id: number) => {
+  fetch(`http://localhost:3000/api/noticias/publicar/${id}`, {
+    method: "PUT"
+  })
+    .then(() => fetchNoticias())
+    .catch(() => {
+      setMensaje("Error al cambiar estado");
+      setTimeout(() => setMensaje(""), 3000);
+    });
+};
+
 
   const cargarNoticiaParaEditar = (n: any) => {
     setTitulo(n.titulo);
@@ -115,6 +126,7 @@ function PanelNoticias() {
               <div className="acciones">
                 <button className="btn-editar" onClick={() => cargarNoticiaParaEditar(n)}>Editar</button>
                 <button className="btn-eliminar" onClick={() => eliminarNoticia(n.id)}>Eliminar</button>
+                <button className={`btn-toggle ${n.publicada ? "publica" : "privada"}`} onClick={() => alternarPublicacion(n.id)}>{n.publicada ? "Pública" : "Privada"}</button>
               </div>
             </div>
           </div>

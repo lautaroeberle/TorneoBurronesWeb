@@ -44,11 +44,18 @@ router.post("/", upload.single("imagen"), (req, res) => {
 
 // GET: obtener noticias
 router.get("/", (req, res) => {
-  db.query("SELECT * FROM noticias ORDER BY fecha_publicacion DESC", (err, results) => {
+  const publicada = req.query.publicadas === "true";
+
+  const query = publicada
+    ? "SELECT * FROM noticias WHERE publicada = true ORDER BY fecha_publicacion DESC"
+    : "SELECT * FROM noticias ORDER BY fecha_publicacion DESC";
+
+  db.query(query, (err, results) => {
     if (err) return res.status(500).send(err);
     res.json(results);
   });
 });
+
 
 
 // Eliminar una noticia por ID
@@ -102,6 +109,15 @@ router.get("/:id", (req, res) => {
 });
 
 
+// PUT /api/noticias/publicar/:id
+router.put("/publicar/:id", (req, res) => {
+  const id = req.params.id;
+  const query = "UPDATE noticias SET publicada = NOT publicada WHERE id = ?";
+  db.query(query, [id], (err, result) => {
+    if (err) return res.status(500).json({ error: "Error al cambiar estado" });
+    res.json({ message: "Estado actualizado correctamente" });
+  });
+});
 
 
 

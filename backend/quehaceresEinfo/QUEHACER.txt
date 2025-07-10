@@ -25,7 +25,6 @@ archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
 
 
 
-
  revisar que carajo es el subrayado
 
 -todo el front

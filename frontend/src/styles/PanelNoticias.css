@@ -125,6 +125,34 @@
   background-color: #e53935;
   color: white;
 }
+.btn-toggle {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+
+.btn-toggle.publica {
+  background-color: #28a745; 
+}
+
+.btn-toggle.publica:hover {
+  background-color: #218838;
+}
+
+
+.btn-toggle.privada {
+  background-color: #6c757d; 
+}
+
+.btn-toggle.privada:hover {
+  background-color: #5a6268;
+}
+
 .noticia-form {
   max-width: 100%;
 }

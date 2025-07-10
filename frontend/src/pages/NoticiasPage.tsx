@@ -16,7 +16,7 @@ function NoticiasPage() {
   const [noticias, setNoticias] = useState<Noticia[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/noticias")
+    fetch("http://localhost:3000/api/noticias?publicadas=true")
       .then(res => res.json())
       .then(data => setNoticias(data))
       .catch(err => console.error("Error al cargar noticias:", err));
