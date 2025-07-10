@@ -32,11 +32,14 @@ stats deben guardarse por partido (para no repetir y para mostrar x partido)
 mostrar apellido (o nombre completo) en vez de nombre en stats  --- POCO URGENTE
 
 
-en cargar partido deben mostrarse solamente los equipos del torneo que se elije     ---- MEDIANTAMENTE URG
+  
 
 ver todo de tabla de posiciones ---- me
 
 agregar seccion noticias         MEDIANAMENTE URG
+subpanel o nuevo panel para cargar noticias (nuevos componentes,bdd,etc.)
+
+
 
 agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG
 
@@ -44,12 +47,17 @@ agregar paginas individuales para ver stats de equipos y quizas jugadores ------
 
 
 
-prompt: enviar eso + archivo editarPartido.tsx
-por alguna razon los eventos no se eliminan. el codigo que proporcionaste no cumple su funcion.
 
-que puede estar pasando? te envio el codigo de un delete de mi pagina que sí funciona router.delete("/:id", (req, res) => {
-  db.query("DELETE FROM torneos WHERE id = ?", [req.params.id], (err) => {
-    if (err) return res.status(500).send(err);
-    res.sendStatus(204);
-  });
-});
+
+
+
+
+archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
+
+
+
+
+
+-----POR HACER UNA VEZ TERMINADO TODO-----
+-eliminar eventos
+en cargar partido deben mostrarse solamente los equipos del torneo que se elije
