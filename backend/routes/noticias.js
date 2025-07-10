@@ -91,6 +91,18 @@ router.put("/:id", upload.single("imagen"), (req, res) => {
 
 
 
+// Obtener una noticia individual por ID
+router.get("/:id", (req, res) => {
+  const noticiaId = req.params.id;
+  db.query("SELECT * FROM noticias WHERE id = ?", [noticiaId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (results.length === 0) return res.status(404).json({ error: "Noticia no encontrada" });
+    res.json(results[0]);
+  });
+});
+
+
+
 
 
 module.exports = router;

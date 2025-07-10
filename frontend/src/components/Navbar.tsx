@@ -29,6 +29,7 @@ const Navbar = () => {
         <li><NavLinkHero to="inscripcion">Inscripción</NavLinkHero></li>
         <li><NavLinkHero to="contacto">Contacto</NavLinkHero></li>
         <li><Link to="/reglamento">Reglamento</Link></li>
+        <li><Link to = "/noticias">Periodismo</Link>"</li>
         <li className="dropdown">
           <span>Torneos ▾</span>
           <ul className="dropdown-menu">

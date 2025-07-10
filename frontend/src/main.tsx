@@ -11,6 +11,8 @@ import AperturaPage from "../src/pages/AperturaPage.tsx";
 import './styles/global.css';
 import ReglamentoPage from "./pages/ReglamentoPage.tsx";
 import PanelNoticias from "./pages/PanelNoticias.tsx";
+import NoticiasPage from "./pages/NoticiasPage.tsx";
+import NoticiaIndividual from "./pages/NoticiaIndividual.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -18,11 +20,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Routes>
         {/* Rutas públicas con navbar */}
         <Route element={<PublicLayout />}>
-          <Route path="/" element={<App />} />
-          <Route path="/copa" element={<CopaPage />} />
-          <Route path="/apertura" element={<AperturaPage />} />
-          <Route path="/reglamento" element={<ReglamentoPage />} />
-        </Route>
+  <Route path="/" element={<App />} />
+  <Route path="/copa" element={<CopaPage />} />
+  <Route path="/apertura" element={<AperturaPage />} />
+  <Route path="/reglamento" element={<ReglamentoPage />} />
+  <Route path="/noticias" element={<NoticiasPage />} />
+  <Route path="/noticias/:id" element={<NoticiaIndividual />} /> {/* 👈 esta línea nueva */}
+</Route>
 
         {/* Rutas admin sin navbar */}
         <Route path="/admin/login" element={<Login />} />
