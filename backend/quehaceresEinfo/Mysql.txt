@@ -96,6 +96,19 @@ CREATE TABLE estadisticas_partido (
   FOREIGN KEY (jugador_id) REFERENCES jugadores(id) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS noticias;
+CREATE TABLE noticias (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  titulo VARCHAR(255) NOT NULL,
+  copete TEXT,
+  cuerpo TEXT,
+  imagen_url VARCHAR(500),
+  autor VARCHAR(100),
+  fecha_publicacion DATETIME DEFAULT CURRENT_TIMESTAMP
+); 
+
+//quizas agregar importancia noticia
+
 
 
 ojo con este archivo, revisar cambios

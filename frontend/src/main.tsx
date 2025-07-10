@@ -5,11 +5,12 @@ import './index.css'
 import PublicLayout from './layouts/PublicLayout.tsx';
 import App from './App.tsx'
 import Login from "../src/pages/Login.tsx";
-import Panel from "../src/pages/Panel.tsx";
+import Panel from "./pages/Panel.tsx";
 import CopaPage from "../src/pages/CopaPage.tsx";
 import AperturaPage from "../src/pages/AperturaPage.tsx";
 import './styles/global.css';
 import ReglamentoPage from "./pages/ReglamentoPage.tsx";
+import PanelNoticias from "./pages/PanelNoticias.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         {/* Rutas admin sin navbar */}
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin/panel" element={<Panel />} />
+        <Route path="/admin/lucio" element={<PanelNoticias />} />
       </Routes>
     </Router>
   </React.StrictMode>

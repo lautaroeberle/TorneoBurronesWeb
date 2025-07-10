@@ -18,8 +18,12 @@ app.use("/api/equipos", equiposRouter);
 
 const partidosRouter = require("./routes/partidos");
 app.use("/api/partidos", partidosRouter);
+
 const estadisticasRouter = require("./routes/estadisticas");
 app.use("/api/estadisticas", estadisticasRouter);
+
+const noticiasRoutes = require('./routes/noticias');
+app.use("/api/noticias", noticiasRoutes);
 
 
 
