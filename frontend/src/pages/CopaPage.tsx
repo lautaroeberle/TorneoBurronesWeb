@@ -154,6 +154,7 @@ function CopaPage() {
         <th>PP</th>
         <th>GF</th>
         <th>GC</th>
+        <th>DG</th>
         <th>Pts</th>
       </tr>
     </thead>
@@ -174,22 +175,13 @@ function CopaPage() {
           <td>{pos.pp}</td>
           <td>{pos.gf}</td>
           <td>{pos.gc}</td>
+          <td>{pos.gf - pos.gc}</td>
           <td>{pos.puntos}</td>
         </tr>
       ))}
     </tbody>
   </table>
 </section>
-
-
-
-
-
-
-
-
-
-
 
 
       <section className="partidos">

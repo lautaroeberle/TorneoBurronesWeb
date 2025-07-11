@@ -1,8 +1,11 @@
+
+
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const http = require('http');
 
-// Crear un partido
+
 router.post('/', (req, res) => {
   const {
     torneo_id,
@@ -48,7 +51,9 @@ router.post('/', (req, res) => {
     });
   });
 });
-// Editar partido (actualizar resultado y tabla de posiciones)
+
+
+
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { goles_local, goles_visitante, jugado } = req.body;
@@ -56,87 +61,60 @@ router.put('/:id', async (req, res) => {
   try {
     const jugadoEntero = jugado === "true" || jugado === true || jugado === "1" || jugado === 1 ? 1 : 0;
 
-    // 1. Obtener datos actuales del partido antes de editarlo
-    const [[partidoAnterior]] = await db.promise().query(
-      `SELECT equipo_local_id, equipo_visitante_id, goles_local, goles_visitante, jugado FROM partidos WHERE id = ?`,
+    // 1. Obtener nombre del torneo para recalculo
+    const [[partidoAntes]] = await db.promise().query(
+      `SELECT p.torneo_id, t.nombre AS nombre_torneo
+       FROM partidos p
+       JOIN torneos t ON p.torneo_id = t.id
+       WHERE p.id = ?`,
       [id]
     );
 
-    const [[{ torneo_id }]] = await db.promise().query(
-  `SELECT torneo_id FROM partidos WHERE id = ?`,
-  [id]
-);
+    if (!partidoAntes) {
+      return res.status(404).json({ error: 'Partido no encontrado' });
+    }
 
-    // 2. Actualizar el resultado del partido
+    const nombreTorneo = partidoAntes.nombre_torneo;
+
+    // 2. Actualizar partido
     const [resultado] = await db.promise().query(
       `UPDATE partidos SET goles_local = ?, goles_visitante = ?, jugado = ? WHERE id = ?`,
       [goles_local, goles_visitante, jugadoEntero, id]
     );
 
     if (resultado.affectedRows === 0) {
-      return res.status(404).json({ error: 'Partido no encontrado' });
+      return res.status(404).json({ error: 'No se pudo actualizar el partido' });
     }
 
-    const { equipo_local_id, equipo_visitante_id } = partidoAnterior;
+    // 3. Recalcular posiciones usando http.request
+    const options = {
+      hostname: 'localhost',
+      port: 3000,
+      path: `/api/posiciones/recalcular?nombre=${encodeURIComponent(nombreTorneo)}`,
+      method: 'POST'
+    };
 
-    // Función para restar estadísticas anteriores si el partido ya había sido jugado
-   const restarPosiciones = async (equipoId, golesFavor, golesContra, torneoId) => {
-      let puntos = 0, pg = 0, pe = 0, pp = 0;
-      if (golesFavor > golesContra) { puntos = 3; pg = 1; }
-      else if (golesFavor === golesContra) { puntos = 1; pe = 1; }
-      else { pp = 1; }
-  await db.promise().query(`
-    UPDATE posiciones
-    SET pj = pj - 1,
-        pg = pg - ?,
-        pe = pe - ?,
-        pp = pp - ?,
-        gf = gf - ?,
-        gc = gc - ?,
-        puntos = puntos - ?
-    WHERE equipo_id = ? AND torneo_id = ?
-  `, [pg, pe, pp, golesFavor, golesContra, puntos, equipoId, torneoId]);
-};
+    const reqRecalculo = http.request(options, (resRecalculo) => {
+      if (resRecalculo.statusCode === 200) {
+        res.json({ message: 'Partido y posiciones actualizados correctamente' });
+      } else {
+        res.status(500).json({ error: 'Partido actualizado, pero falló el recalculo de posiciones' });
+      }
+    });
 
-const sumarPosiciones = async (equipoId, golesFavor, golesContra, torneoId) => {
-  let puntos = 0, pg = 0, pe = 0, pp = 0;
-      if (golesFavor > golesContra) { puntos = 3; pg = 1; }
-      else if (golesFavor === golesContra) { puntos = 1; pe = 1; }
-      else { pp = 1; }
-  await db.promise().query(`
-    INSERT INTO posiciones (torneo_id, equipo_id, pj, pg, pe, pp, gf, gc, puntos)
-    VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?)
-    ON DUPLICATE KEY UPDATE
-      pj = pj + 1,
-      pg = pg + VALUES(pg),
-      pe = pe + VALUES(pe),
-      pp = pp + VALUES(pp),
-      gf = gf + VALUES(gf),
-      gc = gc + VALUES(gc),
-      puntos = puntos + VALUES(puntos)
-  `, [torneoId, equipoId, pg, pe, pp, golesFavor, golesContra, puntos]);
-};
+    reqRecalculo.on('error', (e) => {
+      console.error('Error al recalcular posiciones:', e);
+      res.status(500).json({ error: 'Partido actualizado, pero error al recalcular posiciones' });
+    });
 
+    reqRecalculo.end(); // envía la solicitud
 
-
-    // 3. Revertir datos anteriores si ya estaba jugado
-    if (partidoAnterior.jugado === 1) {
-     await restarPosiciones(equipo_local_id, partidoAnterior.goles_local, partidoAnterior.goles_visitante, torneo_id);
-await restarPosiciones(equipo_visitante_id, partidoAnterior.goles_visitante, partidoAnterior.goles_local, torneo_id);
-    }
-
-    // 4. Aplicar nuevos datos si ahora está jugado
-    if (jugadoEntero === 1) {
-      await sumarPosiciones(equipo_local_id, goles_local, goles_visitante, torneo_id);
-await sumarPosiciones(equipo_visitante_id, goles_visitante, goles_local, torneo_id);
-    }
-
-    res.json({ message: 'Partido actualizado correctamente' });
   } catch (error) {
     console.error('Error al editar partido:', error);
-    res.status(500).json({ error: 'Error al editar el partido' });
+    res.status(500).json({ error: 'Error general al editar el partido' });
   }
 });
+
 
 
 

@@ -55,9 +55,9 @@ agregar dif gol bdd? no. calcularlo dps haciendo gf-gc
 
 ver tema PJ == 1
 
+MOFICIAR MYSQLEXACTO POSICIONES
 
-
-
+cuando se elimina un partido, se eliminan las stats relacionadas a él
 
 
 
@@ -70,3 +70,11 @@ ver tema PJ == 1
 -en cargar partido deben mostrarse solamente los equipos del torneo que se elije
 -mejorar panel lucio (incluso agregar previsualizacion)
 -revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel
+
+
+https://m.wcostream.tv
+
+
+
+
+npm install node-fetch  //para el hosteo, ver si lo tengo que instalar
