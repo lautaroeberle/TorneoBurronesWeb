@@ -24,7 +24,8 @@ app.use("/api/estadisticas", estadisticasRouter);
 
 const noticiasRoutes = require('./routes/noticias');
 app.use("/api/noticias", noticiasRoutes);
-
+const posicionesRoutes = require('./routes/posiciones');
+app.use("/api/posiciones", posicionesRoutes);
 
 
 const PORT = 3000;

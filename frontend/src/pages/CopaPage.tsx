@@ -23,6 +23,19 @@ type Evento = {
   equipo: string;
   partido_id: number;
 };
+type Posicion = {
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  pj: number;
+  pg: number;
+  pe: number;
+  pp: number;
+  gf: number;
+  gc: number;
+  puntos: number;
+};
+
 
 type Equipo = {
   id: number;
@@ -34,6 +47,8 @@ function CopaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
+  const [posiciones, setPosiciones] = useState<Posicion[]>([]);
+
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -64,6 +79,14 @@ function CopaPage() {
       } catch (error) {
         console.warn("No se pudieron cargar los equipos:", error);
       }
+      try {
+      const resPos = await fetch("http://localhost:3000/api/posiciones?nombre=Copa de Verano");
+      const dataPos = await resPos.json();
+      setPosiciones(dataPos);
+}     catch (error) {
+     console.warn("No se pudieron cargar las posiciones:", error);
+}
+
     };
 
     fetchDatos();
@@ -118,6 +141,56 @@ function CopaPage() {
   return (
     <div className="torneo-page">
       <h2>Copa de Verano {new Date().getFullYear()}</h2>
+
+    <section className="tabla-posiciones">
+  <h3>Tabla de Posiciones</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Equipo</th>
+        <th>PJ</th>
+        <th>PG</th>
+        <th>PE</th>
+        <th>PP</th>
+        <th>GF</th>
+        <th>GC</th>
+        <th>Pts</th>
+      </tr>
+    </thead>
+    <tbody>
+      {posiciones.map((pos) => (
+        <tr key={pos.equipo_id}>
+          <td>
+            <img
+              src={`http://localhost:3000/uploads/${pos.imagen}`}
+              alt={pos.equipo}
+              className="logo-equipo"
+            />{" "}
+            {pos.equipo}
+          </td>
+          <td>{pos.pj}</td>
+          <td>{pos.pg}</td>
+          <td>{pos.pe}</td>
+          <td>{pos.pp}</td>
+          <td>{pos.gf}</td>
+          <td>{pos.gc}</td>
+          <td>{pos.puntos}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
+
+
+
+
+
+
+
+
+
+
+
 
       <section className="partidos">
         <h3>Partidos</h3>

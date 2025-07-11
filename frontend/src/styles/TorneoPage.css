@@ -47,3 +47,29 @@
   padding: 2px;
 }
 
+
+.tabla-posiciones table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.tabla-posiciones th,
+.tabla-posiciones td {
+  padding: 0.5rem;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.tabla-posiciones td:first-child {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.tabla-posiciones .logo-equipo {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
+  object-fit: contain;
+}

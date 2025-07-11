@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
 import "../styles/TorneoPage.css";
 
+type Posicion = {
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  pj: number;
+  pg: number;
+  pe: number;
+  pp: number;
+  gf: number;
+  gc: number;
+  puntos: number;
+};
+
+
 type Partido = {
   id: number;
   equipo_local: string;
@@ -26,6 +40,8 @@ type Evento = {
 function AperturaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
+  const [posiciones, setPosiciones] = useState<Posicion[]>([]);
+
 
 useEffect(() => {
   const fetchDatos = async () => {
@@ -44,6 +60,15 @@ useEffect(() => {
     } catch (error) {
       console.warn("No se pudieron cargar eventos del Apertura:", error);
     }
+
+    try {
+  const resPos = await fetch("http://localhost:3000/api/posiciones?nombre=Apertura");
+  const dataPos = await resPos.json();
+  setPosiciones(dataPos);
+} catch (error) {
+  console.warn("No se pudieron cargar las posiciones del Apertura:", error);
+}
+
   };
 
   fetchDatos();
@@ -78,6 +103,47 @@ useEffect(() => {
   return (
     <div className="torneo-page">
       <h2>Torneo Apertura {new Date().getFullYear()}</h2>
+
+
+      <section className="tabla-posiciones">
+  <h3>Tabla de Posiciones</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Equipo</th>
+        <th>PJ</th>
+        <th>PG</th>
+        <th>PE</th>
+        <th>PP</th>
+        <th>GF</th>
+        <th>GC</th>
+        <th>Pts</th>
+      </tr>
+    </thead>
+    <tbody>
+      {posiciones.map((pos) => (
+        <tr key={pos.equipo_id}>
+          <td>
+            <img
+              src={`http://localhost:3000/uploads/${pos.imagen}`}
+              alt={pos.equipo}
+              className="logo-equipo"
+            />{" "}
+            {pos.equipo}
+          </td>
+          <td>{pos.pj}</td>
+          <td>{pos.pg}</td>
+          <td>{pos.pe}</td>
+          <td>{pos.pp}</td>
+          <td>{pos.gf}</td>
+          <td>{pos.gc}</td>
+          <td>{pos.puntos}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
+
 
       <section className="partidos">
         <h3>Partidos</h3>
