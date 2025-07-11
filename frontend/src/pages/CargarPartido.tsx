@@ -16,20 +16,45 @@ function CargarPartido() {
 
   const [mensaje, setMensaje] = useState('');
 
+  // Cargar torneos al iniciar
   useEffect(() => {
-    const fetchData = async () => {
-      const torneosRes = await fetch("http://localhost:3000/api/torneos");
-      const equiposRes = await fetch("http://localhost:3000/api/equipos");
-      const torneosData = await torneosRes.json();
-      const equiposData = await equiposRes.json();
-      setTorneos(torneosData);
-      setEquipos(equiposData);
+    const fetchTorneos = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/torneos");
+        const data = await res.json();
+        setTorneos(data);
+      } catch (err) {
+        console.error("Error al cargar torneos:", err);
+      }
     };
-    fetchData();
+    fetchTorneos();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  // Manejar cambios del formulario
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    if (name === "torneo_id") {
+      setForm(prev => ({
+        ...prev,
+        torneo_id: value,
+        equipo_local_id: '',
+        equipo_visitante_id: ''
+      }));
+
+      try {
+        const res = await fetch(`http://localhost:3000/api/equipos/torneo/${value}`);
+        const data = await res.json();
+        setEquipos(data);
+      } catch (error) {
+        console.error("Error al cargar equipos por torneo:", error);
+        setEquipos([]);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,14 +91,14 @@ function CargarPartido() {
           ))}
         </select>
 
-        <select className="select" name="equipo_local_id" value={form.equipo_local_id} onChange={handleChange} required>
+        <select className="select" name="equipo_local_id" value={form.equipo_local_id} onChange={handleChange} required disabled={!equipos.length}>
           <option value="">Equipo Local</option>
           {equipos.map((e: any) => (
             <option key={e.id} value={e.id}>{e.nombre}</option>
           ))}
         </select>
 
-        <select className="select" name="equipo_visitante_id" value={form.equipo_visitante_id} onChange={handleChange} required>
+        <select className="select" name="equipo_visitante_id" value={form.equipo_visitante_id} onChange={handleChange} required disabled={!equipos.length}>
           <option value="">Equipo Visitante</option>
           {equipos.map((e: any) => (
             <option key={e.id} value={e.id}>{e.nombre}</option>

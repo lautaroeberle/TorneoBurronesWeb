@@ -10,6 +10,10 @@ agregar seccion noticias
 subpanel o nuevo panel para cargar noticias (nuevos componentes,bdd,etc.)
 mostrar apellido (o nombre completo) en vez de nombre en stats 
 archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
+ver tema PJ == 1
+agregar dif gol bdd? no. calcularlo dps haciendo gf-gc
+MOFICIAR MYSQLEXACTO POSICIONES
+
 
 
 
@@ -49,13 +53,12 @@ agregar paginas individuales para ver stats de equipos y quizas jugadores ------
 
 
 
-agregar dif gol bdd? no. calcularlo dps haciendo gf-gc
 
 
 
-ver tema PJ == 1
 
-MOFICIAR MYSQLEXACTO POSICIONES
+
+
 
 cuando se elimina un partido, se eliminan las stats relacionadas a él
 
@@ -63,13 +66,14 @@ cuando se elimina un partido, se eliminan las stats relacionadas a él
 
 
 
-
+agregar partidos a apertura para ver si DG está bien implementado:
 
 -----POR HACER UNA VEZ TERMINADO TODO-----
 -eliminar eventos
 -en cargar partido deben mostrarse solamente los equipos del torneo que se elije
 -mejorar panel lucio (incluso agregar previsualizacion)
 -revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel
+-que se guarde la fecha de nacimiento al editar equipo
 
 
 https://m.wcostream.tv
@@ -77,4 +81,4 @@ https://m.wcostream.tv
 
 
 
-npm install node-fetch  //para el hosteo, ver si lo tengo que instalar
+

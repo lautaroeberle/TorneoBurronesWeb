@@ -165,6 +165,18 @@ router.delete("/jugador/:id", (req, res) => {
 
 
 
+// GET /api/equipos/torneo/:torneoId
+router.get("/torneo/:torneoId", (req, res) => {
+  const { torneoId } = req.params;
+
+  db.query("SELECT * FROM equipos WHERE torneo_id = ?", [torneoId], (err, rows) => {
+    if (err) {
+      console.error("Error al obtener equipos por torneo:", err);
+      return res.status(500).json({ error: "Error al obtener equipos del torneo" });
+    }
+    res.json(rows);
+  });
+});
 
 
 

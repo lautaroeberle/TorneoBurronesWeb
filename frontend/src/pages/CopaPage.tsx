@@ -147,6 +147,7 @@ function CopaPage() {
   <table>
     <thead>
       <tr>
+        <th>Pos</th>
         <th>Equipo</th>
         <th>PJ</th>
         <th>PG</th>
@@ -158,11 +159,12 @@ function CopaPage() {
         <th>Pts</th>
       </tr>
     </thead>
-    <tbody>
-      {posiciones.map((pos) => (
-        <tr key={pos.equipo_id}>
-          <td>
-            <img
+   <tbody>
+  {posiciones.map((pos, index) => (
+    <tr key={pos.equipo_id}>
+      <td>{index + 1}</td>
+      <td>
+        <img
               src={`http://localhost:3000/uploads/${pos.imagen}`}
               alt={pos.equipo}
               className="logo-equipo"

@@ -88,7 +88,6 @@ CREATE TABLE `inscripciones` (
 
 
 
-DROP TABLE IF EXISTS posiciones;
 CREATE TABLE `posiciones` (
   `id` int NOT NULL AUTO_INCREMENT,
   `equipo_id` int NOT NULL,
@@ -99,10 +98,12 @@ CREATE TABLE `posiciones` (
   `gf` int DEFAULT '0',
   `gc` int DEFAULT '0',
   `puntos` int DEFAULT '0',
+  `torneo_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `equipo_id` (`equipo_id`),
-  CONSTRAINT `posiciones_ibfk_1` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+  UNIQUE KEY `torneo_equipo_unico` (`torneo_id`,`equipo_id`),
+  KEY `posiciones_equipo_fk` (`equipo_id`),
+  CONSTRAINT `posiciones_equipo_fk` FOREIGN KEY (`equipo_id`) REFERENCES `equipos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 
 DROP TABLE IF EXISTS noticias;
