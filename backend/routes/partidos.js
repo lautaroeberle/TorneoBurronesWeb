@@ -48,8 +48,7 @@ router.post('/', (req, res) => {
     });
   });
 });
-
-// Editar partido (actualizar resultado y jugado)
+// Editar partido (actualizar resultado y tabla de posiciones)
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { goles_local, goles_visitante, jugado } = req.body;
@@ -57,14 +56,75 @@ router.put('/:id', async (req, res) => {
   try {
     const jugadoEntero = jugado === "true" || jugado === true || jugado === "1" || jugado === 1 ? 1 : 0;
 
+    // 1. Obtener datos actuales del partido antes de editarlo
+    const [[partidoAnterior]] = await db.promise().query(
+      `SELECT equipo_local_id, equipo_visitante_id, goles_local, goles_visitante, jugado FROM partidos WHERE id = ?`,
+      [id]
+    );
 
-const [resultado] = await db.promise().query(
-  `UPDATE partidos SET goles_local = ?, goles_visitante = ?, jugado = ? WHERE id = ?`,
-  [goles_local, goles_visitante, jugadoEntero, id]
-);
+    // 2. Actualizar el resultado del partido
+    const [resultado] = await db.promise().query(
+      `UPDATE partidos SET goles_local = ?, goles_visitante = ?, jugado = ? WHERE id = ?`,
+      [goles_local, goles_visitante, jugadoEntero, id]
+    );
 
     if (resultado.affectedRows === 0) {
       return res.status(404).json({ error: 'Partido no encontrado' });
+    }
+
+    const { equipo_local_id, equipo_visitante_id } = partidoAnterior;
+
+    // Función para restar estadísticas anteriores si el partido ya había sido jugado
+    const restarPosiciones = async (equipoId, golesFavor, golesContra) => {
+      let puntos = 0, pg = 0, pe = 0, pp = 0;
+      if (golesFavor > golesContra) { puntos = 3; pg = 1; }
+      else if (golesFavor === golesContra) { puntos = 1; pe = 1; }
+      else { pp = 1; }
+
+      await db.promise().query(`
+        UPDATE posiciones
+        SET pj = pj - 1,
+            pg = pg - ?,
+            pe = pe - ?,
+            pp = pp - ?,
+            gf = gf - ?,
+            gc = gc - ?,
+            puntos = puntos - ?
+        WHERE equipo_id = ?
+      `, [pg, pe, pp, golesFavor, golesContra, puntos, equipoId]);
+    };
+
+    // Función para sumar estadísticas nuevas
+    const sumarPosiciones = async (equipoId, golesFavor, golesContra) => {
+      let puntos = 0, pg = 0, pe = 0, pp = 0;
+      if (golesFavor > golesContra) { puntos = 3; pg = 1; }
+      else if (golesFavor === golesContra) { puntos = 1; pe = 1; }
+      else { pp = 1; }
+
+      await db.promise().query(`
+        INSERT INTO posiciones (equipo_id, pj, pg, pe, pp, gf, gc, puntos)
+        VALUES (?, 1, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+          pj = pj + 1,
+          pg = pg + VALUES(pg),
+          pe = pe + VALUES(pe),
+          pp = pp + VALUES(pp),
+          gf = gf + VALUES(gf),
+          gc = gc + VALUES(gc),
+          puntos = puntos + VALUES(puntos)
+      `, [equipoId, pg, pe, pp, golesFavor, golesContra, puntos]);
+    };
+
+    // 3. Revertir datos anteriores si ya estaba jugado
+    if (partidoAnterior.jugado === 1) {
+      await restarPosiciones(equipo_local_id, partidoAnterior.goles_local, partidoAnterior.goles_visitante);
+      await restarPosiciones(equipo_visitante_id, partidoAnterior.goles_visitante, partidoAnterior.goles_local);
+    }
+
+    // 4. Aplicar nuevos datos si ahora está jugado
+    if (jugadoEntero === 1) {
+      await sumarPosiciones(equipo_local_id, goles_local, goles_visitante);
+      await sumarPosiciones(equipo_visitante_id, goles_visitante, goles_local);
     }
 
     res.json({ message: 'Partido actualizado correctamente' });
@@ -73,6 +133,8 @@ const [resultado] = await db.promise().query(
     res.status(500).json({ error: 'Error al editar el partido' });
   }
 });
+
+
 
 // Obtener partidos por ID de torneo (para EditarPartido)
 router.get('/torneo/:id', (req, res) => {
