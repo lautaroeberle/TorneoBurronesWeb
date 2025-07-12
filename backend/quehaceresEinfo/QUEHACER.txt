@@ -13,7 +13,7 @@ archivo de texto con esta data SHOW CREATE TABLE estadisticas_partido;
 ver tema PJ == 1
 agregar dif gol bdd? no. calcularlo dps haciendo gf-gc
 MOFICIAR MYSQLEXACTO POSICIONES
-
+agregar partidos a apertura para ver si DG está bien implementado:
 
 
 
@@ -42,9 +42,10 @@ jugadp automaticamente quizas
 
   
 
-ver todo de tabla de posiciones ---- me
+ver todo de tabla de posiciones ?????? terminado i guess
 
-fixture
+
+fixture !
 
 
 
@@ -64,9 +65,9 @@ cuando se elimina un partido, se eliminan las stats relacionadas a él
 
 
 
+cuando se genera un fixture, que se añadan todos a la tabla de posiciones con datos 0, o ver eso en el recalculo
 
 
-agregar partidos a apertura para ver si DG está bien implementado:
 
 -----POR HACER UNA VEZ TERMINADO TODO-----
 -eliminar eventos

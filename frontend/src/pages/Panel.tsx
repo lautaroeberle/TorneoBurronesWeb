@@ -6,6 +6,7 @@ import EditarEquipos from "./EditarEquipos";
 import CargarPartido from "./CargarPartido";
 import EditarPartido from "./EditarPartido";
 import "../styles/panel.css";
+import GenerarFixture from "./GenerarFixture";
 
 function Panel() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ function Panel() {
         <section className="panel-section"><EquipoNuevo /></section>
         <section className="panel-section"><EditarEquipos /></section>
         <section className="panel-section"><CargarPartido /></section>
+        <section className="panel-section"><GenerarFixture /></section>
         <section className="panel-section"><EditarPartido /></section>
       </main>
     </div>
