@@ -5,7 +5,7 @@ import "../styles/panel.css";
 interface Jugador {
   id: number;
   nombre: string;
-  apellido:string;
+  apellido: string;
 }
 
 interface Evento {
@@ -13,7 +13,7 @@ interface Evento {
   tipo: 'gol' | 'amarilla' | 'roja' | 'azul';
   minuto: number | string;
   tipo_gol?: 'penal' | 'en_contra' | 'jugada';
-  existente?: boolean; // Nuevo campo para distinguir eventos existentes
+  existente?: boolean;
 }
 
 function EditarPartido() {
@@ -158,21 +158,8 @@ function EditarPartido() {
         ))}
       </select>
 
-      <ul className="lista-partidos">
-        {partidos.map((p: any) => (
-          <li key={p.id}>
-            {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} - 
-            Resultado: {p.jugado === 1 ? `${p.goles_local} - ${p.goles_visitante}` : 'Pendiente'}
-            <button className="botonEditar" onClick={() => handleEdit(p)}>Editar</button>
-            <button className="botonEliminar" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
-              Eliminar
-            </button>
-          </li>
-        ))}
-      </ul>
-
       {partidoSeleccionado && (
-        <form className="formulario" onSubmit={handleSubmit}>
+        <form className="formulario formulario-arriba" onSubmit={handleSubmit}>
           <h3>
             Editando: {partidoSeleccionado.equipo_local} vs {partidoSeleccionado.equipo_visitante}
           </h3>
@@ -260,6 +247,21 @@ function EditarPartido() {
           <button type="submit" className="botonGuardar">Guardar cambios</button>
         </form>
       )}
+
+      <ul className="lista-partidos">
+        {[...partidos]
+          .sort((a, b) => a.jugado - b.jugado)
+          .map((p: any) => (
+            <li key={p.id}>
+              {p.equipo_local} vs {p.equipo_visitante} - {p.fecha} {p.hora} -
+              Resultado: {p.jugado === 1 ? `${p.goles_local} - ${p.goles_visitante}` : 'Pendiente'}
+              <button className="botonEditar" onClick={() => handleEdit(p)}>Editar</button>
+              <button className="botonEliminar" onClick={() => eliminarPartido(p.id)} style={{ marginLeft: "8px" }}>
+                Eliminar
+              </button>
+            </li>
+          ))}
+      </ul>
 
       <p className="mensaje">{mensaje}</p>
     </div>

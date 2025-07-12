@@ -33,7 +33,7 @@ MOFICIAR MYSQLEXACTO POSICIONES
 
 -todo el front
 
-
+jugadp automaticamente quizas
 
  
 
@@ -54,7 +54,7 @@ agregar paginas individuales para ver stats de equipos y quizas jugadores ------
 
 
 
-
+editar partido abajo del mismo partido URGENTEE
 
 
 
