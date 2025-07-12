@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "../styles/TorneoPage.css";
 
 type Partido = {
+  grupo_fecha: number;
   id: number;
   equipo_local: string;
   equipo_visitante: string;
@@ -23,6 +24,7 @@ type Evento = {
   equipo: string;
   partido_id: number;
 };
+
 type Posicion = {
   equipo_id: number;
   equipo: string;
@@ -36,7 +38,6 @@ type Posicion = {
   puntos: number;
 };
 
-
 type Equipo = {
   id: number;
   nombre: string;
@@ -48,24 +49,26 @@ function CopaPage() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
-
+  const [fechaActual, setFechaActual] = useState<number>(1);
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const resPartidos = await fetch(
-          "http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano"
-        );
-        const dataPartidos = await resPartidos.json();
+        const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano");
+        const dataPartidos: Partido[] = await resPartidos.json();
         setPartidos(dataPartidos);
+
+        const fechas = dataPartidos
+          .map((p) => p.grupo_fecha || 0)
+          .filter((n): n is number => typeof n === "number")
+          .sort((a, b) => a - b);
+        if (fechas.length > 0) setFechaActual(fechas[0]);
       } catch (error) {
         console.error("Error al cargar partidos de la Copa de Verano:", error);
       }
 
       try {
-        const resEventos = await fetch(
-          "http://localhost:3000/api/estadisticas/torneo?nombre=Copa de Verano"
-        );
+        const resEventos = await fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Copa de Verano");
         const dataEventos = await resEventos.json();
         setEventos(dataEventos);
       } catch (error) {
@@ -79,14 +82,14 @@ function CopaPage() {
       } catch (error) {
         console.warn("No se pudieron cargar los equipos:", error);
       }
-      try {
-      const resPos = await fetch("http://localhost:3000/api/posiciones?nombre=Copa de Verano");
-      const dataPos = await resPos.json();
-      setPosiciones(dataPos);
-}     catch (error) {
-     console.warn("No se pudieron cargar las posiciones:", error);
-}
 
+      try {
+        const resPos = await fetch("http://localhost:3000/api/posiciones?nombre=Copa de Verano");
+        const dataPos = await resPos.json();
+        setPosiciones(dataPos);
+      } catch (error) {
+        console.warn("No se pudieron cargar las posiciones:", error);
+      }
     };
 
     fetchDatos();
@@ -99,119 +102,142 @@ function CopaPage() {
       : "http://localhost:3000/uploads/default.png";
   };
 
-  const renderEventos = (partidoId: number) => {
-    const eventosDelPartido = eventos
-      .filter((e) => e.partido_id === partidoId)
-      .sort((a, b) => a.minuto - b.minuto);
+  const fechasUnicas: number[] = Array.from(
+    new Set(partidos.map((p) => p.grupo_fecha || 0))
+  )
+    .filter((n): n is number => typeof n === "number")
+    .sort((a, b) => a - b);
 
-    if (eventosDelPartido.length === 0) return null;
-
-    return (
-      <ul className="minuto-a-minuto">
-        {eventosDelPartido.map((e, i) => (
-          <li key={i}>
-            <strong>{e.minuto}'</strong>{" "}
-            {e.tipo === "gol"
-              ? "⚽"
-              : e.tipo === "amarilla"
-              ? "🟡"
-              : e.tipo === "roja"
-              ? "🔴"
-              : "🔵"}{" "}
-            {e.apellido} ({e.equipo}) -{" "}
-            {e.tipo === "gol"
-              ? `Gol${
-                  e.tipo_gol === "en_contra"
-                    ? " en contra"
-                    : e.tipo_gol === "penal"
-                    ? " de penal"
-                    : ""
-                }`
-              : e.tipo === "amarilla"
-              ? "Amarilla"
-              : e.tipo === "roja"
-              ? "Roja"
-              : "Azul"}
-          </li>
-        ))}
-      </ul>
-    );
+  const avanzar = () => {
+    const idx = fechasUnicas.indexOf(fechaActual);
+    if (idx < fechasUnicas.length - 1) {
+      setFechaActual(fechasUnicas[idx + 1]);
+    }
   };
+
+  const retroceder = () => {
+    const idx = fechasUnicas.indexOf(fechaActual);
+    if (idx > 0) {
+      setFechaActual(fechasUnicas[idx - 1]);
+    }
+  };
+
+  const partidosPorFecha = partidos.filter(
+    (p) => (p.grupo_fecha || 0) === fechaActual
+  );
 
   return (
     <div className="torneo-page">
       <h2>Copa de Verano {new Date().getFullYear()}</h2>
 
-    <section className="tabla-posiciones">
-  <h3>Tabla de Posiciones</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Pos</th>
-        <th>Equipo</th>
-        <th>PJ</th>
-        <th>PG</th>
-        <th>PE</th>
-        <th>PP</th>
-        <th>GF</th>
-        <th>GC</th>
-        <th>DG</th>
-        <th>Pts</th>
-      </tr>
-    </thead>
-   <tbody>
-  {posiciones.map((pos, index) => (
-    <tr key={pos.equipo_id}>
-      <td>{index + 1}</td>
-      <td>
+      <section className="tabla-posiciones">
+        <h3>Tabla de Posiciones</h3>
+         <section className="tabla-posiciones">
+        <h3>Tabla de Posiciones</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Equipo</th>
+              <th>PJ</th>
+              <th>PG</th>
+              <th>PE</th>
+              <th>PP</th>
+              <th>GF</th>
+              <th>GC</th>
+              <th>DG</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posiciones.map((pos, index) => (
+              <tr key={pos.equipo_id}>
+                <td>{index + 1}</td>
+                <td>
+                  <img
+                    src={`http://localhost:3000/uploads/${pos.imagen}`}
+                    alt={pos.equipo}
+                    className="logo-equipo"
+                  />{" "}
+                  {pos.equipo}
+                </td>
+                <td>{pos.pj}</td>
+                <td>{pos.pg}</td>
+                <td>{pos.pe}</td>
+                <td>{pos.pp}</td>
+                <td>{pos.gf}</td>
+                <td>{pos.gc}</td>
+                <td>{pos.gf - pos.gc}</td>
+                <td>{pos.puntos}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+      </section>
+
+      <section className="fixture">
+        <h3>Fixture</h3>
+
+        <div className="fixture-nav">
+          <button className="nav-button" onClick={retroceder} disabled={fechaActual === fechasUnicas[0]}>
+            Anterior
+          </button>
+          <span className="nav-label">Fecha {fechaActual}</span>
+          <button className="nav-button" onClick={avanzar} disabled={fechaActual === fechasUnicas[fechasUnicas.length - 1]}>
+            Siguiente
+          </button>
+        </div>
+<table className="fixture-table">
+  <colgroup>
+    <col style={{ width: "100px" }} />
+    <col />
+    <col style={{ width: "30px" }} />
+    <col style={{ width: "30px" }} />
+    <col style={{ width: "30px" }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Estado</th>
+      <th>Local</th>
+      <th></th>
+      <th style={{ color: "transparent" }}>-</th> {/* Guion invisible */}
+      <th></th>
+      <th>Visitante</th>
+    </tr>
+  </thead>
+  <tbody>
+  {partidosPorFecha.map((p) => (
+    <tr key={p.id}>
+      <td className="estado">
+        {p.jugado ? "Final" : `${p.fecha} ${p.hora}`}
+      </td>
+      <td className="equipo truncar">
         <img
-              src={`http://localhost:3000/uploads/${pos.imagen}`}
-              alt={pos.equipo}
-              className="logo-equipo"
-            />{" "}
-            {pos.equipo}
-          </td>
-          <td>{pos.pj}</td>
-          <td>{pos.pg}</td>
-          <td>{pos.pe}</td>
-          <td>{pos.pp}</td>
-          <td>{pos.gf}</td>
-          <td>{pos.gc}</td>
-          <td>{pos.gf - pos.gc}</td>
-          <td>{pos.puntos}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</section>
+          src={obtenerLogo(p.equipo_local)}
+          alt={p.equipo_local}
+          className="logo-equipo"
+        />
+        {p.equipo_local}
+      </td>
+      <td>{p.jugado ? p.goles_local : ""}</td>
+      <td>{"-"}</td>
+      <td>{p.jugado ? p.goles_visitante : ""}</td>
+      <td className="equipo truncar">
+        <img
+          src={obtenerLogo(p.equipo_visitante)}
+          alt={p.equipo_visitante}
+          className="logo-equipo"
+        />
+        {p.equipo_visitante}
+      </td>
+    </tr>
+  ))}
+</tbody>
 
+</table>
 
-      <section className="partidos">
-        <h3>Partidos</h3>
-        <ul>
-          {partidos.map((p) => (
-            <li key={p.id}>
-              <img
-                src={obtenerLogo(p.equipo_local)}
-                alt={p.equipo_local}
-                className="logo-equipo"
-              />
-              <strong>{p.equipo_local}</strong> vs{" "}
-              <img
-                src={obtenerLogo(p.equipo_visitante)}
-                alt={p.equipo_visitante}
-                className="logo-equipo"
-              />
-              <strong>{p.equipo_visitante}</strong> - {p.fecha} {p.hora} - {p.fase}
-              <br />
-              Resultado:{" "}
-              {p.jugado
-                ? `${p.goles_local} - ${p.goles_visitante}`
-                : "Pendiente"}
-              {p.jugado && renderEventos(p.id)}
-            </li>
-          ))}
-        </ul>
       </section>
     </div>
   );
