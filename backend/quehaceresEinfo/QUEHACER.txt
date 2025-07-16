@@ -15,15 +15,13 @@ agregar dif gol bdd? no. calcularlo dps haciendo gf-gc
 MOFICIAR MYSQLEXACTO POSICIONES
 agregar partidos a apertura para ver si DG está bien implementado:
 ver todo de tabla de posiciones
-
+agregar fixture a apertura
 
 -----------POR HACER-----------
 
 
 
-
-
-
+pedir chatgpt que pase MYSQLEXACTO a mysql
 
 
 
@@ -47,7 +45,7 @@ agregar paginas individuales para ver stats de equipos y quizas jugadores ------
 
 PROXIMO:
 mejorar fixture en cuanto a lo de arriba
-agregar fixture a apertura
+
 que la fecha y hora se muestren bien y no como un choclo
 
 

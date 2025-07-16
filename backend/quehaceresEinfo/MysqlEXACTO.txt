@@ -1,3 +1,11 @@
+1 jug
+2 posiciones
+3 partidos
+4 equipos
+5 torneos
+
+? noticias inscripciones est partido
+
 SHOW CREATE TABLE
 
 
@@ -85,7 +93,7 @@ CREATE TABLE `inscripciones` (
   `telefono` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-
+ ERROR SINTAXIS
 
 
 CREATE TABLE `posiciones` (
