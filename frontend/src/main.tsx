@@ -13,6 +13,7 @@ import ReglamentoPage from "./pages/ReglamentoPage.tsx";
 import PanelNoticias from "./pages/PanelNoticias.tsx";
 import NoticiasPage from "./pages/NoticiasPage.tsx";
 import NoticiaIndividual from "./pages/NoticiaIndividual.tsx";
+import EquipoIndividual from "./pages/EquipoIndividual.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -25,7 +26,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <Route path="/apertura" element={<AperturaPage />} />
   <Route path="/reglamento" element={<ReglamentoPage />} />
   <Route path="/noticias" element={<NoticiasPage />} />
-  <Route path="/noticias/:id" element={<NoticiaIndividual />} /> {/* 👈 esta línea nueva */}
+  <Route path="/noticias/:id" element={<NoticiaIndividual />} /> 
+  <Route path="/equipos/:id" element={<EquipoIndividual />} /> 
 </Route>
 
         {/* Rutas admin sin navbar */}

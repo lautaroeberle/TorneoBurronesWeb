@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/TorneoPage.css";
 
 type Partido = {
@@ -50,6 +51,7 @@ function AperturaPage() {
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
   const [fechaActual, setFechaActual] = useState<number>(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -102,6 +104,13 @@ function AperturaPage() {
       : "http://localhost:3000/uploads/default.png";
   };
 
+  const irAEquipo = (nombre: string) => {
+    const equipo = equipos.find(e => e.nombre === nombre);
+    if (equipo) {
+      navigate(`/equipos/${equipo.id}`);
+    }
+  };
+
   const fechasUnicas: number[] = Array.from(
     new Set(partidos.map((p) => p.grupo_fecha || 0))
   )
@@ -151,7 +160,10 @@ function AperturaPage() {
             {posiciones.map((pos, index) => (
               <tr key={pos.equipo_id}>
                 <td>{index + 1}</td>
-                <td>
+                <td
+                  className="equipo truncar clickable"
+                  onClick={() => irAEquipo(pos.equipo)}
+                >
                   <img
                     src={`http://localhost:3000/uploads/${pos.imagen}`}
                     alt={pos.equipo}
@@ -211,7 +223,10 @@ function AperturaPage() {
                 <td className="estado">
                   {p.jugado ? "Final" : `${p.fecha} ${p.hora}`}
                 </td>
-                <td className="equipo truncar">
+                <td
+                  className="equipo truncar clickable"
+                  onClick={() => irAEquipo(p.equipo_local)}
+                >
                   <img
                     src={obtenerLogo(p.equipo_local)}
                     alt={p.equipo_local}
@@ -222,7 +237,10 @@ function AperturaPage() {
                 <td>{p.jugado ? p.goles_local : ""}</td>
                 <td>-</td>
                 <td>{p.jugado ? p.goles_visitante : ""}</td>
-                <td className="equipo truncar">
+                <td
+                  className="equipo truncar clickable"
+                  onClick={() => irAEquipo(p.equipo_visitante)}
+                >
                   <img
                     src={obtenerLogo(p.equipo_visitante)}
                     alt={p.equipo_visitante}

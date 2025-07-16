@@ -16,48 +16,27 @@ MOFICIAR MYSQLEXACTO POSICIONES
 agregar partidos a apertura para ver si DG está bien implementado:
 ver todo de tabla de posiciones
 agregar fixture a apertura
+fixture !
+que la fecha y hora se muestren bien y no como un choclo
+
+
 
 -----------POR HACER-----------
 
-
-
-pedir chatgpt que pase MYSQLEXACTO a mysql
-
-
-
-
-
  revisar que carajo es el subrayado
-
 -todo el front
 
 jugadp automaticamente quizas ???
 editar partido abajo del mismo partido  ????
  cuando se elimina un partido, se eliminan las stats relacionadas a él ????
 
-
-fixture !
-
-
+pedir chatgpt que pase MYSQLEXACTO a mysql
 
 agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG
 
-
 PROXIMO:
+fechas equipo/id y mejorar resultados en ese panel
 mejorar fixture en cuanto a lo de arriba
-
-que la fecha y hora se muestren bien y no como un choclo
-
-
-
-
-
-
-
-
-
-
-
 cuando se genera un fixture, que se añadan todos a la tabla de posiciones con datos 0, o ver eso en el recalculo
 
 

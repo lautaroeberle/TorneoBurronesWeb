@@ -178,7 +178,69 @@ router.get("/torneo/:torneoId", (req, res) => {
   });
 });
 
+router.get("/:id/detalle", (req, res) => {
+  const equipoId = req.params.id;
+  db.query("SELECT * FROM equipos WHERE id = ?", [equipoId], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (rows.length === 0) return res.status(404).json({ error: "Equipo no encontrado" });
+    res.json(rows[0]);
+  });
+});
+router.get("/:id/partidos", (req, res) => {
+  const equipoId = req.params.id;
+  const query = `
+    SELECT p.*, el.nombre AS nombre_local, ev.nombre AS nombre_visitante
+    FROM partidos p
+    JOIN equipos el ON p.equipo_local_id = el.id
+    JOIN equipos ev ON p.equipo_visitante_id = ev.id
+    WHERE p.equipo_local_id = ? OR p.equipo_visitante_id = ?
+    ORDER BY p.fecha DESC
+  `;
+  db.query(query, [equipoId, equipoId], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
+
+router.get("/:id/tarjetas", (req, res) => {
+  const equipoId = req.params.id;
+  const query = `
+    SELECT ep.tipo, COUNT(*) as cantidad
+    FROM estadisticas_partido ep
+    JOIN jugadores j ON ep.jugador_id = j.id
+    WHERE j.equipo_id = ?
+    GROUP BY ep.tipo
+  `;
+
+  db.query(query, [equipoId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    const tarjetas = { amarilla: 0, roja: 0, azul: 0 };
+    results.forEach((row) => {
+      if (row.tipo === "amarilla") tarjetas.amarilla = row.cantidad;
+      if (row.tipo === "roja") tarjetas.roja = row.cantidad;
+      if (row.tipo === "azul") tarjetas.azul = row.cantidad;
+    });
+
+    res.json(tarjetas);
+  });
+});
 
 
+
+
+// crear endpoint para traer posición de un equipo
+router.get("/:id/posicion", (req, res) => {
+  const equipoId = req.params.id;
+  db.query(
+    "SELECT pj, pg, pe, pp, gf, gc FROM posiciones WHERE equipo_id = ?",
+    [equipoId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (rows.length === 0) return res.status(404).json({ error: "Posición no encontrada" });
+      res.json(rows[0]);
+    }
+  );
+});
 
 module.exports = router;

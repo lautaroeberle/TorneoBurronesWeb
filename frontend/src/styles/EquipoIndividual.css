@@ -1,0 +1,140 @@
+.equipo-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  font-family: 'Segoe UI', sans-serif;
+  color: #1e293b;
+}
+
+.volver-btn {
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.volver-btn:hover {
+  color: #1d4ed8;
+}
+
+.header-equipo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-equipo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: contain;
+  border: 1px solid #cbd5e1;
+  background-color: #f1f5f9;
+}
+
+.header-equipo h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.header-equipo h2 {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  flex: 1 1 180px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.stat-card h4 {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.stat-card p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.25rem;
+}
+
+.jugadores-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.jugador-item {
+  padding: 0.5rem 0.75rem;
+  background-color: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.jugador-item span {
+  font-weight: 500;
+}
+
+.partidos-lista {
+  margin-top: 1rem;
+}
+
+.partido-item {
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.partido-item span {
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    flex-direction: column;
+  }
+
+  .header-equipo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
