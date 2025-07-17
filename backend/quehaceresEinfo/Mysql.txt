@@ -15,21 +15,6 @@ CREATE TABLE torneos (
   nombre ENUM('Copa de Verano', 'Apertura', 'Copa de Invierno', 'Clausura') NOT NULL,
   año INT NOT NULL
 );
-DROP TABLE IF EXISTS jugadores;
-CREATE TABLE jugadores (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(100) NOT NULL,
-  apellido VARCHAR(100) NOT NULL,
-  dni VARCHAR(20) NOT NULL,
-  dorsal INT NOT NULL,
-  goles INT DEFAULT 0,
-  amarillas INT DEFAULT 0,
-  rojas INT DEFAULT 0,
-  azules INT DEFAULT 0,
-  equipo_id INT NOT NULL,
-  fecha_nacimiento DATE,
-  FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
-);
 
 DROP TABLE IF EXISTS posiciones;
 CREATE TABLE posiciones (
@@ -80,6 +65,22 @@ CREATE TABLE equipos (
     'Villa Ballester', 'Villa Lynch'
   ) DEFAULT 'Palermo',
   FOREIGN KEY (torneo_id) REFERENCES torneos(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS jugadores;
+CREATE TABLE jugadores (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  apellido VARCHAR(100) NOT NULL,
+  dni VARCHAR(20) NOT NULL,
+  dorsal INT NOT NULL,
+  goles INT DEFAULT 0,
+  amarillas INT DEFAULT 0,
+  rojas INT DEFAULT 0,
+  azules INT DEFAULT 0,
+  equipo_id INT NOT NULL,
+  fecha_nacimiento DATE,
+  FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
 );
 
 
