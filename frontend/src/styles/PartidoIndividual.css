@@ -245,3 +245,34 @@
   margin: 0 4px;
   color: #64748b;
 }
+.entretiempo-separador {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  margin: 20px 0;
+  background-color: #eee;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+}
+
+
+.separador-tiempo {
+     font-weight: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+  margin: 20px 0;
+  padding: 8px 12px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-size: 18px;
+  color: #666;
+}
+
+.separador-tiempo strong {
+  font-size: 22px;
+  font-weight: bold;
+  color: #111;
+}
+
