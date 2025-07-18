@@ -17,7 +17,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Crear equipo con imagen (y jugadores vacíos por ahora)
 router.post("/con-jugadores", upload.single("imagen"), (req, res) => {
   const { torneo_id, nombre, barrio } = req.body;
   const jugadores = req.body.jugadores ? JSON.parse(req.body.jugadores) : [];
@@ -35,22 +34,34 @@ router.post("/con-jugadores", upload.single("imagen"), (req, res) => {
 
       const equipoId = result.insertId;
 
-      if (!jugadores || jugadores.length === 0) {
-        return res.status(201).json({ message: "Equipo creado sin jugadores." });
-      }
-
-      const values = jugadores.map(j => [j.nombre, j.apellido, j.dni, j.dorsal, equipoId]);
+      // Insertar en tabla de posiciones con torneo_id incluido
       db.query(
-        "INSERT INTO jugadores (nombre, apellido, dni, dorsal, equipo_id) VALUES ?",
-        [values],
+        `INSERT INTO posiciones (equipo_id, torneo_id, pj, pg, pe, pp, gf, gc, puntos)
+         VALUES (?, ?, 0, 0, 0, 0, 0, 0, 0)`,
+        [equipoId, torneo_id],
         (err2) => {
-          if (err2) return res.status(500).json({ error: err2.message });
-          res.status(201).json({ message: "Equipo y jugadores cargados correctamente." });
+          if (err2) return res.status(500).json({ error: "Error al insertar en posiciones: " + err2.message });
+
+          // Si no hay jugadores, terminar
+          if (!jugadores || jugadores.length === 0) {
+            return res.status(201).json({ message: "Equipo creado sin jugadores." });
+          }
+
+          const values = jugadores.map(j => [j.nombre, j.apellido, j.dni, j.dorsal, equipoId]);
+          db.query(
+            "INSERT INTO jugadores (nombre, apellido, dni, dorsal, equipo_id) VALUES ?",
+            [values],
+            (err3) => {
+              if (err3) return res.status(500).json({ error: err3.message });
+              res.status(201).json({ message: "Equipo y jugadores cargados correctamente." });
+            }
+          );
         }
       );
     }
   );
 });
+
 
 
 // Obtener todos los equipos y sus jugadores

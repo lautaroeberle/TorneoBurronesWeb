@@ -18,7 +18,7 @@ ver todo de tabla de posiciones
 agregar fixture a apertura
 fixture !
 que la fecha y hora se muestren bien y no como un choclo
-
+cuando se crea un equipo, a tabla de pos
 
 
 -----------POR HACER-----------
@@ -37,7 +37,8 @@ agregar paginas individuales para ver stats de equipos y quizas jugadores ------
 PROXIMO:
 fechas equipo/id y mejorar resultados en ese panel
 mejorar fixture en cuanto a lo de arriba
-cuando se genera un fixture, que se añadan todos a la tabla de posiciones con datos 0, o ver eso en el recalculo
+
+chequear endpoint recalcular
 
 
 
