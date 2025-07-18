@@ -19,7 +19,7 @@ agregar fixture a apertura
 fixture !
 que la fecha y hora se muestren bien y no como un choclo
 cuando se crea un equipo, a tabla de pos
-
+pedir chatgpt que pase MYSQLEXACTO a mysql
 
 -----------POR HACER-----------
 
@@ -30,7 +30,9 @@ jugadp automaticamente quizas ???
 editar partido abajo del mismo partido  ????
  cuando se elimina un partido, se eliminan las stats relacionadas a él ????
 
-pedir chatgpt que pase MYSQLEXACTO a mysql
+ -arreglar fixture
+
+
 
 agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG
 
@@ -49,6 +51,7 @@ chequear endpoint recalcular
 -revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel
 -que se guarde la fecha de nacimiento al editar equipo
 -limitar numeros (no negativos,etc.)
+
 
 https://m.wcostream.tv
 

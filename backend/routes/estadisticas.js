@@ -61,5 +61,27 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// GET /api/estadisticas/partido/:id/detalle
+router.get("/partido/:id/detalle", async (req, res) => {
+  const { id } = req.params;
+  const query = `
+    SELECT ep.id, ep.partido_id, ep.jugador_id, ep.tipo, ep.tipo_gol, ep.minuto,
+           j.nombre AS jugador_nombre, j.apellido AS jugador_apellido,
+           e.nombre AS equipo_nombre
+    FROM estadisticas_partido ep
+    JOIN jugadores j ON ep.jugador_id = j.id
+    JOIN equipos e ON j.equipo_id = e.id
+    WHERE ep.partido_id = ?
+    ORDER BY ep.minuto ASC
+  `;
+  try {
+    const [rows] = await db.promise().query(query, [id]);
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener estadísticas detalladas del partido:", error);
+    res.status(500).json({ error: "Error al obtener estadísticas detalladas del partido" });
+  }
+});
+
 
 module.exports = router;

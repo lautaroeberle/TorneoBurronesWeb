@@ -15,6 +15,7 @@ import NoticiasPage from "./pages/NoticiasPage.tsx";
 import NoticiaIndividual from "./pages/NoticiaIndividual.tsx";
 import EquipoIndividual from "./pages/EquipoIndividual.tsx";
 import JugadorIndividual from "./pages/JugadorIndividual.tsx";
+import PartidoIndividual from "./pages/PartidoIndividual.tsx";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <Route path="/noticias/:id" element={<NoticiaIndividual />} /> 
   <Route path="/equipos/:id" element={<EquipoIndividual />} /> 
   <Route path="/jugadores/:id" element={<JugadorIndividual />} /> 
+  <Route path="/partidos/:id" element={<PartidoIndividual />} /> 
 </Route>
 
         {/* Rutas admin sin navbar */}

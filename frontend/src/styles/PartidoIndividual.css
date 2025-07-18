@@ -1,0 +1,229 @@
+.partido-container {
+  padding: 20px;
+  max-width: 720px;
+  margin: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1e293b;
+  background-color: #fff;
+}
+
+.volver-btn {
+  cursor: pointer;
+  color: #2563eb;
+  margin-bottom: 15px;
+  font-weight: 600;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.volver-btn:hover {
+  color: #1d4ed8;
+}
+
+/* Header partido con logos, resultado y datos */
+.header-partido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.equipo-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+}
+
+.logo-equipo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.nombre-equipo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #334155;
+  text-align: center;
+}
+
+.resultado-partido {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  flex-grow: 1;
+}
+
+.fecha-hora {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.nombre-torneo {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+/* Contenedor eventos separado en dos columnas */
+.minuto-minuto-container {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+/* Cada columna de eventos */
+.columna-eventos {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitulo-columna {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 6px;
+}
+
+/* Texto cuando no hay eventos */
+.sin-eventos {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding-left: 8px;
+}
+
+/* Evento individual */
+.evento-minuto {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.04);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  user-select: none;
+}
+
+/* Evento local: minuto a la izquierda */
+.evento-minuto.local {
+  justify-content: flex-start;
+  color: #334155;
+}
+
+.evento-minuto.local .minuto {
+  font-weight: 700;
+  color: #64748b;
+  margin-right: 10px;
+  min-width: 30px;
+  text-align: right;
+}
+
+.evento-minuto.local .icono {
+  font-size: 1.2rem;
+  margin-right: 8px;
+  color: #64748b;
+}
+
+.evento-minuto.local .tipo {
+  font-style: italic;
+  margin-right: 10px;
+  white-space: nowrap;
+  color: #475569;
+}
+
+.evento-minuto.local .nombre {
+  font-weight: 600;
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Evento visitante: minuto a la derecha */
+.evento-minuto.visitante {
+  justify-content: flex-end;
+  color: #334155;
+  text-align: right;
+}
+
+.evento-minuto.visitante .nombre {
+  font-weight: 600;
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 8px;
+}
+
+.evento-minuto.visitante .tipo {
+  font-style: italic;
+  margin-right: 8px;
+  white-space: nowrap;
+  color: #475569;
+}
+
+.evento-minuto.visitante .icono {
+  font-size: 1.2rem;
+  margin-right: 8px;
+  color: #64748b;
+}
+
+.evento-minuto.visitante .minuto {
+  font-weight: 700;
+  color: #64748b;
+  min-width: 30px;
+  text-align: left;
+}
+
+/* Responsive: columnas apiladas en móvil */
+@media (max-width: 600px) {
+  .minuto-minuto-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+.evento-minuto-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.columna-eventos {
+  width: 48%;
+}
+
+.evento-minuto {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.evento-minuto.empty {
+  height: 24px; /* Para alinear con los que sí tienen contenido */
+}

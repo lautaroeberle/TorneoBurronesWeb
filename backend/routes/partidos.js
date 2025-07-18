@@ -227,6 +227,34 @@ router.delete("/:id", (req, res) => {
 
 
 
+// GET /api/partidos/:id – Detalles de un partido puntual
+router.get('/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `
+    SELECT p.*, 
+           el.nombre AS equipo_local, el.imagen AS logo_local,
+           ev.nombre AS equipo_visitante, ev.imagen AS logo_visitante
+    FROM partidos p
+    JOIN equipos el ON p.equipo_local_id = el.id
+    JOIN equipos ev ON p.equipo_visitante_id = ev.id
+    WHERE p.id = ?
+  `;
+
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error al obtener partido:', err);
+      return res.status(500).json({ error: 'Error al obtener el partido' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Partido no encontrado' });
+    }
+
+    res.json(results[0]);
+  });
+});
+
 
 
 
