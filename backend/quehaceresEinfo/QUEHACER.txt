@@ -20,87 +20,47 @@ fixture !
 que la fecha y hora se muestren bien y no como un choclo
 cuando se crea un equipo, a tabla de pos
 pedir chatgpt que pase MYSQLEXACTO a mysql
+agregar paginas individuales para ver stats de equipos
+agregar paginas individuales para ver stats de partidos
+-en cargar partido deben mostrarse solamente los equipos del torneo que se elige
+-mejorar panel lucio
+
+
+
 
 -----------POR HACER-----------
-
+????:
  revisar que carajo es el subrayado
 -todo el front
 
 jugadp automaticamente quizas ???
 editar partido abajo del mismo partido  ????
  cuando se elimina un partido, se eliminan las stats relacionadas a él ????
-
+chequear endpoint recalcular
  -arreglar fixture logica?
 
 
 
-agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG
-modificar visualmente partidos jugados en equipoindividual
+
 
 PROXIMO:
+agregar redireccion a partido/id
 fechas equipo/id y mejorar resultados en ese panel
 mejorar fixture en cuanto a lo de arriba
+agregar paginas individuales para ver stats de jugadores
+modificar visualmente partidos jugados en equipoindividual (junto con tema fecha)
 
-chequear endpoint recalcular
 
 
 
 -----POR HACER UNA VEZ TERMINADO TODO-----
 -eliminar eventos
--en cargar partido deben mostrarse solamente los equipos del torneo que se elije
--mejorar panel lucio (incluso agregar previsualizacion)
 -revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel
 -que se guarde la fecha de nacimiento al editar equipo
 -limitar numeros (no negativos,etc.)
 
 
 https://m.wcostream.tv
-
-
-
-
-
-  const renderEventos = (partidoId: number) => {
-    const eventosDelPartido = eventos
-      .filter((e) => e.partido_id === partidoId)
-      .sort((a, b) => a.minuto - b.minuto);
-
-    if (eventosDelPartido.length === 0) return null;
-
-    return (
-      <ul className="minuto-a-minuto">
-        {eventosDelPartido.map((e, i) => (
-          <li key={i}>
-            <strong>{e.minuto}'</strong>{" "}
-            {e.tipo === "gol"
-              ? "⚽"
-              : e.tipo === "amarilla"
-              ? "🟡"
-              : e.tipo === "roja"
-              ? "🔴"
-              : "🔵"}{" "}
-            {e.apellido} ({e.equipo}) -{" "}
-            {e.tipo === "gol"
-              ? `Gol${
-                  e.tipo_gol === "en_contra"
-                    ? " en contra"
-                    : e.tipo_gol === "penal"
-                    ? " de penal"
-                    : ""
-                }`
-              : e.tipo === "amarilla"
-              ? "Amarilla"
-              : e.tipo === "roja"
-              ? "Roja"
-              : "Azul"}
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
-
-
 
 
 
