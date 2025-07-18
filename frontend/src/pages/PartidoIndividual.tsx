@@ -119,38 +119,39 @@ function PartidoIndividual() {
           const visitantes = eventosDelMinuto.filter(e => e.equipo_nombre === partido.equipo_visitante);
 
           return (
-            <div key={minuto} className="fila-minuto">
-              <div className="columna-eventos local">
-                {locales.map(e => (
-                  <div key={e.id} className="evento-minuto">
-                    <span className="icono">{iconoPorTipo(e.tipo)}</span>
-                    <span className="tipo">
-                      {e.tipo === "gol"
-                        ? `Gol${e.tipo_gol === "en_contra" ? " en contra" : e.tipo_gol === "penal" ? " de penal" : ""}`
-                        : e.tipo.charAt(0).toUpperCase() + e.tipo.slice(1)}
-                    </span>
-                    <span className="nombre">{e.jugador_nombre} {e.jugador_apellido}</span>
-                  </div>
-                ))}
-              </div>
+  <div key={minuto} className="fila-minuto">
+    <div className="columna-eventos local">
+      {locales.map(e => (
+        <div key={e.id} className="evento-minuto">
+          <span className="icono">{iconoPorTipo(e.tipo)}</span>
+          {e.tipo === "gol" && (e.tipo_gol === "en_contra" || e.tipo_gol === "penal") && (
+            <span className="detalle-gol">
+              {e.tipo_gol === "en_contra" ? "EC" : "P"}
+            </span>
+          )}
+          <span className="nombre"> {e.jugador_apellido}</span>
+        </div>
+      ))}
+    </div>
 
-              <div className="minuto-centro">{minuto}'</div>
+    <div className="minuto-centro">{minuto}'</div>
 
-              <div className="columna-eventos visitante">
-                {visitantes.map(e => (
-                  <div key={e.id} className="evento-minuto">
-                    <span className="nombre">{e.jugador_nombre} {e.jugador_apellido}</span>
-                    <span className="tipo">
-                      {e.tipo === "gol"
-                        ? `Gol${e.tipo_gol === "en_contra" ? " en contra" : e.tipo_gol === "penal" ? " de penal" : ""}`
-                        : e.tipo.charAt(0).toUpperCase() + e.tipo.slice(1)}
-                    </span>
-                    <span className="icono">{iconoPorTipo(e.tipo)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
+    <div className="columna-eventos visitante">
+      {visitantes.map(e => (
+        <div key={e.id} className="evento-minuto">
+          <span className="nombre"> {e.jugador_apellido}</span>
+          {e.tipo === "gol" && (e.tipo_gol === "en_contra" || e.tipo_gol === "penal") && (
+            <span className="detalle-gol">
+              {e.tipo_gol === "en_contra" ? " EC " : " P "}
+            </span>
+          )}
+          <span className="icono">{iconoPorTipo(e.tipo)}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
         })}
       </div>
     </div>

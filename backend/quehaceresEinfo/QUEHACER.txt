@@ -30,11 +30,12 @@ jugadp automaticamente quizas ???
 editar partido abajo del mismo partido  ????
  cuando se elimina un partido, se eliminan las stats relacionadas a él ????
 
- -arreglar fixture
+ -arreglar fixture logica?
 
 
 
 agregar paginas individuales para ver stats de equipos y quizas jugadores --------- POCO URG
+modificar visualmente partidos jugados en equipoindividual
 
 PROXIMO:
 fechas equipo/id y mejorar resultados en ese panel
