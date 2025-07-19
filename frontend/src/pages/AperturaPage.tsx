@@ -47,7 +47,7 @@ type Equipo = {
 
 function AperturaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
-  const [eventos, setEventos] = useState<Evento[]>([]);
+  const [, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
   const [fechaActual, setFechaActual] = useState<number>(1);
@@ -162,6 +162,7 @@ function AperturaPage() {
                 <td>{index + 1}</td>
                 <td
                   className="equipo truncar clickable"
+                  style={{ cursor: "pointer" }}
                   onClick={() => irAEquipo(pos.equipo)}
                 >
                   <img
@@ -217,40 +218,51 @@ function AperturaPage() {
               <th>Visitante</th>
             </tr>
           </thead>
-          <tbody>
-            {partidosPorFecha.map((p) => (
-              <tr key={p.id}>
-                <td className="estado">
-                  {p.jugado ? "Final" : `${p.fecha} ${p.hora}`}
-                </td>
-                <td
-                  className="equipo truncar clickable"
-                  onClick={() => irAEquipo(p.equipo_local)}
-                >
-                  <img
-                    src={obtenerLogo(p.equipo_local)}
-                    alt={p.equipo_local}
-                    className="logo-equipo"
-                  />
-                  {p.equipo_local}
-                </td>
-                <td>{p.jugado ? p.goles_local : ""}</td>
-                <td>-</td>
-                <td>{p.jugado ? p.goles_visitante : ""}</td>
-                <td
-                  className="equipo truncar clickable"
-                  onClick={() => irAEquipo(p.equipo_visitante)}
-                >
-                  <img
-                    src={obtenerLogo(p.equipo_visitante)}
-                    alt={p.equipo_visitante}
-                    className="logo-equipo"
-                  />
-                  {p.equipo_visitante}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+         <tbody>
+  {partidosPorFecha.map((p) => (
+    <tr
+      key={p.id}
+      style={{ cursor: "pointer" }}
+      onClick={() => navigate(`/partidos/${p.id}`)}
+    >
+      <td className="estado">
+        {p.jugado ? "Final" : `${p.fecha} ${p.hora}`}
+      </td>
+      <td
+        className="equipo truncar clickable"
+        onClick={(e) => {
+          e.stopPropagation(); // evita redirigir al partido si se clickea el equipo
+          irAEquipo(p.equipo_local);
+        }}
+      >
+        <img
+          src={obtenerLogo(p.equipo_local)}
+          alt={p.equipo_local}
+          className="logo-equipo"
+        />
+        {p.equipo_local}
+      </td>
+      <td>{p.jugado ? p.goles_local : ""}</td>
+      <td>-</td>
+      <td>{p.jugado ? p.goles_visitante : ""}</td>
+      <td
+        className="equipo truncar clickable"
+        onClick={(e) => {
+          e.stopPropagation(); // evita redirigir al partido si se clickea el equipo
+          irAEquipo(p.equipo_visitante);
+        }}
+      >
+        <img
+          src={obtenerLogo(p.equipo_visitante)}
+          alt={p.equipo_visitante}
+          className="logo-equipo"
+        />
+        {p.equipo_visitante}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </section>
     </div>

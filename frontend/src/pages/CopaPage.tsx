@@ -47,7 +47,7 @@ type Equipo = {
 
 function CopaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
-  const [eventos, setEventos] = useState<Evento[]>([]);
+  const [, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
   const [fechaActual, setFechaActual] = useState<number>(1);
@@ -110,6 +110,7 @@ function CopaPage() {
       navigate(`/equipos/${equipo.id}`);
     }
   };
+ 
 
   const fechasUnicas: number[] = Array.from(
     new Set(partidos.map((p) => p.grupo_fecha || 0))
@@ -226,41 +227,50 @@ function CopaPage() {
             </tr>
           </thead>
           <tbody>
-            {partidosPorFecha.map((p) => (
-              <tr key={p.id}>
-                <td className="estado">
-                  {p.jugado ? "Final" : formatearFechaHora(p.fecha, p.hora)}
-                </td>
-                <td
-                  className="equipo truncar"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => irAEQUIPO(p.equipo_local)}
-                >
-                  <img
-                    src={obtenerLogo(p.equipo_local)}
-                    alt={p.equipo_local}
-                    className="logo-equipo"
-                  />
-                  {p.equipo_local}
-                </td>
-                <td>{p.jugado ? p.goles_local : ""}</td>
-                <td>-</td>
-                <td>{p.jugado ? p.goles_visitante : ""}</td>
-                <td
-                  className="equipo truncar"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => irAEQUIPO(p.equipo_visitante)}
-                >
-                  <img
-                    src={obtenerLogo(p.equipo_visitante)}
-                    alt={p.equipo_visitante}
-                    className="logo-equipo"
-                  />
-                  {p.equipo_visitante}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {partidosPorFecha.map((p) => (
+    <tr
+      key={p.id}
+      style={{ cursor: "pointer" }}
+      onClick={() => navigate(`/partidos/${p.id}`)}
+    >
+      <td className="estado">
+        {p.jugado ? "Final" : formatearFechaHora(p.fecha, p.hora)}
+      </td>
+      <td
+        className="equipo truncar"
+        onClick={(e) => {
+          e.stopPropagation(); // evita redirección general
+          irAEQUIPO(p.equipo_local);
+        }}
+      >
+        <img
+          src={obtenerLogo(p.equipo_local)}
+          alt={p.equipo_local}
+          className="logo-equipo"
+        />
+        {p.equipo_local}
+      </td>
+      <td>{p.jugado ? p.goles_local : ""}</td>
+      <td>-</td>
+      <td>{p.jugado ? p.goles_visitante : ""}</td>
+      <td
+        className="equipo truncar"
+        onClick={(e) => {
+          e.stopPropagation(); // evita redirección general
+          irAEQUIPO(p.equipo_visitante);
+        }}
+      >
+        <img
+          src={obtenerLogo(p.equipo_visitante)}
+          alt={p.equipo_visitante}
+          className="logo-equipo"
+        />
+        {p.equipo_visitante}
+      </td>
+    </tr>
+  ))}
+    </tbody>
+
         </table>
       </section>
     </div>

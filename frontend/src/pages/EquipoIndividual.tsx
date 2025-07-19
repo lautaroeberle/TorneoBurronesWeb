@@ -53,16 +53,35 @@ function EquipoIndividual() {
         <div className="stat-card"><h4>Azules</h4><p>{tarjetas.azul}</p></div>
       </div>
 
-      <h3 className="section-title">Jugadores</h3>
-      <div className="jugadores-lista">{jugadores.map(j => <div key={j.id} className="jugador-item">#{j.id} – {j.nombre} {j.apellido}</div>)}</div>
+      <div className="jugadores-lista">
+  {jugadores.map(j => (
+    <div
+      key={j.id}
+      className="jugador-item"
+      style={{ cursor: "pointer" }}
+      onClick={() => navigate(`/jugadores/${j.id}`)}
+    >
+      #{j.id} – {j.nombre} {j.apellido}
+    </div>
+  ))}
+</div>
+
 
       <h3 className="section-title">Partidos Jugados</h3>
-      <div className="partidos-lista">{partidos.map(p => (
-        <div key={p.id} className="partido-item">
-          <span>{p.nombre_local} {p.jugado ? p.goles_local : "-"} – {p.jugado ? p.goles_visitante : "-"} {p.nombre_visitante}</span>
-          <span>{new Date(p.fecha).toLocaleDateString("es-AR")}</span>
-        </div>
-      ))}</div>
+      <div className="partidos-lista">
+  {partidos.map(p => (
+    <div
+      key={p.id}
+      className="partido-item"
+      style={{ cursor: "pointer" }}
+      onClick={() => navigate(`/partidos/${p.id}`)}
+    >
+      <span>{p.nombre_local} {p.jugado ? p.goles_local : "-"} – {p.jugado ? p.goles_visitante : "-"} {p.nombre_visitante}</span>
+      <span>{new Date(p.fecha).toLocaleDateString("es-AR")}</span>
+    </div>
+  ))}
+</div>
+
     </div>
   );
 }

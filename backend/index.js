@@ -31,6 +31,10 @@ app.use("/api/posiciones", posicionesRoutes);
 const fixtureRoutes = require("./routes/fixture");
 app.use("/api/fixture", fixtureRoutes);
 
+const jugadoresRouter = require('./routes/jugadores');
+app.use('/api/jugadores', jugadoresRouter);
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor backend escuchando en http://localhost:${PORT}`);

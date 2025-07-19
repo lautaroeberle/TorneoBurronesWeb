@@ -99,14 +99,19 @@ function PartidoIndividual() {
       <div className="volver-btn" onClick={() => navigate(-1)}>← Volver</div>
 
       <div className="header-partido">
-        <div className="equipo-local equipo-header">
-          <img
-            src={`http://localhost:3000/uploads/${partido.logo_local ?? 'default.png'}`}
-            alt={partido.equipo_local}
-            className="logo-equipo"
-          />
-          <div className="nombre-equipo">{partido.equipo_local}</div>
-        </div>
+        <div
+  className="equipo-local equipo-header"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate(`/equipos/${partido.equipo_local_id}`)}
+>
+  <img
+    src={`http://localhost:3000/uploads/${partido.logo_local ?? 'default.png'}`}
+    alt={partido.equipo_local}
+    className="logo-equipo"
+  />
+  <div className="nombre-equipo">{partido.equipo_local}</div>
+</div>
+
 
         <div className="resultado-partido">
           {partido.jugado
@@ -116,14 +121,19 @@ function PartidoIndividual() {
           <div className="nombre-torneo">{partido.nombre_torneo}</div>
         </div>
 
-        <div className="equipo-visitante equipo-header">
-          <img
-            src={`http://localhost:3000/uploads/${partido.logo_visitante ?? 'default.png'}`}
-            alt={partido.equipo_visitante}
-            className="logo-equipo"
-          />
-          <div className="nombre-equipo">{partido.equipo_visitante}</div>
-        </div>
+        <div
+  className="equipo-visitante equipo-header"
+  style={{ cursor: "pointer" }}
+  onClick={() => navigate(`/equipos/${partido.equipo_visitante_id}`)}
+>
+  <img
+    src={`http://localhost:3000/uploads/${partido.logo_visitante ?? 'default.png'}`}
+    alt={partido.equipo_visitante}
+    className="logo-equipo"
+  />
+  <div className="nombre-equipo">{partido.equipo_visitante}</div>
+</div>
+
       </div>
 
       <h3 className="section-title">Minuto a Minuto</h3>

@@ -49,8 +49,11 @@ fechas equipo/id y mejorar resultados en ese panel
 mejorar fixture en cuanto a lo de arriba
 agregar paginas individuales para ver stats de jugadores
 modificar visualmente partidos jugados en equipoindividual (junto con tema fecha)
-
-
+-tabla de goleadores generales en copaPage y aperturaPage
+-valla menos vencida (promedio por partido)
+-mas goles (promedio por partido)
+-tabla de goleadores por equipo
+-en jugadorIndividual que se muestre en que # está como goleador del campeonato
 
 
 -----POR HACER UNA VEZ TERMINADO TODO-----
@@ -58,9 +61,11 @@ modificar visualmente partidos jugados en equipoindividual (junto con tema fecha
 -revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel
 -que se guarde la fecha de nacimiento al editar equipo
 -limitar numeros (no negativos,etc.)
-
+-busque a equipo por id y no por nombre (caso nom repetido)
+-agregar mvp partido a bdd y a jugadoresIndividual
 
 https://m.wcostream.tv
 
+0 2
 
 
