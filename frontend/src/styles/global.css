@@ -8,8 +8,8 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #000;
-  color: white;
+  background-color: #fff;
+  color: #333;
 }
 
 /* NAVBAR */
@@ -38,7 +38,7 @@ body {
 }
 
 .navbar a:hover {
-  color: #ffcb05;
+  color: #00bcd4;
 }
 
 .navbar.transparent {
@@ -86,89 +86,8 @@ body {
 }
 
 .navbar .dropdown-menu li a:hover {
-  color: #ffcb05;
+  color: #00bcd4;
 }
-
-/* SECCIÓN INICIO */
-.inicio {
-  height: 100vh;
-  background-size: cover;
-  background-position: center;
-  padding-top: 6rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.inicio h1 {
-  font-size: 2.5rem;
-  margin: 1rem 0;
-  color: #000;
-}
-
-.inicio p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: black;
-}
-
-/* SECCIONES GENERALES */
-section {
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-section p,
-section li {
-  font-size: 1.1rem;
-  max-width: 700px;
-}
-
-/* BENEFICIOS */
-.beneficios ul {
-  list-style: none;
-}
-
-.beneficios li::before {
-  content: '✔️ ';
-  margin-right: 0.5rem;
-}
-
-/* CONTACTO */
-.contacto {
-  color: #000;
-}
-
-/* FORMULARIO */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-  max-width: 500px;
-}
-
-form input {
-  padding: 0.8rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-
 
 /* LOGO */
 .logo {
@@ -199,6 +118,22 @@ form input {
   transform: translateY(-2px);
 }
 
+/* FORMULARIO */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+form input {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .navbar {
@@ -215,18 +150,11 @@ form input {
     font-size: 14px;
   }
 
-  .inicio h1 {
-    font-size: 2rem;
-  }
-
-  section h2 {
-    font-size: 1.5rem;
-  }
-
   .logo {
     width: 80px;
   }
 }
+
 a, a:visited, a:hover, a:focus {
   text-decoration: none !important;
   border-bottom: none !important;

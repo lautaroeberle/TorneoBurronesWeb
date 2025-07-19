@@ -56,6 +56,19 @@ modificar visualmente partidos jugados en equipoindividual (junto con tema fecha
 -en jugadorIndividual que se muestre en que # está como goleador del campeonato
 
 
+
+
+proximo lobby:
+cambiar y mejorar navbar
+agregar coso de wpp
+agregar tp,fix y noticias
+
+
+"fixture no centrado en torneopage.css"
+
+
+
+
 -----POR HACER UNA VEZ TERMINADO TODO-----
 -eliminar eventos
 -revisar si mostrar nom y apellido o solo apellido en minuto a minuto y panel

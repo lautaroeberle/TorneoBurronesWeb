@@ -1,15 +1,39 @@
-import inicioImg from "../assets/inicio.jpg";
+// src/pages/Inicio.tsx
+import { Carousel } from "react-responsive-carousel";
+import Inscripcion from "../components/Inscripcion";
 
-const Inicio = () => (
-  <section id="inicio" className="inicio" style={{ backgroundImage: `url(${inicioImg})` }}>
-    <div id="titulo">
-      <h1>TPyB Torneos</h1>
-      <p>Jugá con tu equipo en el mejor torneo de Buenos Aires </p>
-      <a href="#inscripcion">
-        <button className="btn">Inscribirse ahora</button>
-      </a>
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import "../styles/Inicio.css";
+
+const Inicio = () => {
+
+
+  return (
+    <div className="inicio-container">
+      {/* 1. Carrusel Hero */}
+      <section className="hero-carousel">
+        <Carousel autoPlay infiniteLoop showThumbs={false} showStatus={false}>
+          <div><img src="/assets/hero1.jpg" alt="Hero 1" /></div>
+          <div><img src="/assets/hero2.jpg" alt="Hero 2" /></div>
+          <div><img src="/assets/hero3.jpg" alt="Hero 3" /></div>
+        </Carousel>
+      </section>
+
+      {/* 2. Beneficios */}
+      <section className="beneficios">
+        <div className="beneficio"><span>📸</span><p>cambiar</p></div>
+        <div className="beneficio"><span>📊</span><p>cambiar</p></div>
+        <div className="beneficio"><span>🎥</span><p>cambiar</p></div>
+        <div className="beneficio"><span>⚖️</span><p>cambiar</p></div>
+      </section>
+
+      {/* 3. Preview del torneo */}
+    
+    {/* 4. Inscripción */}
+<Inscripcion />
+
     </div>
-  </section>
-);
+  );
+};
 
 export default Inicio;

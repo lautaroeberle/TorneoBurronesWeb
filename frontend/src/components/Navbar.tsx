@@ -25,7 +25,6 @@ const Navbar = () => {
       <ul>
         <li><NavLinkHero to="inicio">Inicio</NavLinkHero></li>
         <li><NavLinkHero to="beneficios">Beneficios</NavLinkHero></li>
-        <li><NavLinkHero to="sedes">Sedes</NavLinkHero></li>
         <li><NavLinkHero to="inscripcion">Inscripción</NavLinkHero></li>
         <li><NavLinkHero to="contacto">Contacto</NavLinkHero></li>
         <li><Link to="/reglamento">Reglamento</Link></li>

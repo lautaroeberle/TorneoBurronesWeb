@@ -256,7 +256,46 @@ router.get('/:id', (req, res) => {
 });
 
 
+// Devuelve hasta 5 partidos futuros de la Copa de Verano con sus nombres de equipos
+router.get("/fixture-preview", (req, res) => {
+  const query = `
+    SELECT 
+      p.id,
+      el.nombre AS equipo_local,
+      ev.nombre AS equipo_visitante,
+      p.goles_local,
+      p.goles_visitante,
+      p.fecha,
+      p.jugado
+    FROM partidos p
+    JOIN equipos el ON p.equipo_local_id = el.id
+    JOIN equipos ev ON p.equipo_visitante_id = ev.id
+    JOIN torneos t ON p.torneo_id = t.id
+    WHERE t.nombre = 'Copa de Verano'
+    ORDER BY p.fecha ASC
+    LIMIT 5
+  `;
 
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error en fixture-preview:", err);
+      return res.status(500).send("Error al obtener partidos");
+    }
 
+    if (results.length === 0) {
+      return res.status(404).send("No se encontraron partidos");
+    }
+
+    res.json(results);
+  });
+});
 
 module.exports = router;
+
+
+
+
+
+
+
+
