@@ -33,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <Route path="/equipos/:id" element={<EquipoIndividual />} /> 
   <Route path="/jugadores/:id" element={<JugadorIndividual />} /> 
   <Route path="/partidos/:id" element={<PartidoIndividual />} /> 
+
 </Route>
 
         {/* Rutas admin sin navbar */}

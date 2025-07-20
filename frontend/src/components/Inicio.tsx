@@ -1,7 +1,7 @@
 // src/pages/Inicio.tsx
 import { Carousel } from "react-responsive-carousel";
 import Inscripcion from "../components/Inscripcion";
-
+import PublicContactoWhatsapp from "../layouts/PublicContactoWhatsapp";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../styles/Inicio.css";
 
@@ -31,6 +31,7 @@ const Inicio = () => {
     
     {/* 4. Inscripción */}
 <Inscripcion />
+<PublicContactoWhatsapp />
 
     </div>
   );
