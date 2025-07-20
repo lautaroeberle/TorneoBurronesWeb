@@ -223,3 +223,39 @@
   font-weight: 600;
   color: #047857; /* verde */
 }
+
+.footer {
+  background-color: #0f172a;
+  color: #ffffffcc;
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 0.95rem;
+  margin-top: 60px;
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer p {
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.footer-links a img {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.2s ease;
+  filter: brightness(0) invert(1);
+}
+
+.footer-links a:hover img {
+  transform: scale(1.1);
+}
