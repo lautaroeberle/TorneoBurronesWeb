@@ -1,16 +1,13 @@
-import beneficiosImg from "../assets/beneficios.jpg";
+
 
 const Beneficios = () => (
-  <section id="beneficios" className="beneficios" style={{ backgroundImage: `url(${beneficiosImg})` }}>
-    <div>
-      <h2>Beneficios</h2>
-      <ul>
-        <li>Cobertura de partidos y fotos</li>
-        <li>Árbitros profesionales</li>
-        <li>Cobertura médica</li>
-      </ul>
-    </div>
-  </section>
+ <section className="beneficios">
+        <div className="beneficio"><span>📸</span><p>Fotografía profesional</p></div>
+        <div className="beneficio"><span>⚖️</span><p>Arbitraje local</p></div>
+         <div className="beneficio"><span>👨‍⚕️</span><p>Personal médico capacitado</p></div>
+        <div className="beneficio"><span>📊</span><p>Tabla de posiciones y resultados online</p></div>
+        <div className="beneficio"><span>⏱️</span><p>Minuto a minuto de cada partido online</p></div>
+        <div className="beneficio"><span>📰</span><p>Noticias internas online</p></div>
+      </section>
 );
-
 export default Beneficios;
