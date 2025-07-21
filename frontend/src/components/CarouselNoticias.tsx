@@ -27,13 +27,30 @@ const CarouselNoticias = () => {
       <h3>Últimas Noticias</h3>
       {noticias.length > 0 && (
         <Carousel
-          autoPlay
-          infiniteLoop
-          showThumbs={false}
-          showStatus={false}
-          showIndicators={true}
-          interval={6000}
-        >
+  autoPlay
+  infiniteLoop
+  showThumbs={false}
+  showStatus={false}
+  showIndicators={true}
+  interval={6000}
+  swipeable={false}
+  emulateTouch={false}
+  renderArrowPrev={(onClickHandler, hasPrev, label) =>
+    hasPrev && (
+      <button className="carousel-arrow left" onClick={onClickHandler} title={label}>
+        ‹
+      </button>
+    )
+  }
+  renderArrowNext={(onClickHandler, hasNext, label) =>
+    hasNext && (
+      <button className="carousel-arrow right" onClick={onClickHandler} title={label}>
+        ›
+      </button>
+    )
+  }
+>
+
           {noticias.map((n) => (
             <div
               key={n.id}

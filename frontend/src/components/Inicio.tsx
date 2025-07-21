@@ -14,11 +14,34 @@ const Inicio = () => {
     <div className="inicio-container">
       {/* 1. Hero Carousel */}
       <section className="hero-carousel">
-        <Carousel autoPlay infiniteLoop showThumbs={false} showStatus={false}>
-          <div><img src="/assets/hero1.jpg" alt="Hero 1" /></div>
-          <div><img src="/assets/hero2.jpg" alt="Hero 2" /></div>
-          <div><img src="/assets/hero3.jpg" alt="Hero 3" /></div>
-        </Carousel>
+       <Carousel
+  autoPlay
+  infiniteLoop
+  showThumbs={false}
+  showStatus={false}
+  swipeable={false}
+  emulateTouch={false}
+  showIndicators={false}
+  renderArrowPrev={(onClickHandler, hasPrev, label) =>
+    hasPrev && (
+      <button className="hero-carousel-arrow left" onClick={onClickHandler} title={label}>
+        ‹
+      </button>
+    )
+  }
+  renderArrowNext={(onClickHandler, hasNext, label) =>
+    hasNext && (
+      <button className="hero-carousel-arrow right" onClick={onClickHandler} title={label}>
+        ›
+      </button>
+    )
+  }
+>
+  <div><img src="/assets/hero1.jpg" alt="Hero 1" /></div>
+  <div><img src="/assets/hero2.jpg" alt="Hero 2" /></div>
+  <div><img src="/assets/hero3.jpg" alt="Hero 3" /></div>
+</Carousel>
+
       </section>
 
       {/* 2. Beneficios */}
