@@ -82,3 +82,5 @@ https://m.wcostream.tv
 0 2
 
 
+npm i react-icons
+npm i multer
