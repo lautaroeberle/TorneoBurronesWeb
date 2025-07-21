@@ -78,3 +78,31 @@
 .carousel-arrow.right {
   right: 10px;
 }
+@media (max-width: 768px) {
+  .carousel-noticias {
+    padding: 0.5rem;
+  }
+
+  .carousel-noticias h3 {
+    font-size: 1rem;
+  }
+
+  .noticia-slide img {
+    height: 180px; 
+  }
+
+  .texto-slide-destacado h4 {
+    font-size: 0.95rem;
+  }
+
+  .texto-slide-destacado p {
+    font-size: 0.85rem;
+  }
+
+ 
+  .carousel-arrow {
+    font-size: 1.5rem;
+    padding: 0.15rem 0.4rem;
+    opacity: 0.7;
+  }
+}

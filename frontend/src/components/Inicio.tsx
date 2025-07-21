@@ -11,6 +11,7 @@ import TablaPosicionesResumida from "../components/TablaPosicionesResumida";
 
 const Inicio = () => {
   return (
+    
     <div className="inicio-container">
       {/* 1. Hero Carousel */}
       <section className="hero-carousel">

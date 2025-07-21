@@ -1,3 +1,4 @@
+
 .inicio-container {
   font-family: 'Inter', sans-serif;
   color: #1e293b;
@@ -28,7 +29,8 @@
   font-weight: 600;
   font-size: 1rem;
   text-align: center;
-  width: 150px;
+  flex: 1 1 140px;
+   max-width: 200px;
   margin: 10px;
   color: #0c4a6e;
 }
@@ -229,6 +231,7 @@
   z-index: 5;
   opacity: 0.4;
   transition: background 0.2s ease, opacity 0.2s ease;
+  
 }
 
 
@@ -239,4 +242,9 @@
 
 .hero-carousel-arrow.right {
   right: 20px;
+}
+@media (max-width: 1024px) {
+  .bloque-torneo-resumen {
+    grid-template-columns: 1fr;
+  }
 }

@@ -78,3 +78,31 @@
   top: 1px;
 }
 
+@media (max-width: 768px) {
+  .tabla-resumida {
+    padding: 10px;
+  }
+
+  .tabla-resumida h3 {
+    font-size: 1rem;
+  }
+
+  .tabla-resumida table {
+    font-size: 0.8rem;
+  }
+
+  .tabla-resumida th, .tabla-resumida td {
+    padding: 0.4rem 0.5rem;
+  }
+
+  /* Opcional: ocultar la columna PJ para pantallas muy chicas para más espacio */
+  .tabla-resumida th:nth-child(2),
+  .tabla-resumida td:nth-child(2) {
+    display: none;
+  }
+
+  .tabla-resumida .logo-equipo {
+    width: 20px;
+    height: 20px;
+  }
+}
