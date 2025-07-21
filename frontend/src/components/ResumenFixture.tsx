@@ -28,7 +28,7 @@ const ResumenFixture = () => {
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano");
+        const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Apertura");
         const dataPartidos = await resPartidos.json();
         setPartidos(dataPartidos.filter((p: Partido) => p.jugado));
       } catch (err) {

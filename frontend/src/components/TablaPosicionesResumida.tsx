@@ -15,7 +15,7 @@ const TablaPosicionesResumida = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/posiciones?nombre=Copa de Verano")
+    fetch("http://localhost:3000/api/posiciones?nombre=Apertura")
       .then((res) => res.json())
       .then((data) => setPosiciones(data))
       .catch((err) => console.error("Error al cargar posiciones:", err));
@@ -27,23 +27,24 @@ const TablaPosicionesResumida = () => {
       <table>
         <thead>
           <tr>
+            <th>#</th>
             <th>Equipo</th>
             <th>PJ</th>
             <th>Pts</th>
           </tr>
         </thead>
         <tbody>
-          {posiciones.map((pos) => (
+          {posiciones.slice(0, 16).map((pos, index) => (
             <tr key={pos.equipo_id} onClick={() => navigate(`/equipos/${pos.equipo_id}`)}>
-             <td className="tp-equipo">
-  <img
-    src={`http://localhost:3000/uploads/${pos.imagen}`}
-    alt={pos.equipo}
-    className="logo-equipo"
-  />
-  <span>{pos.equipo}</span>
-</td>
-
+              <td>{index + 1}</td>
+              <td className="tp-equipo">
+                <img
+                  src={`http://localhost:3000/uploads/${pos.imagen}`}
+                  alt={pos.equipo}
+                  className="logo-equipo"
+                />
+                <span>{pos.equipo}</span>
+              </td>
               <td>{pos.pj}</td>
               <td>{pos.puntos}</td>
             </tr>

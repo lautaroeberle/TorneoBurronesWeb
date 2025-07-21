@@ -75,6 +75,8 @@ cambiar y mejorar navbar
 -busque a equipo por id y no por nombre (caso nom repetido)
 -agregar mvp partido a bdd y a jugadoresIndividual
 
+-revisar hasta que top mostrar en fixture y tabla posiciones
+
 https://m.wcostream.tv
 
 0 2

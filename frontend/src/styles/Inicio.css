@@ -192,24 +192,34 @@
     gap: 16px;
   }
 }
-/* BLOQUE RESUMEN TORNEO (fixture + noticias + tabla) */
+
+
+/* BLOQUE RESUMEN TORNEO (Fixture + Noticias + Tabla de posiciones) */
 .bloque-torneo-resumen {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-  padding: 40px 20px;
-  background-color: #f1f5f9;
-}
-
-.bloque-izquierda {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  gap: 1rem;
 }
 
+.bloque-izquierda,
 .bloque-derecha {
-  display: flex;
-  flex-direction: column;
+  flex: 1 1 300px; /* Grow, shrink, basis */
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+.bloque-izquierda table,
+.bloque-derecha table,
+.bloque-izquierda .card,
+.bloque-derecha .card {
+  width: 100% !important;
 }
 
 /* Responsive para móviles */
