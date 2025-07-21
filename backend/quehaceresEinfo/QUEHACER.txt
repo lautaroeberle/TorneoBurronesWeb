@@ -26,11 +26,12 @@ agregar paginas individuales para ver stats de partidos
 -mejorar panel lucio
 agregar redireccion a partido/id
 modificar visualmente partidos jugados en equipoindividual (junto con tema fecha)
-
-
+agregar coso de wpp
+agregar tp,fix y noticias
+revisar que carajo es el subrayado
 -----------POR HACER-----------
 ????:
- revisar que carajo es el subrayado
+
 -todo el front
 
 jugadp automaticamente quizas ???
@@ -58,8 +59,7 @@ agregar paginas individuales para ver stats de jugadores
 
 proximo lobby:
 cambiar y mejorar navbar
-agregar coso de wpp
-agregar tp,fix y noticias
+
 
 
 "fixture no centrado en torneopage.css"

@@ -1,0 +1,66 @@
+.rf-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.rf-titulo {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.rf-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rf-partido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.rf-partido:hover {
+  background-color: #f8fafc;
+}
+
+.rf-equipo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  font-weight: 500;
+  color: #1e293b;
+  justify-content: flex-start;
+}
+
+.rf-equipo img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+}
+
+.rf-resultado {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #0f172a;
+  width: 60px;
+  text-align: center;
+}
+.rf-equipo.visitante {
+  justify-content: flex-end;
+  text-align: right;
+}

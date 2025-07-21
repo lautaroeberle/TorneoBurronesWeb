@@ -1,4 +1,3 @@
-// src/pages/Inicio.tsx
 import { Carousel } from "react-responsive-carousel";
 import Inscripcion from "../components/Inscripcion";
 import PublicContactoWhatsapp from "../layouts/PublicContactoWhatsapp";
@@ -6,14 +5,14 @@ import Footer from "./Footer";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../styles/Inicio.css";
 import Beneficios from "./Beneficios";
-
+import ResumenFixture from "../components/ResumenFixture";
+import CarouselNoticias from "../components/CarouselNoticias";
+import TablaPosicionesResumida from "../components/TablaPosicionesResumida";
 
 const Inicio = () => {
-
-
   return (
     <div className="inicio-container">
-      {/* 1. Carrusel Hero */}
+      {/* 1. Hero Carousel */}
       <section className="hero-carousel">
         <Carousel autoPlay infiniteLoop showThumbs={false} showStatus={false}>
           <div><img src="/assets/hero1.jpg" alt="Hero 1" /></div>
@@ -22,11 +21,24 @@ const Inicio = () => {
         </Carousel>
       </section>
 
-    <Beneficios/>
-<Inscripcion />
-<PublicContactoWhatsapp />
-<Footer/>
+      {/* 2. Beneficios */}
+      <Beneficios />
 
+      {/* 3. Bloque informativo central */}
+      <section className="bloque-torneo-resumen">
+        <div className="bloque-izquierda">
+          <ResumenFixture />
+          <CarouselNoticias />
+        </div>
+        <div className="bloque-derecha">
+          <TablaPosicionesResumida />
+        </div>
+      </section>
+
+      {/* 4. Inscripción + Footer */}
+      <Inscripcion />
+      <PublicContactoWhatsapp />
+      <Footer />
     </div>
   );
 };

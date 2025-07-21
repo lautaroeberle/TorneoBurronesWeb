@@ -190,3 +190,29 @@
     gap: 16px;
   }
 }
+/* BLOQUE RESUMEN TORNEO (fixture + noticias + tabla) */
+.bloque-torneo-resumen {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  padding: 40px 20px;
+  background-color: #f1f5f9;
+}
+
+.bloque-izquierda {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bloque-derecha {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .bloque-torneo-resumen {
+    grid-template-columns: 1fr;
+  }
+}

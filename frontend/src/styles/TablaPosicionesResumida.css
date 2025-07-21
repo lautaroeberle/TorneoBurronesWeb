@@ -1,0 +1,80 @@
+.tabla-resumida {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  height: 100%;
+  overflow-x: auto;
+}
+
+.tabla-resumida h3 {
+  color: #0f172a;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.tabla-resumida table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+
+.tabla-resumida th {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-weight: 600;
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabla-resumida td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.tabla-resumida tbody tr:hover {
+  background-color: #f8fafc;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.tabla-resumida .tp-equipo {
+  display: flex;
+  align-items: center; /* Alinea verticalmente */
+  gap: 0.5rem;
+  justify-content: flex-start;
+  font-weight: 500;
+  color: #1e293b;
+  text-align: left;
+  vertical-align: middle;
+  position:relative;
+}
+
+.tabla-resumida td:last-child {
+  font-weight: 700;
+  color: #0f172a;
+}
+.tabla-resumida .logo-equipo {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  border: 1px solid #cbd5e1;
+  position: relative;
+  top: 2px; 
+}
+
+.logo-equipo {
+  position: relative;
+  top: 1px;
+}
+
