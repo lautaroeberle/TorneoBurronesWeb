@@ -24,8 +24,8 @@ agregar paginas individuales para ver stats de equipos
 agregar paginas individuales para ver stats de partidos
 -en cargar partido deben mostrarse solamente los equipos del torneo que se elige
 -mejorar panel lucio
-
-
+agregar redireccion a partido/id
+modificar visualmente partidos jugados en equipoindividual (junto con tema fecha)
 
 
 -----------POR HACER-----------
@@ -44,17 +44,15 @@ chequear endpoint recalcular
 
 
 PROXIMO:
-agregar redireccion a partido/id
-fechas equipo/id y mejorar resultados en ese panel
 mejorar fixture en cuanto a lo de arriba
 agregar paginas individuales para ver stats de jugadores
-modificar visualmente partidos jugados en equipoindividual (junto con tema fecha)
+
 -tabla de goleadores generales en copaPage y aperturaPage
 -valla menos vencida (promedio por partido)
 -mas goles (promedio por partido)
 -tabla de goleadores por equipo
 -en jugadorIndividual que se muestre en que # está como goleador del campeonato
-
+-carousel deslizable solo con flechas para que no tosquee
 
 
 
