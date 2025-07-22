@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import NavLinkHero from "./NavLinkHero";
-import { FaInstagram} from "react-icons/fa";
+import { FaInstagram, FaWhatsapp} from "react-icons/fa";
 import "../styles/navbar.css";
 import LOGO from "../assets/logo.png";
 
@@ -54,7 +54,10 @@ const Navbar = () => {
             className="whatsapp-text"
             title="WhatsApp"
           >
-            +5491141723182
+            <span className="wpp-desktop">+54 9 1141723182</span>
+            <FaWhatsapp className="wpp-mobile" />
+ 
+  
           </a>
           <a
             href="https://instagram.com"

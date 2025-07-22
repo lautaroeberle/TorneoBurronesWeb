@@ -136,10 +136,22 @@
   user-select: none;
   line-height: 1;
   padding-top: 2px;
+  gap: 0.3rem;
 }
 
+/* Hover */
 .whatsapp-text:hover {
   color: #7dd3fc;
+}
+  
+  .wpp-mobile {
+    display: none;
+  }
+
+/* Por defecto: mostrar solo línea 1 */
+.wpp-line-2,
+.wpp-line-3 {
+  display: none;
 }
 
 /* Responsive */
@@ -161,7 +173,7 @@
   .tiba-text {
     font-size: 1.6rem;
   }
-
+  
   /* Menu vertical y con scroll horizontal */
   .navbar-menu {
     display: flex;
@@ -179,9 +191,35 @@
     font-size: 1.1rem;
   }
 
-  .whatsapp-text {
-    font-size: 0.95rem;
+      .wpp-desktop {
+    display: none;
   }
+
+  .wpp-mobile {
+    display: inline;
+  }
+
+ 
+@media (max-width: 768px) {
+  .whatsapp-text {
+    font-size: 0.5rem;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+    line-height: 1.1;
+  }
+  
+    .wpp-desktop {
+    display: none;
+  }
+
+  .wpp-mobile {
+    display: inline;
+  }
+
+
+  
+}
 }
 .navbar .dropdown > span {
   color: #e2e8f0; /* Mismo color claro que los enlaces */

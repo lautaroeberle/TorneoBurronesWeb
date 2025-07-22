@@ -29,6 +29,12 @@ modificar visualmente partidos jugados en equipoindividual (junto con tema fecha
 agregar coso de wpp
 agregar tp,fix y noticias
 revisar que carajo es el subrayado
+carousel deslizable solo con flechas para que no tosquee
+cambiar y mejorar navbar
+
+
+
+
 -----------POR HACER-----------
 ????:
 
@@ -53,12 +59,15 @@ agregar paginas individuales para ver stats de jugadores
 -mas goles (promedio por partido)
 -tabla de goleadores por equipo
 -en jugadorIndividual que se muestre en que # está como goleador del campeonato
--carousel deslizable solo con flechas para que no tosquee
+
 
 
 
 proximo lobby:
-cambiar y mejorar navbar
+responsividad navbar
+agregar tt arriba?
+modificar logos footer por react icons
+añadir sede en footer?
 
 
 
