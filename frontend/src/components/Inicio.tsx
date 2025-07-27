@@ -38,7 +38,7 @@ const Inicio = () => {
     )
   }
 >
-  <div><img src="/assets/hero1.jpg" alt="Hero 1" /></div>
+  <div><img src="/assets/tibaLogo1.png" alt="Hero 1" /></div>
   <div><img src="/assets/hero2.jpg" alt="Hero 2" /></div>
   <div><img src="/assets/hero3.jpg" alt="Hero 3" /></div>
 </Carousel>

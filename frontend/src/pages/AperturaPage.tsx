@@ -45,12 +45,23 @@ type Equipo = {
   imagen: string;
 };
 
+type Goleador = {
+  jugador_id: number;
+  nombre: string;
+  apellido: string;
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  goles: number;
+};
+
 function AperturaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
   const [fechaActual, setFechaActual] = useState<number>(1);
+  const [goleadores, setGoleadores] = useState<Goleador[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,8 +82,30 @@ function AperturaPage() {
 
       try {
         const resEventos = await fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Apertura");
-        const dataEventos = await resEventos.json();
+        const dataEventos: Evento[] = await resEventos.json();
         setEventos(dataEventos);
+
+        const goles = dataEventos.filter(e => e.tipo === "gol" && e.tipo_gol !== "en_contra");
+
+        const conteo = goles.reduce<Record<number, Goleador>>((acc, gol) => {
+          if (!acc[gol.jugador_id]) {
+            const equipo = equipos.find(e => e.nombre === gol.equipo);
+            acc[gol.jugador_id] = {
+              jugador_id: gol.jugador_id,
+              nombre: gol.nombre,
+              apellido: gol.apellido,
+              equipo_id: equipo?.id || 0,
+              equipo: gol.equipo,
+              imagen: equipo?.imagen || "default.png",
+              goles: 1
+            };
+          } else {
+            acc[gol.jugador_id].goles += 1;
+          }
+          return acc;
+        }, {});
+        const lista = Object.values(conteo).sort((a, b) => b.goles - a.goles);
+        setGoleadores(lista);
       } catch (error) {
         console.warn("No se pudieron cargar eventos del Apertura:", error);
       }
@@ -160,16 +193,12 @@ function AperturaPage() {
             {posiciones.map((pos, index) => (
               <tr key={pos.equipo_id}>
                 <td>{index + 1}</td>
-                <td
-                  className="equipo truncar clickable"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => irAEquipo(pos.equipo)}
-                >
+                <td className="equipo truncar clickable" onClick={() => irAEquipo(pos.equipo)}>
                   <img
                     src={`http://localhost:3000/uploads/${pos.imagen}`}
                     alt={pos.equipo}
                     className="logo-equipo"
-                  />{" "}
+                  />
                   {pos.equipo}
                 </td>
                 <td>{pos.pj}</td>
@@ -186,9 +215,39 @@ function AperturaPage() {
         </table>
       </section>
 
+      <section className="tabla-goleadores">
+        <h3>Tabla de Goleadores</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Jugador</th>
+              <th>Equipo</th>
+              <th>Goles</th>
+            </tr>
+          </thead>
+          <tbody>
+            {goleadores.map((g, index) => (
+              <tr key={g.jugador_id}>
+                <td>{index + 1}</td>
+                <td>{g.nombre} {g.apellido}</td>
+                <td className="equipo truncar clickable" onClick={() => irAEquipo(g.equipo)}>
+                  <img
+                    src={`http://localhost:3000/uploads/${g.imagen}`}
+                    alt={g.equipo}
+                    className="logo-equipo"
+                  />
+                  {g.equipo}
+                </td>
+                <td>{g.goles}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
       <section className="fixture">
         <h3>Fixture</h3>
-
         <div className="fixture-nav">
           <button className="nav-button" onClick={retroceder} disabled={fechaActual === fechasUnicas[0]}>
             Anterior
@@ -200,14 +259,6 @@ function AperturaPage() {
         </div>
 
         <table className="fixture-table">
-          <colgroup>
-            <col style={{ width: "100px" }} />
-            <col />
-            <col style={{ width: "30px" }} />
-            <col style={{ width: "30px" }} />
-            <col style={{ width: "30px" }} />
-            <col />
-          </colgroup>
           <thead>
             <tr>
               <th>Estado</th>
@@ -218,51 +269,24 @@ function AperturaPage() {
               <th>Visitante</th>
             </tr>
           </thead>
-         <tbody>
-  {partidosPorFecha.map((p) => (
-    <tr
-      key={p.id}
-      style={{ cursor: "pointer" }}
-      onClick={() => navigate(`/partidos/${p.id}`)}
-    >
-      <td className="estado">
-        {p.jugado ? "Final" : `${p.fecha} ${p.hora}`}
-      </td>
-      <td
-        className="equipo truncar clickable"
-        onClick={(e) => {
-          e.stopPropagation(); // evita redirigir al partido si se clickea el equipo
-          irAEquipo(p.equipo_local);
-        }}
-      >
-        <img
-          src={obtenerLogo(p.equipo_local)}
-          alt={p.equipo_local}
-          className="logo-equipo"
-        />
-        {p.equipo_local}
-      </td>
-      <td>{p.jugado ? p.goles_local : ""}</td>
-      <td>-</td>
-      <td>{p.jugado ? p.goles_visitante : ""}</td>
-      <td
-        className="equipo truncar clickable"
-        onClick={(e) => {
-          e.stopPropagation(); // evita redirigir al partido si se clickea el equipo
-          irAEquipo(p.equipo_visitante);
-        }}
-      >
-        <img
-          src={obtenerLogo(p.equipo_visitante)}
-          alt={p.equipo_visitante}
-          className="logo-equipo"
-        />
-        {p.equipo_visitante}
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+          <tbody>
+            {partidosPorFecha.map((p) => (
+              <tr key={p.id} onClick={() => navigate(`/partidos/${p.id}`)} style={{ cursor: "pointer" }}>
+                <td className="estado">{p.jugado ? "Final" : `${p.fecha} ${p.hora}`}</td>
+                <td className="equipo truncar clickable" onClick={(e) => { e.stopPropagation(); irAEquipo(p.equipo_local); }}>
+                  <img src={obtenerLogo(p.equipo_local)} alt={p.equipo_local} className="logo-equipo" />
+                  {p.equipo_local}
+                </td>
+                <td>{p.jugado ? p.goles_local : ""}</td>
+                <td>-</td>
+                <td>{p.jugado ? p.goles_visitante : ""}</td>
+                <td className="equipo truncar clickable" onClick={(e) => { e.stopPropagation(); irAEquipo(p.equipo_visitante); }}>
+                  <img src={obtenerLogo(p.equipo_visitante)} alt={p.equipo_visitante} className="logo-equipo" />
+                  {p.equipo_visitante}
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </section>
     </div>

@@ -34,6 +34,14 @@ app.use("/api/fixture", fixtureRoutes);
 const jugadoresRouter = require('./routes/jugadores');
 app.use('/api/jugadores', jugadoresRouter);
 
+const goleadoresRoutes = require("./routes/goleadores");
+app.use("/api/goleadores", goleadoresRoutes);
+
+const vallaRoutes = require("./routes/valla");
+app.use("/api/valla", vallaRoutes);
+
+
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

@@ -330,3 +330,31 @@
 .fixture-table td:nth-child(4) {
   width: 5px;
 }
+
+.tabla-goleadores table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  color: #1e293b;
+}
+
+.tabla-goleadores th, .tabla-goleadores td {
+  padding: 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tabla-goleadores th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.logo-equipo {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  vertical-align: middle;
+}
