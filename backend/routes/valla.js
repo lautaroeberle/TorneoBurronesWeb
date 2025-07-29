@@ -2,43 +2,52 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
+// GET /api/valla?nombre=Copa de Verano
 router.get("/", (req, res) => {
   const { nombre } = req.query;
-  if (!nombre) return res.status(400).json({ error: "Falta el nombre del torneo" });
 
-  const query = `
-    SELECT
-      e.id AS equipo_id,
-      e.nombre AS equipo,
-      e.imagen AS imagen,
-      COUNT(p.id) AS partidos,
-      SUM(
-        CASE WHEN p.equipo_local_id = e.id THEN p.goles_local_else_else END
-        WHEN p.equipo_local_id = e.id THEN p.goles_visitante
-        WHEN p.equipo_visitante_id = e.id THEN p.goles_local
-        ELSE 0 END
-      ) AS goles_encajados
-    FROM equipos e
-    JOIN torneos t ON e.torneo_id = t.id
-    LEFT JOIN partidos p ON t.id = p.torneo_id AND p.jugado = 1 AND (p.equipo_local_id = e.id OR p.equipo_visitante_id = e.id)
-    WHERE t.nombre = ?
-    GROUP BY e.id
-    HAVING partidos > 0
-    ORDER BY (goles_encajados / partidos) ASC
-    LIMIT 10
+  if (!nombre) {
+    return res.status(400).json({ error: "Falta el nombre del torneo" });
+  }
+
+  const torneoQuery = `
+    SELECT id FROM torneos WHERE nombre = ? LIMIT 1
   `;
 
-  db.query(query, [nombre], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    const result = rows.map(r => ({
-      equipo_id: r.equipo_id,
-      equipo: r.equipo,
-      imagen: r.imagen,
-      partidos: r.partidos,
-      goles_encajados: r.goles_encajados,
-      promedio: parseFloat((r.goles_encajados / r.partidos).toFixed(2))
-    }));
-    res.json(result);
+  db.query(torneoQuery, [nombre], (err, torneoResult) => {
+    if (err) {
+      console.error("Error al obtener torneo:", err);
+      return res.status(500).json({ error: "Error al obtener torneo" });
+    }
+
+    if (torneoResult.length === 0) {
+      return res.status(404).json({ error: "Torneo no encontrado" });
+    }
+
+    const torneoId = torneoResult[0].id;
+
+    const vallaQuery = `
+      SELECT 
+        e.id AS equipo_id,
+        e.nombre AS equipo,
+        e.imagen,
+        p.pj,
+        p.gc,
+        ROUND(p.gc / p.pj, 2) AS promedio_gc
+      FROM posiciones p
+      JOIN equipos e ON p.equipo_id = e.id
+      WHERE p.torneo_id = ? AND p.pj > 0
+      ORDER BY promedio_gc ASC, p.gc ASC, p.pj DESC
+    `;
+
+    db.query(vallaQuery, [torneoId], (err2, result) => {
+      if (err2) {
+        console.error("Error al obtener valla menos vencida:", err2);
+        return res.status(500).json({ error: "Error al obtener valla menos vencida" });
+      }
+
+      res.json(result);
+    });
   });
 });
 

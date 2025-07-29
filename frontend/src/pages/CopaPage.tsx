@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/TorneoPage.css";
@@ -14,18 +15,6 @@ type Partido = {
   fase: string;
   jugado: boolean;
 };
-
-type Evento = {
-  jugador_id: number;
-  nombre: string;
-  apellido: string;
-  tipo: "gol" | "amarilla" | "roja" | "azul";
-  tipo_gol?: "penal" | "en_contra" | "jugada";
-  minuto: number;
-  equipo: string;
-  partido_id: number;
-};
-
 type Posicion = {
   equipo_id: number;
   equipo: string;
@@ -55,13 +44,33 @@ type Goleador = {
   goles: number;
 };
 
+type VallaMenosVencida = {
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  pj: number;
+  gc: number;
+  promedio_gc: number;
+};
+type PromedioGoles = {
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  pj: number;
+  gf: number;
+  promedio_gf: number;
+};
+
+
 function CopaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
-  const [, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
   const [goleadores, setGoleadores] = useState<Goleador[]>([]);
+  const [vallas, setVallas] = useState<VallaMenosVencida[]>([]);
   const [fechaActual, setFechaActual] = useState<number>(1);
+  const [promediosGoles, setPromediosGoles] = useState<PromedioGoles[]>([]);
+
 
   const navigate = useNavigate();
 
@@ -78,16 +87,10 @@ function CopaPage() {
           .sort((a, b) => a - b);
         if (fechas.length > 0) setFechaActual(fechas[0]);
       } catch (error) {
-        console.error("Error al cargar partidos de la Copa de Verano:", error);
+        console.error("Error al cargar partidos:", error);
       }
 
-      try {
-        const resEventos = await fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Copa de Verano");
-        const dataEventos = await resEventos.json();
-        setEventos(dataEventos);
-      } catch (error) {
-        console.warn("No se pudieron cargar eventos de la Copa de Verano:", error);
-      }
+      
 
       try {
         const resEquipos = await fetch("http://localhost:3000/api/equipos");
@@ -102,7 +105,7 @@ function CopaPage() {
         const dataPos = await resPos.json();
         setPosiciones(dataPos);
       } catch (error) {
-        console.warn("No se pudieron cargar las posiciones:", error);
+        console.warn("No se pudieron cargar posiciones:", error);
       }
 
       try {
@@ -110,12 +113,53 @@ function CopaPage() {
         const dataGoleadores: Goleador[] = await resGoleadores.json();
         setGoleadores(dataGoleadores);
       } catch (error) {
-        console.warn("No se pudieron cargar los goleadores:", error);
+        console.warn("No se pudieron cargar goleadores:", error);
       }
+      try {
+  const resPromGoles = await fetch("http://localhost:3000/api/promediogoles?nombre=Copa de Verano");
+  if (!resPromGoles.ok) {
+    console.warn('Error al cargar promedio de goles:', resPromGoles.status, await resPromGoles.text());
+    setPromediosGoles([]);
+  } else {
+    const data: PromedioGoles[] = await resPromGoles.json();
+    if (Array.isArray(data)) {
+      setPromediosGoles(data);
+    } else {
+      console.warn('Respuesta inesperada promedio goles:', data);
+      setPromediosGoles([]);
+    }
+  }
+} catch (error) {
+  console.error("No se pudo cargar el promedio de goles:", error);
+  setPromediosGoles([]);
+}
+
+
+      try {
+  const resValla = await fetch("http://localhost:3000/api/valla?nombre=Copa de Verano");
+  if (!resValla.ok) {
+    console.warn('Error al cargar vallas:', resValla.status, await resValla.text());
+    setVallas([]);
+  } else {
+    const dataValla: VallaMenosVencida[] = await resValla.json();
+    // opcional: validar que venga array
+    if (Array.isArray(dataValla)) {
+      setVallas(dataValla);
+    } else {
+      console.warn('Respuesta inesperada vallas:', dataValla);
+      setVallas([]);
+    }
+  }
+} catch (error) {
+  console.error("No se pudo cargar la valla menos vencida:", error);
+  setVallas([]);
+}
+
     };
 
     fetchDatos();
   }, []);
+  
 
   const obtenerLogo = (nombreEquipo: string) => {
     const equipo = equipos.find((e) => e.nombre === nombreEquipo);
@@ -167,6 +211,7 @@ function CopaPage() {
     <div className="torneo-page">
       <h2>Copa de Verano {new Date().getFullYear()}</h2>
 
+      {/* Posiciones */}
       <section className="tabla-posiciones">
         <h3>Tabla de Posiciones</h3>
         <table>
@@ -180,7 +225,7 @@ function CopaPage() {
               <th>PP</th>
               <th>GF</th>
               <th>GC</th>
-              <th>DG</th>
+                            <th>DG</th>
               <th>Pts</th>
             </tr>
           </thead>
@@ -214,6 +259,7 @@ function CopaPage() {
         </table>
       </section>
 
+      {/* Goleadores */}
       <section className="tabla-goleadores">
         <h3>Tabla de Goleadores</h3>
         <table>
@@ -229,7 +275,11 @@ function CopaPage() {
             {goleadores.map((g, index) => (
               <tr key={g.jugador_id}>
                 <td>{index + 1}</td>
-                <td className="equipo truncar" style={{ cursor: "pointer" }} onClick={() => irAEQUIPO(g.equipo)}>
+                <td
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(g.equipo)}
+                >
                   <img
                     src={`http://localhost:3000/uploads/${g.imagen}`}
                     alt={g.equipo}
@@ -245,6 +295,84 @@ function CopaPage() {
         </table>
       </section>
 
+      {/* Valla Menos Vencida */}
+      <section className="tabla-valla">
+        <h3>Valla Menos Vencida (Promedio GC)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Equipo</th>
+              <th>PJ</th>
+              <th>GC</th>
+              <th>Promedio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vallas.map((v, index) => (
+              <tr key={v.equipo_id}>
+                <td>{index + 1}</td>
+                <td
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(v.equipo)}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${v.imagen}`}
+                    alt={v.equipo}
+                    className="logo-equipo"
+                  />
+                  {v.equipo}
+                </td>
+                <td>{v.pj}</td>
+                <td>{v.gc}</td>
+               <td>{!isNaN(Number(v.promedio_gc)) ? Number(v.promedio_gc).toFixed(2) : "-"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* Equipo Más Goleador */}
+<section className="tabla-valla">
+  <h3>Equipo Más Goleador (Promedio GF)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Pos</th>
+        <th>Equipo</th>
+        <th>PJ</th>
+        <th>GF</th>
+        <th>Promedio</th>
+      </tr>
+    </thead>
+    <tbody>
+      {promediosGoles.map((e, index) => (
+        <tr key={e.equipo_id}>
+          <td>{index + 1}</td>
+          <td
+            className="equipo truncar"
+            style={{ cursor: "pointer" }}
+            onClick={() => irAEQUIPO(e.equipo)}
+          >
+            <img
+              src={`http://localhost:3000/uploads/${e.imagen}`}
+              alt={e.equipo}
+              className="logo-equipo"
+            />
+            {e.equipo}
+          </td>
+          <td>{e.pj}</td>
+          <td>{e.gf}</td>
+          <td>{!isNaN(Number(e.promedio_gf)) ? Number(e.promedio_gf).toFixed(2) : "-"}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>
+
+
+      {/* Fixture */}
       <section className="fixture">
         <h3>Fixture</h3>
 
@@ -327,3 +455,4 @@ function CopaPage() {
 }
 
 export default CopaPage;
+

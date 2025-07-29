@@ -15,17 +15,6 @@ type Partido = {
   jugado: boolean;
 };
 
-type Evento = {
-  jugador_id: number;
-  nombre: string;
-  apellido: string;
-  tipo: "gol" | "amarilla" | "roja" | "azul";
-  tipo_gol?: "penal" | "en_contra" | "jugada";
-  minuto: number;
-  equipo: string;
-  partido_id: number;
-};
-
 type Posicion = {
   equipo_id: number;
   equipo: string;
@@ -55,13 +44,22 @@ type Goleador = {
   goles: number;
 };
 
+type VallaMenosVencida = {
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  pj: number;
+  gc: number;
+  promedio_gc: number;
+};
+
 function AperturaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
-  const [, setEventos] = useState<Evento[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
   const [fechaActual, setFechaActual] = useState<number>(1);
   const [goleadores, setGoleadores] = useState<Goleador[]>([]);
+  const [vallas, setVallas] = useState<VallaMenosVencida[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -81,36 +79,6 @@ function AperturaPage() {
       }
 
       try {
-        const resEventos = await fetch("http://localhost:3000/api/estadisticas/torneo?nombre=Apertura");
-        const dataEventos: Evento[] = await resEventos.json();
-        setEventos(dataEventos);
-
-        const goles = dataEventos.filter(e => e.tipo === "gol" && e.tipo_gol !== "en_contra");
-
-        const conteo = goles.reduce<Record<number, Goleador>>((acc, gol) => {
-          if (!acc[gol.jugador_id]) {
-            const equipo = equipos.find(e => e.nombre === gol.equipo);
-            acc[gol.jugador_id] = {
-              jugador_id: gol.jugador_id,
-              nombre: gol.nombre,
-              apellido: gol.apellido,
-              equipo_id: equipo?.id || 0,
-              equipo: gol.equipo,
-              imagen: equipo?.imagen || "default.png",
-              goles: 1
-            };
-          } else {
-            acc[gol.jugador_id].goles += 1;
-          }
-          return acc;
-        }, {});
-        const lista = Object.values(conteo).sort((a, b) => b.goles - a.goles);
-        setGoleadores(lista);
-      } catch (error) {
-        console.warn("No se pudieron cargar eventos del Apertura:", error);
-      }
-
-      try {
         const resEquipos = await fetch("http://localhost:3000/api/equipos");
         const dataEquipos = await resEquipos.json();
         setEquipos(dataEquipos);
@@ -124,6 +92,33 @@ function AperturaPage() {
         setPosiciones(dataPos);
       } catch (error) {
         console.warn("No se pudieron cargar las posiciones del Apertura:", error);
+      }
+
+      try {
+        const resGoleadores = await fetch("http://localhost:3000/api/goleadores?nombre=Apertura");
+        const dataGoleadores: Goleador[] = await resGoleadores.json();
+        setGoleadores(dataGoleadores);
+      } catch (error) {
+        console.warn("No se pudieron cargar los goleadores del Apertura:", error);
+      }
+
+      try {
+        const resValla = await fetch("http://localhost:3000/api/valla?nombre=Apertura");
+        if (!resValla.ok) {
+          console.warn('Error al cargar vallas:', resValla.status, await resValla.text());
+          setVallas([]);
+        } else {
+          const dataValla: VallaMenosVencida[] = await resValla.json();
+          if (Array.isArray(dataValla)) {
+            setVallas(dataValla);
+          } else {
+            console.warn('Respuesta inesperada vallas:', dataValla);
+            setVallas([]);
+          }
+        }
+      } catch (error) {
+        console.error("No se pudo cargar la valla menos vencida:", error);
+        setVallas([]);
       }
     };
 
@@ -167,6 +162,14 @@ function AperturaPage() {
   const partidosPorFecha = partidos.filter(
     (p) => (p.grupo_fecha || 0) === fechaActual
   );
+
+  const formatearFechaHora = (fecha: string, hora: string) => {
+    const fechaObj = new Date(fecha);
+    const dia = fechaObj.getDate().toString().padStart(2, "0");
+    const mes = (fechaObj.getMonth() + 1).toString().padStart(2, "0");
+    const horaStr = hora?.slice(0, 5);
+    return `${dia}/${mes} ${horaStr} hs`;
+  };
 
   return (
     <div className="torneo-page">
@@ -246,14 +249,62 @@ function AperturaPage() {
         </table>
       </section>
 
+      <section className="tabla-valla">
+        <h3>Valla Menos Vencida (Promedio GC)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Equipo</th>
+                            <th>PJ</th>
+              <th>GC</th>
+              <th>Promedio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vallas.map((v, index) => (
+              <tr key={v.equipo_id}>
+                <td>{index + 1}</td>
+                <td
+                  className="equipo truncar clickable"
+                  onClick={() => irAEquipo(v.equipo)}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${v.imagen}`}
+                    alt={v.equipo}
+                    className="logo-equipo"
+                  />
+                  {v.equipo}
+                </td>
+                <td>{v.pj}</td>
+                <td>{v.gc}</td>
+                <td>
+                  {!isNaN(Number(v.promedio_gc))
+                    ? Number(v.promedio_gc).toFixed(2)
+                    : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
       <section className="fixture">
         <h3>Fixture</h3>
         <div className="fixture-nav">
-          <button className="nav-button" onClick={retroceder} disabled={fechaActual === fechasUnicas[0]}>
+          <button
+            className="nav-button"
+            onClick={retroceder}
+            disabled={fechaActual === fechasUnicas[0]}
+          >
             Anterior
           </button>
           <span className="nav-label">Fecha {fechaActual}</span>
-          <button className="nav-button" onClick={avanzar} disabled={fechaActual === fechasUnicas[fechasUnicas.length - 1]}>
+          <button
+            className="nav-button"
+            onClick={avanzar}
+            disabled={fechaActual === fechasUnicas[fechasUnicas.length - 1]}
+          >
             Siguiente
           </button>
         </div>
@@ -271,17 +322,43 @@ function AperturaPage() {
           </thead>
           <tbody>
             {partidosPorFecha.map((p) => (
-              <tr key={p.id} onClick={() => navigate(`/partidos/${p.id}`)} style={{ cursor: "pointer" }}>
-                <td className="estado">{p.jugado ? "Final" : `${p.fecha} ${p.hora}`}</td>
-                <td className="equipo truncar clickable" onClick={(e) => { e.stopPropagation(); irAEquipo(p.equipo_local); }}>
-                  <img src={obtenerLogo(p.equipo_local)} alt={p.equipo_local} className="logo-equipo" />
+              <tr
+                key={p.id}
+                onClick={() => navigate(`/partidos/${p.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <td className="estado">
+                  {p.jugado ? "Final" : formatearFechaHora(p.fecha, p.hora)}
+                </td>
+                <td
+                  className="equipo truncar clickable"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    irAEquipo(p.equipo_local);
+                  }}
+                >
+                  <img
+                    src={obtenerLogo(p.equipo_local)}
+                    alt={p.equipo_local}
+                    className="logo-equipo"
+                  />
                   {p.equipo_local}
                 </td>
                 <td>{p.jugado ? p.goles_local : ""}</td>
                 <td>-</td>
                 <td>{p.jugado ? p.goles_visitante : ""}</td>
-                <td className="equipo truncar clickable" onClick={(e) => { e.stopPropagation(); irAEquipo(p.equipo_visitante); }}>
-                  <img src={obtenerLogo(p.equipo_visitante)} alt={p.equipo_visitante} className="logo-equipo" />
+                <td
+                  className="equipo truncar clickable"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    irAEquipo(p.equipo_visitante);
+                  }}
+                >
+                  <img
+                    src={obtenerLogo(p.equipo_visitante)}
+                    alt={p.equipo_visitante}
+                    className="logo-equipo"
+                  />
                   {p.equipo_visitante}
                 </td>
               </tr>
@@ -294,3 +371,4 @@ function AperturaPage() {
 }
 
 export default AperturaPage;
+

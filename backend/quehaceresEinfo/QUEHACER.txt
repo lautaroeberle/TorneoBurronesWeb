@@ -31,9 +31,9 @@ agregar tp,fix y noticias
 revisar que carajo es el subrayado
 carousel deslizable solo con flechas para que no tosquee
 cambiar y mejorar navbar
-
-
-
+agregar paginas individuales para ver stats de jugadores
+-tabla de goleadores generales en copaPage y aperturaPage
+-valla menos vencida (promedio por partido)
 
 -----------POR HACER-----------
 ????:
@@ -52,16 +52,18 @@ chequear endpoint recalcular
 
 PROXIMO:
 mejorar fixture en cuanto a lo de arriba
-agregar paginas individuales para ver stats de jugadores
 
--tabla de goleadores generales en copaPage y aperturaPage
--valla menos vencida (promedio por partido)
+
+
+
 -mas goles (promedio por partido)
+
 -tabla de goleadores por equipo
 -en jugadorIndividual que se muestre en que # está como goleador del campeonato
 
 
-
+estilos y estructuras:
+en copaPage y aperturaPage, tp, fixture, estadisticas (goleadores-valla menos vencida en promedio-mas goles en promedio-amarillas?rojas?)
 
 proximo lobby:
 responsividad navbar
