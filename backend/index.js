@@ -40,6 +40,9 @@ app.use("/api/goleadores", goleadoresRoutes);
 const vallaRoutes = require("./routes/valla");
 app.use("/api/valla", vallaRoutes);
 
+const golesRoutes = require('./routes/goles');
+app.use('/api', golesRoutes);
+
 
 
 

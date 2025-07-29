@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/TorneoPage.css";
@@ -61,7 +60,6 @@ type PromedioGoles = {
   promedio_gf: number;
 };
 
-
 function CopaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
@@ -71,13 +69,14 @@ function CopaPage() {
   const [fechaActual, setFechaActual] = useState<number>(1);
   const [promediosGoles, setPromediosGoles] = useState<PromedioGoles[]>([]);
 
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano");
+        const resPartidos = await fetch(
+          "http://localhost:3000/api/partidos/torneo?nombre=Copa de Verano"
+        );
         const dataPartidos: Partido[] = await resPartidos.json();
         setPartidos(dataPartidos);
 
@@ -90,8 +89,6 @@ function CopaPage() {
         console.error("Error al cargar partidos:", error);
       }
 
-      
-
       try {
         const resEquipos = await fetch("http://localhost:3000/api/equipos");
         const dataEquipos = await resEquipos.json();
@@ -101,7 +98,9 @@ function CopaPage() {
       }
 
       try {
-        const resPos = await fetch("http://localhost:3000/api/posiciones?nombre=Copa de Verano");
+        const resPos = await fetch(
+          "http://localhost:3000/api/posiciones?nombre=Copa de Verano"
+        );
         const dataPos = await resPos.json();
         setPosiciones(dataPos);
       } catch (error) {
@@ -109,57 +108,72 @@ function CopaPage() {
       }
 
       try {
-        const resGoleadores = await fetch("http://localhost:3000/api/goleadores?nombre=Copa de Verano");
+        const resGoleadores = await fetch(
+          "http://localhost:3000/api/goleadores?nombre=Copa de Verano"
+        );
         const dataGoleadores: Goleador[] = await resGoleadores.json();
         setGoleadores(dataGoleadores);
       } catch (error) {
         console.warn("No se pudieron cargar goleadores:", error);
       }
-      try {
-  const resPromGoles = await fetch("http://localhost:3000/api/promediogoles?nombre=Copa de Verano");
-  if (!resPromGoles.ok) {
-    console.warn('Error al cargar promedio de goles:', resPromGoles.status, await resPromGoles.text());
-    setPromediosGoles([]);
-  } else {
-    const data: PromedioGoles[] = await resPromGoles.json();
-    if (Array.isArray(data)) {
-      setPromediosGoles(data);
-    } else {
-      console.warn('Respuesta inesperada promedio goles:', data);
-      setPromediosGoles([]);
-    }
-  }
-} catch (error) {
-  console.error("No se pudo cargar el promedio de goles:", error);
-  setPromediosGoles([]);
-}
-
 
       try {
-  const resValla = await fetch("http://localhost:3000/api/valla?nombre=Copa de Verano");
-  if (!resValla.ok) {
-    console.warn('Error al cargar vallas:', resValla.status, await resValla.text());
-    setVallas([]);
-  } else {
-    const dataValla: VallaMenosVencida[] = await resValla.json();
-    // opcional: validar que venga array
-    if (Array.isArray(dataValla)) {
-      setVallas(dataValla);
-    } else {
-      console.warn('Respuesta inesperada vallas:', dataValla);
-      setVallas([]);
-    }
-  }
-} catch (error) {
-  console.error("No se pudo cargar la valla menos vencida:", error);
-  setVallas([]);
-}
+        const resPromGoles = await fetch(
+          "http://localhost:3000/api/promediogoles?nombre=Copa de Verano"
+        );
+        if (!resPromGoles.ok) {
+          console.warn(
+            "Error al cargar promedio de goles:",
+            resPromGoles.status,
+            await resPromGoles.text()
+          );
+          setPromediosGoles([]);
+        } else {
+          const data: PromedioGoles[] = await resPromGoles.json();
+          if (Array.isArray(data)) {
+            // Ordenar por promedio_gf descendente para mostrar el más goleador primero
+            const ordenados = data.sort(
+              (a, b) => b.promedio_gf - a.promedio_gf
+            );
+            setPromediosGoles(ordenados);
+          } else {
+            console.warn("Respuesta inesperada promedio goles:", data);
+            setPromediosGoles([]);
+          }
+        }
+      } catch (error) {
+        console.error("No se pudo cargar el promedio de goles:", error);
+        setPromediosGoles([]);
+      }
 
+      try {
+        const resValla = await fetch(
+          "http://localhost:3000/api/valla?nombre=Copa de Verano"
+        );
+        if (!resValla.ok) {
+          console.warn(
+            "Error al cargar vallas:",
+            resValla.status,
+            await resValla.text()
+          );
+          setVallas([]);
+        } else {
+          const dataValla: VallaMenosVencida[] = await resValla.json();
+          if (Array.isArray(dataValla)) {
+            setVallas(dataValla);
+          } else {
+            console.warn("Respuesta inesperada vallas:", dataValla);
+            setVallas([]);
+          }
+        }
+      } catch (error) {
+        console.error("No se pudo cargar la valla menos vencida:", error);
+        setVallas([]);
+      }
     };
 
     fetchDatos();
   }, []);
-  
 
   const obtenerLogo = (nombreEquipo: string) => {
     const equipo = equipos.find((e) => e.nombre === nombreEquipo);
@@ -225,7 +239,7 @@ function CopaPage() {
               <th>PP</th>
               <th>GF</th>
               <th>GC</th>
-                            <th>DG</th>
+              <th>DG</th>
               <th>Pts</th>
             </tr>
           </thead>
@@ -287,7 +301,9 @@ function CopaPage() {
                   />
                   {g.equipo}
                 </td>
-                <td>{g.nombre} {g.apellido}</td>
+                <td>
+                  {g.nombre} {g.apellido}
+                </td>
                 <td>{g.goles}</td>
               </tr>
             ))}
@@ -326,62 +342,77 @@ function CopaPage() {
                 </td>
                 <td>{v.pj}</td>
                 <td>{v.gc}</td>
-               <td>{!isNaN(Number(v.promedio_gc)) ? Number(v.promedio_gc).toFixed(2) : "-"}</td>
+                <td>
+                  {!isNaN(Number(v.promedio_gc))
+                    ? Number(v.promedio_gc).toFixed(2)
+                    : "-"}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </section>
 
-      {/* Equipo Más Goleador */}
-<section className="tabla-valla">
-  <h3>Equipo Más Goleador (Promedio GF)</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Pos</th>
-        <th>Equipo</th>
-        <th>PJ</th>
-        <th>GF</th>
-        <th>Promedio</th>
-      </tr>
-    </thead>
-    <tbody>
-      {promediosGoles.map((e, index) => (
-        <tr key={e.equipo_id}>
-          <td>{index + 1}</td>
-          <td
-            className="equipo truncar"
-            style={{ cursor: "pointer" }}
-            onClick={() => irAEQUIPO(e.equipo)}
-          >
-            <img
-              src={`http://localhost:3000/uploads/${e.imagen}`}
-              alt={e.equipo}
-              className="logo-equipo"
-            />
-            {e.equipo}
-          </td>
-          <td>{e.pj}</td>
-          <td>{e.gf}</td>
-          <td>{!isNaN(Number(e.promedio_gf)) ? Number(e.promedio_gf).toFixed(2) : "-"}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</section>
-
+      {/* Equipo Más Goleador (Promedio GF) */}
+      <section className="tabla-valla">
+        <h3>Equipo Más Goleador (Promedio GF)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Equipo</th>
+              <th>PJ</th>
+              <th>GF</th>
+              <th>Promedio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {promediosGoles.map((e, index) => (
+              <tr key={e.equipo_id}>
+                <td>{index + 1}</td>
+                <td
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(e.equipo)}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${e.imagen}`}
+                    alt={e.equipo}
+                    className="logo-equipo"
+                  />
+                  {e.equipo}
+                </td>
+                <td>{e.pj}</td>
+                <td>{e.gf}</td>
+                <td>
+                  {!isNaN(Number(e.promedio_gf))
+                    ? Number(e.promedio_gf).toFixed(2)
+                    : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
 
       {/* Fixture */}
       <section className="fixture">
         <h3>Fixture</h3>
 
         <div className="fixture-nav">
-          <button className="nav-button" onClick={retroceder} disabled={fechaActual === fechasUnicas[0]}>
+          <button
+            className="nav-button"
+            onClick={retroceder}
+            disabled={fechaActual === fechasUnicas[0]}
+          >
             Anterior
           </button>
           <span className="nav-label">Fecha {fechaActual}</span>
-          <button className="nav-button" onClick={avanzar} disabled={fechaActual === fechasUnicas[fechasUnicas.length - 1]}>
+          <button
+            className="nav-button"
+            onClick={avanzar}
+            disabled={fechaActual === fechasUnicas[fechasUnicas.length - 1]}
+          >
             Siguiente
           </button>
         </div>
@@ -455,4 +486,3 @@ function CopaPage() {
 }
 
 export default CopaPage;
-

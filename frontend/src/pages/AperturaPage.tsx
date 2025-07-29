@@ -14,7 +14,6 @@ type Partido = {
   fase: string;
   jugado: boolean;
 };
-
 type Posicion = {
   equipo_id: number;
   equipo: string;
@@ -52,20 +51,32 @@ type VallaMenosVencida = {
   gc: number;
   promedio_gc: number;
 };
+type PromedioGoles = {
+  equipo_id: number;
+  equipo: string;
+  imagen: string;
+  pj: number;
+  gf: number;
+  promedio_gf: number;
+};
 
 function AperturaPage() {
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
   const [posiciones, setPosiciones] = useState<Posicion[]>([]);
-  const [fechaActual, setFechaActual] = useState<number>(1);
   const [goleadores, setGoleadores] = useState<Goleador[]>([]);
   const [vallas, setVallas] = useState<VallaMenosVencida[]>([]);
+  const [fechaActual, setFechaActual] = useState<number>(1);
+  const [promediosGoles, setPromediosGoles] = useState<PromedioGoles[]>([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const resPartidos = await fetch("http://localhost:3000/api/partidos/torneo?nombre=Apertura");
+        const resPartidos = await fetch(
+          "http://localhost:3000/api/partidos/torneo?nombre=Apertura"
+        );
         const dataPartidos: Partido[] = await resPartidos.json();
         setPartidos(dataPartidos);
 
@@ -75,7 +86,7 @@ function AperturaPage() {
           .sort((a, b) => a - b);
         if (fechas.length > 0) setFechaActual(fechas[0]);
       } catch (error) {
-        console.error("Error al cargar partidos del Apertura:", error);
+        console.error("Error al cargar partidos:", error);
       }
 
       try {
@@ -87,32 +98,70 @@ function AperturaPage() {
       }
 
       try {
-        const resPos = await fetch("http://localhost:3000/api/posiciones?nombre=Apertura");
+        const resPos = await fetch(
+          "http://localhost:3000/api/posiciones?nombre=Apertura"
+        );
         const dataPos = await resPos.json();
         setPosiciones(dataPos);
       } catch (error) {
-        console.warn("No se pudieron cargar las posiciones del Apertura:", error);
+        console.warn("No se pudieron cargar posiciones:", error);
       }
 
       try {
-        const resGoleadores = await fetch("http://localhost:3000/api/goleadores?nombre=Apertura");
+        const resGoleadores = await fetch(
+          "http://localhost:3000/api/goleadores?nombre=Apertura"
+        );
         const dataGoleadores: Goleador[] = await resGoleadores.json();
         setGoleadores(dataGoleadores);
       } catch (error) {
-        console.warn("No se pudieron cargar los goleadores del Apertura:", error);
+        console.warn("No se pudieron cargar goleadores:", error);
       }
 
       try {
-        const resValla = await fetch("http://localhost:3000/api/valla?nombre=Apertura");
+        const resPromGoles = await fetch(
+          "http://localhost:3000/api/promediogoles?nombre=Apertura"
+        );
+        if (!resPromGoles.ok) {
+          console.warn(
+            "Error al cargar promedio de goles:",
+            resPromGoles.status,
+            await resPromGoles.text()
+          );
+          setPromediosGoles([]);
+        } else {
+          const data: PromedioGoles[] = await resPromGoles.json();
+          if (Array.isArray(data)) {
+            const ordenados = data.sort(
+              (a, b) => b.promedio_gf - a.promedio_gf
+            );
+            setPromediosGoles(ordenados);
+          } else {
+            console.warn("Respuesta inesperada promedio goles:", data);
+            setPromediosGoles([]);
+          }
+        }
+      } catch (error) {
+        console.error("No se pudo cargar el promedio de goles:", error);
+        setPromediosGoles([]);
+      }
+
+      try {
+        const resValla = await fetch(
+          "http://localhost:3000/api/valla?nombre=Apertura"
+        );
         if (!resValla.ok) {
-          console.warn('Error al cargar vallas:', resValla.status, await resValla.text());
+          console.warn(
+            "Error al cargar vallas:",
+            resValla.status,
+            await resValla.text()
+          );
           setVallas([]);
         } else {
           const dataValla: VallaMenosVencida[] = await resValla.json();
           if (Array.isArray(dataValla)) {
             setVallas(dataValla);
           } else {
-            console.warn('Respuesta inesperada vallas:', dataValla);
+            console.warn("Respuesta inesperada vallas:", dataValla);
             setVallas([]);
           }
         }
@@ -132,8 +181,8 @@ function AperturaPage() {
       : "http://localhost:3000/uploads/default.png";
   };
 
-  const irAEquipo = (nombre: string) => {
-    const equipo = equipos.find(e => e.nombre === nombre);
+  const irAEQUIPO = (nombre: string) => {
+    const equipo = equipos.find((e) => e.nombre === nombre);
     if (equipo) {
       navigate(`/equipos/${equipo.id}`);
     }
@@ -163,18 +212,19 @@ function AperturaPage() {
     (p) => (p.grupo_fecha || 0) === fechaActual
   );
 
-  const formatearFechaHora = (fecha: string, hora: string) => {
+  function formatearFechaHora(fecha: string, hora: string) {
     const fechaObj = new Date(fecha);
     const dia = fechaObj.getDate().toString().padStart(2, "0");
     const mes = (fechaObj.getMonth() + 1).toString().padStart(2, "0");
     const horaStr = hora?.slice(0, 5);
     return `${dia}/${mes} ${horaStr} hs`;
-  };
+  }
 
   return (
     <div className="torneo-page">
-      <h2>Torneo Apertura {new Date().getFullYear()}</h2>
+      <h2>Apertura {new Date().getFullYear()}</h2>
 
+      {/* Posiciones */}
       <section className="tabla-posiciones">
         <h3>Tabla de Posiciones</h3>
         <table>
@@ -196,7 +246,11 @@ function AperturaPage() {
             {posiciones.map((pos, index) => (
               <tr key={pos.equipo_id}>
                 <td>{index + 1}</td>
-                <td className="equipo truncar clickable" onClick={() => irAEquipo(pos.equipo)}>
+                <td
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(pos.equipo)}
+                >
                   <img
                     src={`http://localhost:3000/uploads/${pos.imagen}`}
                     alt={pos.equipo}
@@ -218,14 +272,15 @@ function AperturaPage() {
         </table>
       </section>
 
+      {/* Goleadores */}
       <section className="tabla-goleadores">
         <h3>Tabla de Goleadores</h3>
         <table>
           <thead>
             <tr>
               <th>Pos</th>
-              <th>Jugador</th>
               <th>Equipo</th>
+              <th>Jugador</th>
               <th>Goles</th>
             </tr>
           </thead>
@@ -233,14 +288,20 @@ function AperturaPage() {
             {goleadores.map((g, index) => (
               <tr key={g.jugador_id}>
                 <td>{index + 1}</td>
-                <td>{g.nombre} {g.apellido}</td>
-                <td className="equipo truncar clickable" onClick={() => irAEquipo(g.equipo)}>
+                <td
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(g.equipo)}
+                >
                   <img
                     src={`http://localhost:3000/uploads/${g.imagen}`}
                     alt={g.equipo}
                     className="logo-equipo"
                   />
                   {g.equipo}
+                </td>
+                <td>
+                  {g.nombre} {g.apellido}
                 </td>
                 <td>{g.goles}</td>
               </tr>
@@ -249,6 +310,7 @@ function AperturaPage() {
         </table>
       </section>
 
+      {/* Valla Menos Vencida */}
       <section className="tabla-valla">
         <h3>Valla Menos Vencida (Promedio GC)</h3>
         <table>
@@ -256,7 +318,7 @@ function AperturaPage() {
             <tr>
               <th>Pos</th>
               <th>Equipo</th>
-                            <th>PJ</th>
+              <th>PJ</th>
               <th>GC</th>
               <th>Promedio</th>
             </tr>
@@ -266,8 +328,9 @@ function AperturaPage() {
               <tr key={v.equipo_id}>
                 <td>{index + 1}</td>
                 <td
-                  className="equipo truncar clickable"
-                  onClick={() => irAEquipo(v.equipo)}
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(v.equipo)}
                 >
                   <img
                     src={`http://localhost:3000/uploads/${v.imagen}`}
@@ -289,8 +352,52 @@ function AperturaPage() {
         </table>
       </section>
 
+      {/* Equipo Más Goleador (Promedio GF) */}
+      <section className="tabla-valla">
+        <h3>Equipo Más Goleador (Promedio GF)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Equipo</th>
+              <th>PJ</th>
+              <th>GF</th>
+              <th>Promedio</th>
+            </tr>
+          </thead>
+          <tbody>
+            {promediosGoles.map((e, index) => (
+              <tr key={e.equipo_id}>
+                <td>{index + 1}</td>
+                <td
+                  className="equipo truncar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => irAEQUIPO(e.equipo)}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${e.imagen}`}
+                    alt={e.equipo}
+                    className="logo-equipo"
+                  />
+                  {e.equipo}
+                </td>
+                <td>{e.pj}</td>
+                <td>{e.gf}</td>
+                <td>
+                  {!isNaN(Number(e.promedio_gf))
+                    ? Number(e.promedio_gf).toFixed(2)
+                    : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* Fixture */}
       <section className="fixture">
         <h3>Fixture</h3>
+
         <div className="fixture-nav">
           <button
             className="nav-button"
@@ -308,8 +415,15 @@ function AperturaPage() {
             Siguiente
           </button>
         </div>
-
         <table className="fixture-table">
+          <colgroup>
+            <col style={{ width: "100px" }} />
+            <col />
+            <col style={{ width: "30px" }} />
+            <col style={{ width: "30px" }} />
+            <col style={{ width: "30px" }} />
+            <col />
+          </colgroup>
           <thead>
             <tr>
               <th>Estado</th>
@@ -324,17 +438,17 @@ function AperturaPage() {
             {partidosPorFecha.map((p) => (
               <tr
                 key={p.id}
-                onClick={() => navigate(`/partidos/${p.id}`)}
                 style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/partidos/${p.id}`)}
               >
                 <td className="estado">
                   {p.jugado ? "Final" : formatearFechaHora(p.fecha, p.hora)}
                 </td>
                 <td
-                  className="equipo truncar clickable"
+                  className="equipo truncar"
                   onClick={(e) => {
                     e.stopPropagation();
-                    irAEquipo(p.equipo_local);
+                    irAEQUIPO(p.equipo_local);
                   }}
                 >
                   <img
@@ -348,10 +462,10 @@ function AperturaPage() {
                 <td>-</td>
                 <td>{p.jugado ? p.goles_visitante : ""}</td>
                 <td
-                  className="equipo truncar clickable"
+                  className="equipo truncar"
                   onClick={(e) => {
                     e.stopPropagation();
-                    irAEquipo(p.equipo_visitante);
+                    irAEQUIPO(p.equipo_visitante);
                   }}
                 >
                   <img
@@ -371,4 +485,3 @@ function AperturaPage() {
 }
 
 export default AperturaPage;
-
