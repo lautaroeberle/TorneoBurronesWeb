@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/EquipoIndividual.css";
 
-type Jugador = { id: number; nombre: string; apellido: string };
+
 type Partido = {
   id: number;
   equipo_local_id: number;
@@ -24,7 +24,6 @@ function EquipoIndividual() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [equipo, setEquipo] = useState<Equipo | null>(null);
-  const [jugadores, setJugadores] = useState<Jugador[]>([]);
   const [partidos, setPartidos] = useState<Partido[]>([]);
   const [posicion, setPosicion] = useState<Posicion | null>(null);
   const [tarjetas, setTarjetas] = useState<Tarjetas>({ amarilla: 0, roja: 0, azul: 0 });
@@ -124,7 +123,7 @@ const [goleadores, setGoleadores] = useState<Goleador[]>([]);
   </thead>
   <tbody>
     {goleadores.map((g) => (
-      <tr key={g.id} onClick={() => navigate(`/jugadores/${g.id}`)} className="clickable-row">
+      <tr key={g.id} onClick={() => navigate(`/jugadores/${g.id}`)}style={{ cursor: "pointer" }} className="clickable-row">
         <td>{g.dorsal}</td>
         <td>{g.nombre}</td>
         <td>{g.apellido}</td>

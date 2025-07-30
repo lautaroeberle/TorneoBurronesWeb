@@ -300,9 +300,13 @@ function AperturaPage() {
                   />
                   {g.equipo}
                 </td>
-                <td>
-                  {g.nombre} {g.apellido}
-                </td>
+                <td
+        onClick={() => navigate(`/jugadores/${g.jugador_id}`)}
+        style={{ cursor: "pointer" }}
+        title="Ver perfil del jugador"
+      >
+        {g.nombre} {g.apellido}
+      </td>
                 <td>{g.goles}</td>
               </tr>
             ))}

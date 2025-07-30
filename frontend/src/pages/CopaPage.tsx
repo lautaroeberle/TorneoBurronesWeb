@@ -286,28 +286,34 @@ function CopaPage() {
             </tr>
           </thead>
           <tbody>
-            {goleadores.map((g, index) => (
-              <tr key={g.jugador_id}>
-                <td>{index + 1}</td>
-                <td
-                  className="equipo truncar"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => irAEQUIPO(g.equipo)}
-                >
-                  <img
-                    src={`http://localhost:3000/uploads/${g.imagen}`}
-                    alt={g.equipo}
-                    className="logo-equipo"
-                  />
-                  {g.equipo}
-                </td>
-                <td>
-                  {g.nombre} {g.apellido}
-                </td>
-                <td>{g.goles}</td>
-              </tr>
-            ))}
-          </tbody>
+  {goleadores.map((g, index) => (
+    <tr key={g.jugador_id}>
+      <td>{index + 1}</td>
+
+      <td
+        className="equipo truncar"
+        style={{ cursor: "pointer" }}
+        onClick={() => irAEQUIPO(g.equipo)}
+      >
+        <img
+          src={`http://localhost:3000/uploads/${g.imagen}`}
+          alt={g.equipo}
+          className="logo-equipo"
+        />
+        {g.equipo}
+      </td>
+      <td
+        onClick={() => navigate(`/jugadores/${g.jugador_id}`)}
+        style={{ cursor: "pointer" }}
+        title="Ver perfil del jugador"
+      >
+        {g.nombre} {g.apellido}
+      </td>
+
+      <td>{g.goles}</td>
+    </tr>
+  ))}
+</tbody>
         </table>
       </section>
 

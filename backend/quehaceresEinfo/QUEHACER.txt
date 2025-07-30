@@ -36,11 +36,9 @@ agregar paginas individuales para ver stats de jugadores
 -valla menos vencida (promedio por partido)
 -mas goles (promedio por partido)
 -tabla de goleadores por equipo
------------POR HACER-----------
-????:
-
 -todo el front
-
+-----------POR HACER-----------
+*????:*
 jugadp automaticamente quizas ???
 editar partido abajo del mismo partido  ????
  cuando se elimina un partido, se eliminan las stats relacionadas a él ????
@@ -48,8 +46,6 @@ chequear endpoint recalcular
  -arreglar fixture logica?
 
 
-
-UNA VEZ AG
 
 PROXIMO:
 mejorar fixture en cuanto a lo de arriba
