@@ -18,6 +18,7 @@ type Partido = {
 type Equipo = { id: number; nombre: string; imagen: string; barrio: string };
 type Posicion = { pj: number; pg: number; pe: number; pp: number; gf: number; gc: number };
 type Tarjetas = { amarilla: number; roja: number; azul: number };
+type Goleador = { id: number; nombre: string; apellido: string; dorsal: number; goles: number };
 
 function EquipoIndividual() {
   const { id } = useParams<{ id: string }>();
@@ -28,12 +29,13 @@ function EquipoIndividual() {
   const [posicion, setPosicion] = useState<Posicion | null>(null);
   const [tarjetas, setTarjetas] = useState<Tarjetas>({ amarilla: 0, roja: 0, azul: 0 });
   const [equiposDict, setEquiposDict] = useState<Record<number, Equipo>>({});
+const [goleadores, setGoleadores] = useState<Goleador[]>([]);
 
   useEffect(() => {
     if (!id) return;
 
     fetch(`http://localhost:3000/api/equipos/${id}/detalle`).then(r => r.json()).then(setEquipo).catch(console.error);
-    fetch(`http://localhost:3000/api/equipos/${id}/jugadores`).then(r => r.json()).then(setJugadores).catch(console.error);
+    fetch(`http://localhost:3000/api/equipos/${id}/goleadores`).then(r => r.json()).then(setGoleadores).catch(console.error);
     fetch(`http://localhost:3000/api/equipos/${id}/partidos`).then(r => r.json()).then(setPartidos).catch(console.error);
     fetch(`http://localhost:3000/api/equipos/${id}/posicion`).then(r => r.json()).then(setPosicion).catch(console.error);
     fetch(`http://localhost:3000/api/equipos/${id}/tarjetas`).then(r => r.json()).then(setTarjetas).catch(console.error);
@@ -110,17 +112,28 @@ function EquipoIndividual() {
         <div className="stat-card"><h4>Azules</h4><p>{tarjetas.azul}</p></div>
       </div>
 
-      <div className="jugadores-lista">
-        {jugadores.map(j => (
-          <div
-            key={j.id}
-            className="jugador-item"
-            onClick={() => navigate(`/jugadores/${j.id}`)}
-          >
-            #{j.id} – {j.nombre} {j.apellido}
-          </div>
-        ))}
-      </div>
+      <h3 className="section-title">Goleadores del Equipo</h3>
+<table className="tabla-goleadores">
+  <thead>
+    <tr>
+      <th>Dorsal</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Goles</th>
+    </tr>
+  </thead>
+  <tbody>
+    {goleadores.map((g) => (
+      <tr key={g.id} onClick={() => navigate(`/jugadores/${g.id}`)} className="clickable-row">
+        <td>{g.dorsal}</td>
+        <td>{g.nombre}</td>
+        <td>{g.apellido}</td>
+        <td>{g.goles}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
 
       <h3 className="section-title">Partidos Jugados</h3>
       <div className="partidos-lista">

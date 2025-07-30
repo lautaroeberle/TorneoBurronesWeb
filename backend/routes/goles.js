@@ -70,5 +70,25 @@ router.get("/promediogoles", (req, res) => {
     });
   });
 });
+// GET /api/equipos/:id/goleadores
+router.get("/equipos/:id/goleadores", (req, res) => {
+  const equipoId = req.params.id;
+
+  const sql = `
+    SELECT 
+      j.id, j.nombre, j.apellido, j.dorsal,
+      COUNT(CASE WHEN ep.tipo = 'gol' AND ep.tipo_gol != 'en_contra' THEN 1 END) AS goles
+    FROM jugadores j
+    LEFT JOIN estadisticas_partido ep ON j.id = ep.jugador_id AND ep.tipo = 'gol' AND ep.tipo_gol != 'en_contra'
+    WHERE j.equipo_id = ?
+    GROUP BY j.id
+    ORDER BY goles DESC, j.apellido ASC
+  `;
+
+  db.query(sql, [equipoId], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
+});
 
 module.exports = router;
